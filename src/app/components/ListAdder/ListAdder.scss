@@ -1,0 +1,54 @@
+@import "../../variables.scss";
+
+.add-list-button {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: $list-width;
+  margin: 0 5px 0 5px;
+  padding: 10px;
+  border: none;
+  border-radius: $list-radius;
+  color: black;
+  background: #5bbac1;
+  font-weight: 400;
+  font-size: 16px;
+  transition: background 0.2s;
+  user-select: none;
+  cursor: pointer;
+}
+
+.add-list-button:hover,
+.add-list-button:focus {
+  background: rgba(0, 166, 180, 0.25);
+}
+
+.list-adder-textarea {
+  float: left;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 50px;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 3px;
+  color: black;
+  background: #C0C6C3;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 400;
+  overflow: hidden;
+  resize: none;
+}
+
+.list-adder-textarea::placeholder {
+  color: red;
+  opacity: 1;
+}
+
+.list-adder-textarea:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: red;
+}
+
+.list-adder-textarea::-ms-input-placeholder { /* Microsoft Edge */
+  color: red;
+}
+
