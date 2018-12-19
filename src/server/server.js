@@ -10,9 +10,9 @@ import favicon from "serve-favicon";
 import logger from "morgan";
 import dotenv from "dotenv";
 import renderPage from "./renderPage";
-import configurePassport from "./passport";
 import api from "./routes/api";
-import auth from "./routes/auth";
+// import configurePassport from "./passport";
+// import auth from "./routes/auth";
 import fetchBoardData from "./fetchBoardData";
 
 // Load environment variables from .env file
@@ -43,13 +43,18 @@ app.use(
   session({
     store: new MongoStore({ db }),
     secret: "123456",
-    resave: false,
+    resave: true,
     saveUninitialized: true
   })
 );
+
+// This configs were made by the original developer
 //app.use(passport.initialize());
 //app.use(passport.session());
 // app.use("/auth", auth);
+
+app.use(passport.initialize())
+
 app.use("/api", api(db));
 app.use(fetchBoardData(db));
 //app.use(fetchBoardData());

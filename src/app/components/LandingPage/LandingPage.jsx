@@ -104,7 +104,13 @@ class LandingPage extends Component {
                   </div>
                 </Link>
               ))}
-        
+              <br/>
+              <Link to="/researcherAuth">
+                <button className="signin-button guest-button">
+                  Área do pesquisador
+                </button>
+              </Link>
+              
             </div>                        
           </div>
         </div>

@@ -8,6 +8,8 @@ import { Helmet } from "react-helmet";
 import { resetContext } from "react-beautiful-dnd";
 import App from "../app/components/App";
 import rootReducer from "../app/reducers";
+import ResearcherAuth from "../app/components/admin/researcherAuth";
+import { Switch, Route } from "react-router-dom";
 
 // Get the manifest which contains the names of the generated files. The files contain hashes
 // that change every time they are updated, which enables aggressive caching.
@@ -25,10 +27,15 @@ const renderPage = (req, res) => {
   resetContext();
 
   // This is where the magic happens
+  // Some kind of route black-magic is happening here.
+  // Please, keep yourself away, little wanderer.
   const appString = renderToString(
     <Provider store={store}>
-      <StaticRouter location={req.url} context={context}>
-        <App />
+      <StaticRouter location={req.url} context={context}>        
+        <Switch>
+          <Route path="/" exact={true} component={App}/>
+          <Route path="/researcherAuth" component={ResearcherAuth}/>
+        </Switch>
       </StaticRouter>
     </Provider>
   );
