@@ -28,7 +28,7 @@ const fetchBoardData = db => (req, res, next) => {
       .find({ $or: [{ users: req.user._id }, { isPublic: true }] })
       .toArray()
       .then(boards => {
-        req.initialState = { ...normalizeBoards(boards), user: req.user };
+        req.initialState = { ...normalizeBoards(boards), user: req.user};
         next();
       });
 

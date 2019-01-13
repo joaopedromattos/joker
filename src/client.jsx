@@ -11,7 +11,9 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import rootReducer from "./app/reducers";
 import persistMiddleware from "./app/middleware/persistMiddleware";
 import App from "./app/components/App";
-import ResearcherAuth from "./app/components/admin/researcherAuth";
+import ResearcherAuth from "./app/components/admin/auth/researcherAuth";
+import ResearcherDashboard from "./app/components/admin/dashboard/researcherDashboard";
+import BoardContainer from './app/components/Board/BoardContainer'
 
 // Extract initial redux state received from the server
 const preloadedState = window.PRELOADED_STATE;
@@ -29,6 +31,9 @@ ReactDOM.hydrate(
       <Switch>
         <Route path="/" exact={true} component={App}/>
         <Route path="/researcherAuth" component={ResearcherAuth}/>
+        <Route path="/researcherDashboard" component={ResearcherAuth} />
+        <Route path="/b/:boardId" component={BoardContainer} />
+
       </Switch>
     </BrowserRouter>
   </Provider>,

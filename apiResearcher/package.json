@@ -1,0 +1,21 @@
+{
+  "name": "apiresearcher",
+  "version": "1.0.0",
+  "description": "An API to make our main aplication interact with Researcher and Studies collections.",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test",
+    "api": "nodemon server.js"
+  },
+  "author": "João Pedro Rodrigues Mattos",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}

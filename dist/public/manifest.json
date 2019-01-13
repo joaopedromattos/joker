@@ -1,6 +1,6 @@
 {
-  "main.js": "/static/bundle.6d2424.js",
-  "main.css": "/static/bundle.6d2424.css",
+  "main.js": "/static/bundle.1e1785.js",
+  "main.css": "/static/bundle.1e1785.css",
   "favicons/.DS_Store": "/static/favicons/.DS_Store",
   "favicons/apple-icon-114x114.png": "/static/favicons/apple-icon-114x114.png",
   "favicons/apple-icon-144x144.png": "/static/favicons/apple-icon-144x144.png",
@@ -13,5 +13,5 @@
   "favicons/mstile-144x144.png": "/static/favicons/mstile-144x144.png",
   "favicons/og-kanban-logo.png": "/static/favicons/og-kanban-logo.png",
   "images/cards.jpg": "/static/images/cards.d12df5.jpg",
-  "images/researcherAuth.jpg": "/static/images/researcherAuth.35a526.jpg"
+  "images/researcherAuthMultiply.jpg": "/static/images/researcherAuthMultiply.c52582.jpg"
 }

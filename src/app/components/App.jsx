@@ -23,7 +23,7 @@ const App = ({ user, isGuest}) => {
 
   // If not logged in, always redirect to landing page
   return (
-      <Switch>
+    <Switch>
         <Route path="/" component={LandingPage} />
         <Redirect to="/" />
       </Switch>

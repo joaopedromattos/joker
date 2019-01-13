@@ -86,9 +86,9 @@ class LandingPage extends Component {
               
               </i></p>  
           <div className="signin-buttons">
-            
+
             <div className="guest-button-wrapper">
-           
+
               {boards.map(board => (
                 <Link
                   key={board._id}
@@ -100,7 +100,7 @@ class LandingPage extends Component {
                   <div className="guest-button-wrapper">
                     <button className="signin-button guest-button">
                       Começar
-                    </button>
+                  </button>
                   </div>
                 </Link>
               ))}

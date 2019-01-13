@@ -8,7 +8,8 @@ import { Helmet } from "react-helmet";
 import { resetContext } from "react-beautiful-dnd";
 import App from "../app/components/App";
 import rootReducer from "../app/reducers";
-import ResearcherAuth from "../app/components/admin/researcherAuth";
+import ResearcherAuth from "../app/components/admin/auth/researcherAuth";
+import ResearcherDashboard from "../app/components/admin/dashboard/researcherDashboard";
 import { Switch, Route } from "react-router-dom";
 
 // Get the manifest which contains the names of the generated files. The files contain hashes
@@ -35,6 +36,7 @@ const renderPage = (req, res) => {
         <Switch>
           <Route path="/" exact={true} component={App}/>
           <Route path="/researcherAuth" component={ResearcherAuth}/>
+          <Route path="/researcherDashboard" component={ResearcherDashboard} />
         </Switch>
       </StaticRouter>
     </Provider>

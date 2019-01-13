@@ -1,5 +1,6 @@
-import express from "express";
+import express, { Router } from "express";
 import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 import passport from "passport";
 import session from "express-session";
 import connectMongo from "connect-mongo";
@@ -15,6 +16,7 @@ import api from "./routes/api";
 // import auth from "./routes/auth";
 import fetchBoardData from "./fetchBoardData";
 
+
 // Load environment variables from .env file
 dotenv.config();
 
@@ -23,8 +25,9 @@ const app = express();
 const MongoStore = connectMongo(session);
 
   //MongoClient.connect("mongodb://localhost:27017").then(client => {
-  MongoClient.connect("mongodb+srv://admin:teste123@cluster0-vdl2d.mongodb.net/test").then(client => {
-  const db = client.db("kanban");
+mongoose.connect("mongodb+srv://admin:teste123@cluster0-vdl2d.mongodb.net/test", { useNewUrlParser: true }).then(client => {
+  mongoose.Promise = global.Promise;
+  const db = mongoose.connection.db;
 
   //configurePassport(db);
 
@@ -53,12 +56,17 @@ app.use(
 //app.use(passport.session());
 // app.use("/auth", auth);
 
-app.use(passport.initialize())
+// app.use(passport.initialize())
+
 
 app.use("/api", api(db));
 app.use(fetchBoardData(db));
+
 //app.use(fetchBoardData());
+
 app.get("*", renderPage);
+
+var router = Router()
 
 const port = process.env.PORT || "1337";
 /* eslint-disable no-console */
