@@ -7,7 +7,7 @@ A React app based on [React Kanban](https://github.com/markusenglund/react-kanba
 
 ## Running the app:
 1. On root folder, you should run `npm install`.
-2. Access /api folder, right below root folder, and run `npm install`.
-3. Still on /api folder, but on another terminal, `run mongod` to start a local database server.
+2. Access /apiResearcher folder, right below root folder, and run `npm install`.
+3. Still on /apiResearcher folder, but on another terminal, `run mongod` to start a local database server.
 4. On the first temrinal, run `npm run api` to connect our api to the database server.
 5. Finally, open two other terminals, both on the root folder. In either one of them, you should run `npm run build` and, after receiving a success message, run on the other one `npm run serve` to start our server side rendering and last part of the application. 

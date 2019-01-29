@@ -6,7 +6,7 @@ var Researcher = mongoose.model("Researcher")
 
 // Here is where the CRUD (create, read, update, delete) Researcher is implemented 
 
-// This will consume a large bandwidth!
+// This will consume a large bandwidth, so I won't create a route for it right now...
 exports.listResearchers = (req, res) => {
     Researcher.find({}, (err, data) => {
         if (err){
@@ -44,7 +44,7 @@ exports.getResearcher = (req, res) =>{
 }
 
 exports.updateResearcher = (req, res) => {
-    Researcher.findOneAndUpdate({ email: req.params.email }, req.body, {new:true}, (err, data) =>{
+    Researcher.findOneAndUpdate({ authId: req.params.authId }, {$push: req.body}, {new:true}, (err, data) =>{
         if (err){
             res.send(err);
         }
@@ -55,7 +55,7 @@ exports.updateResearcher = (req, res) => {
 exports.deleteResearcher = (req, res) => {
 
     Researcher.remove({
-        email: req.params.email
+        authId: req.params.authId
     }, (err, data) => {
         if (err){
             res.send(err)

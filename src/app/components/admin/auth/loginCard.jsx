@@ -6,6 +6,7 @@ import '../../App.scss';
 import './loginCard.scss';
 import firebase from 'firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import Link from "react-router";
 
 // Paper styling.
 const styles = theme => ({
@@ -18,7 +19,6 @@ const styles = theme => ({
     },
 
     square: false
-
     
 });
 
@@ -33,13 +33,15 @@ const uiConfig = {
     }
 }
 
+
+
 function LoginCard(props){
     const { classes, className } = props;
 
     return(
         <div className="login-card">
             <Paper className={classes.root} >
-                <Typography variant="h5" component="h3">
+                <Typography variant="title" component="h3">
                     Faça login para acessar o Joker:
                 </Typography>
 
@@ -50,7 +52,9 @@ function LoginCard(props){
                           
                     uiConfig={uiConfig}
                     firebaseAuth={firebase.auth()}
-                />         
+                />   
+
+                      
             </Paper>
         </div>
     )
