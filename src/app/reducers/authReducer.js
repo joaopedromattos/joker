@@ -4,7 +4,8 @@ const authReducer = (state={authenticated:false}, action) => {
         case "AUTH":
             return {
                 authenticated : action.authenticated
-            }           
+            }  
+                     
     
         default:
             return state;

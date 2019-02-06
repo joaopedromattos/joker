@@ -1,4 +1,3 @@
-// Component to which the used is redirected after signing in...
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -7,6 +6,7 @@ import { connect } from "react-redux";
 import { compose } from 'redux'
 import { loginAction } from "../../../actions/admin/loginAction";
 import { logoutAction } from "../../../actions/admin/logoutAction";
+import { userDataStoreAction } from "../../../actions/admin/userDataStoreAction";
 import './researcherDashboard.scss';
 import DashboardDrawer from "../../DashboardDrawer/DashboardDrawer";
 import MainDrawer from "../../MainContentDashboard/MainDrawer";
@@ -17,7 +17,6 @@ import Snackbar from '@material-ui/core/Snackbar';
 import { withStyles } from '@material-ui/core/styles';
 import NewStudyForm from "../../NewStudyForm/NewStudyForm";
 import MyStudies from "../../MyStudies/MyStudies";
-import LinearLoading from "../../LinearLoading/LinearLoading";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 
@@ -28,34 +27,34 @@ const styles2 = theme => ({
 });
 
 
-class ResearcherDashboard extends Component{
+class ResearcherDashboard extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.state = {
-            isSignedIn: true, 
-            user: {}, 
+        this.state = {            
+            user: this.props.userDataReducer,
             tabs: {
                 active: 0,
                 elements: [{ // To insert a new tab on the drawer, place it this array...
-                    tabName: "Meus estudos", 
-                    tabIcon: <InsertChart/>
+                    tabName: "Meus estudos",
+                    tabIcon: <InsertChart />
                 }, {
                     tabName: "Novo estudo",
-                    tabIcon: <AddCircle/>
-                }], 
-                
-                
-            }, 
+                    tabIcon: <AddCircle />
+                }],
+
+
+            },
             open: true,
-            studyCreationOk: false, 
+            studyCreationOk: false,
             studyCreationError: false,
             studyRetrieveError: false,
             mainElements: [ // The component of the tab you inserted right above should be added here. 
-                <MyStudies />, <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)}/>, <LinearLoading/> // The order should be the same of the tabs array...
-            ]
-            
-            
+                <MyStudies user={this.props.userDataReducer} studyRetrieveError={() => this.handleOpenStudyRetrieve()}/>, <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)} /> // The order should be the same of the tabs array...
+            ],
+            logoutClicked: false
+
+
         }
     }
 
@@ -63,9 +62,9 @@ class ResearcherDashboard extends Component{
     handleCloseLogin = (event, reason) => {
         if (reason === 'clickaway') {
             return;
-        }        
-        this.setState({ open: false });                
-        
+        }
+        this.setState({ open: false });
+
     };
 
     handleCloseStudyCreationOk = (event, reason) => {
@@ -84,6 +83,11 @@ class ResearcherDashboard extends Component{
 
     };
 
+
+    handleOpenStudyRetrieve() {
+        this.setState({ studyRetrieveError : true})
+    }
+
     handleCloseStudyRetrieve = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -91,20 +95,9 @@ class ResearcherDashboard extends Component{
         this.setState({ studyRetrieveError: false });
 
     };
-    
-    getUserStudies(){
-
-        axios.get('http://localhost:3000/researchers/email=' + this.state.user.email).then(res => {
-            this.setState({user: res.data})
-        }, res => {
-            this.setState({ studyRetrieveError: true})
-        })
-
-    }
-    
 
     // Creating tab transition...
-    clickHandler = (tab) =>{
+    clickHandler = (tab) => {
 
         this.setState({
             tabs: {
@@ -119,84 +112,78 @@ class ResearcherDashboard extends Component{
             }
         });
 
-    }    
+    }
 
 
-    newStudy = (studyName, studyObjective, cards) =>{
-
+    newStudy = (studyName, studyObjective, cards) => {
+        
+        // Here I just create the study on the database.
         axios.post('http://localhost:3000/studies', {
             name: studyName,
             objective: studyObjective,
-            cards: cards            
-        }).then(res => {
+            cards: cards
+        }).then(res => {          
 
-            console.log("Como o estudo fica no banco:", res)
-
-            axios.put('http://localhost:3000/researchers/authId=' + this.state.user.uid, {
+            // Taking the response from api and inserting the study id on our user's studies field.
+            axios.put('http://localhost:3000/researchers/authId=' + this.state.user.authId, {
                 studies: res.data._id
             }).then(res => {
-                console.log("Como ficou o usuário depois de adicionado o estudo: ", res)
-                this.setState({ user: res.data})
-                this.setState({ studyCreationOk: true})
+                
+                // Updating our redux reducer
+                this.props.userDataStoreAction(res.data)
+
+                // Updating our views' properties (because they were instantiated on state, they're not aware of the props change)
+                this.setState({
+                    user: res.data, 
+                    studyCreationOk: true, 
+                    mainElements: [
+                    <MyStudies user={this.props.userDataReducer} studyRetrieveError={() => this.handleOpenStudyRetrieve()} />, <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)} /> // The order should be the same of the tabs array...
+                ]})
+
             }, res => {
+                
+                // If we could not insert this study in our user's studies field...
                 this.setState({ studyCreationError: true })
             })
 
         }, res => {
 
-            this.setState({studyCreationError: true})
+            // If we could not insert our study in the database.
+            this.setState({ studyCreationError: true })
 
         })
 
 
 
+    }
+
+    logOut(){
+
+        firebase.auth().signOut()
+
+        this.setState({logoutClicked: true})
+        this.props.logoutAction()
+        this.props.userDataStoreAction({name:"", email:"", authId:"", studies:[]})
+
+        console.log(this.state.logoutClicked)
+        this.props.history.push("/researcherAuth")
     }
 
     // Logout register and redirectioner
     componentDidMount = () => {
-
-        firebase.auth().onAuthStateChanged(usr => {
-
-            this.setState({
-                isSignedIn: !!usr, 
-                user: usr, 
-                tabs: {
-                    active: 0,
-                    elements: [{
-                        tabName: "Meus estudos",
-                        tabIcon: <InsertChart />
-                    }, {
-                        tabName: "Novo estudo",
-                        tabIcon: <AddCircle />
-                    }],
-                    
-                }
-                
-                
-            })
-
-            this.getUserStudies()
-
-
-            if (!this.state.isSignedIn) {
-
-                this.props.authReducer.authenticated ? (this.props.logoutAction()) : (this.props.loginAction())          
-
-
-                this.props.history.push("/researcherAuth")
-
-            }
-
-        })
+        firebase.auth()
     }
 
-    render() {
+
+
+
+
+    render() {        
 
         return (
-                 
-            
+
             <div className="dashboardBody">
-                <DashboardDrawer drawer={this.drawer} active={this.state.tabs.active} elements={this.state.tabs.elements} clickHandler={(tab) => this.clickHandler(tab)} logoutClick={() => firebase.auth().signOut()} />
+                <DashboardDrawer drawer={this.drawer} active={this.state.tabs.active} elements={this.state.tabs.elements} clickHandler={(tab) => this.clickHandler(tab)} logoutClick={() => this.logOut()} />
 
                 <Snackbar
                     anchorOrigin={{
@@ -246,6 +233,8 @@ class ResearcherDashboard extends Component{
                     />
                 </Snackbar>
 
+                
+
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',
@@ -261,22 +250,22 @@ class ResearcherDashboard extends Component{
                         message="Não foi possível recuperar seus estudos!"
                     />
                 </Snackbar>
-                
+
                 {
                     (this.state.tabs.active == 0 && this.state.user && this.state.user.studies) || (this.state.tabs.active != 0) ? (
 
                         <MainDrawer content={this.state.mainElements[this.state.tabs.active]} ></MainDrawer>
 
-                    ):(
-                    
+                    ) : (
+
                         <MainDrawer content={this.state.mainElements[2]} ></MainDrawer>
-                    
+
                     )
-                    
+
 
                 }
-                
-                
+
+
             </div>
 
         )
@@ -294,7 +283,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     loginAction: () => dispatch(loginAction),
-    logoutAction: () => dispatch(logoutAction)
+    logoutAction: () => dispatch(logoutAction),
+    userDataStoreAction: (userData) => dispatch(userDataStoreAction(userData))
 });
 
 ResearcherDashboard.propTypes = {

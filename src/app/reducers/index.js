@@ -6,6 +6,7 @@ import user from "./user";
 import isGuest from "./isGuest";
 import currentBoardId from "./currentBoardId";
 import authReducer from "./authReducer";
+import userDataReducer from "./userDataReducer";
 
 export default combineReducers({
   cardsById,
@@ -14,5 +15,6 @@ export default combineReducers({
   user,
   isGuest,
   currentBoardId,
-  authReducer
+  authReducer, 
+  userDataReducer
 });

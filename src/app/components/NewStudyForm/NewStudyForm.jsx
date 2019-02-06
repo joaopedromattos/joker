@@ -44,7 +44,7 @@ const styles = theme => ({
     },
     root: {
         width: '100%',
-        maxWidth: 360,
+        // maxWidth: 360,
         
         // backgroundColor: theme.palette.background.paper,
     },
@@ -226,7 +226,7 @@ class NewStudyForm extends React.Component {
                             this.state.cards.map((card, index, cards) =>( 
                                 
                                                         
-                                < ListItem alignItems="center" key={index} divider={true}>
+                                < ListItem key={index} divider={true}>
                                     <ListItemText
                                         primary={cards[index].name}
                                         secondary={
@@ -246,7 +246,7 @@ class NewStudyForm extends React.Component {
                                         <IconButton disabled={index === 0} aria-label="Move card up" color="primary" onClick={() => this.moveCardUp(index)}>
                                             <KeyboardArrowUpIcon />
                                         </IconButton>
-                                </ListItemSecondaryAction>
+                                    </ListItemSecondaryAction>
                                 </ListItem>                               
                                         
                             ))        

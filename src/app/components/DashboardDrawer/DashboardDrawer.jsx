@@ -24,6 +24,10 @@ const drawerWidth = 240;
 const styles = theme => ({
     root: {
         display: 'flex',
+        // flexGrow: 1
+    },
+    grow: {
+        flexGrow: 1,
     },
     drawer: {
         [theme.breakpoints.up('sm')]: {
@@ -39,6 +43,7 @@ const styles = theme => ({
         // },
     },
     menuButton: {
+        marginLeft: -12,
         marginRight: 20,
         [theme.breakpoints.up('sm')]: {
             display: 'none',
@@ -94,14 +99,14 @@ class DashboardDrawer extends React.Component {
         );
 
         return (
+            
             <Fragment>
-
                 <div className={classes.root}>
-                    <CssBaseline />
+                    {/* <CssBaseline /> */}
                     <AppBar position="absolute" className={classes.appBar}>
                         
                         
-                        <Toolbar>
+                        <Toolbar >
                             
                             <IconButton
                                 color="inherit"
@@ -112,13 +117,15 @@ class DashboardDrawer extends React.Component {
                                 <MenuIcon />
                             </IconButton>
                                 
-                            <Typography variant="h6" color="inherit" noWrap>
+                            <Typography variant="h6" color="inherit" className={classes.grow}>
                                 {this.props.elements[this.props.active].tabName}
                             </Typography>
+                            
                                 
                             
                         </Toolbar>
                     </AppBar>
+                
                     <nav className={classes.drawer}>
                         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
                         <Hidden smUp implementation="css">

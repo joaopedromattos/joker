@@ -33,7 +33,9 @@ exports.createStudy = (req, res) => {
 }
 
 exports.getStudy = (req, res) => {
-    Study.find({ _id: req.params._id }, (err, data) => {
+    
+
+    Study.find({ _id: {$in: req.params._id.split(',')} }, (err, data) => {
         if (err) {
             res.send(err);
         }
