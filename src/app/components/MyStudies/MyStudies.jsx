@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { studiesDataStoreAction } from "../../actions/admin/studiesDataStoreAction";
+import { compose } from "redux";
+import { connect } from "react-redux"; 
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -29,18 +32,17 @@ const styles = theme => ({
     },
 });
 
-
-
-
-
 class MyStudies extends React.Component {
 
     constructor(props){
         super(props)
         this.state = {
             
-            studies: null, 
-            openDialog: false,     
+            studies: this.props.studiesDataReducer.studies, 
+            openDialog: false,
+            deleteIndex: 0,    
+
+                
 
         }
     }
@@ -48,14 +50,14 @@ class MyStudies extends React.Component {
     // Basically, this component cycle event is just responsible for updating our view in case of a study addition...
     componentDidUpdate(prevProps){
 
-        // Checking if our props 'user' has changed...
-        if (this.props.user.studies.length > prevProps.user.studies.length ){
+        // Checking if our props 'userDataReducer' has changed...
+        if (this.props.userDataReducer.studies.length > prevProps.userDataReducer.studies.length ){
 
             // Declaring our api url...
             let urlRequest = "http://localhost:3000/studies/_id=";
 
             // Taking the last element on our studies vector (the last one to be added, by mongo's default...)            
-            let newStudyUrl = this.props.user.studies[this.props.user.studies.length - 1]
+            let newStudyUrl = this.props.userDataReducer.studies[this.props.userDataReducer.studies.length - 1]
         
 
             urlRequest += newStudyUrl;
@@ -63,6 +65,7 @@ class MyStudies extends React.Component {
             // API request to get info about this last study...
             axios.get(urlRequest).then(res => {
                 this.setState({ studies: [...this.state.studies[this.state.studies.length - 1], res.data] })
+                this.props.studiesDataStoreAction({ studies: [...this.state.studies[this.state.studies.length - 1], res.data] })
             }, res => {
                 this.props.studyRetrieveError()
             })
@@ -73,12 +76,11 @@ class MyStudies extends React.Component {
 
     getStudies(){
 
-        console.log("Study retrieving => Get studies")        
         let url = "http://localhost:3000/studies/_id=";
 
-        this.props.user.studies.map((study, index) => {
+        this.props.userDataReducer.studies.map((study, index) => {
 
-            if (index === this.props.user.studies.length - 1){
+            if (index === this.props.userDataReducer.studies.length - 1){
                 url += study
 
             }else{
@@ -90,18 +92,74 @@ class MyStudies extends React.Component {
 
         axios.get(url).then(res => {
             this.setState({studies: res.data})
+            this.props.studiesDataStoreAction({studies: res.data})
         }, res => {
             this.props.studyRetrieveError()
         })
     }
 
+    openDialog = (index) => {
+
+        console.log("Dentro de open dialog: ", index)
+        
+        
+        this.setState({ openDialog: true, deleteIndex: index })
+
+
+    }
+
+    denial = () => {
+
+        this.setState({ openDialog:false })
+
+    }
     
+    granted = () => {
+        let url = "http://localhost:3000/studies/_id=";  
+        
+        
+        // Handling deletion with api...
+        
+        console.log("What we requested...", this.state.studies[this.state.deleteIndex]._id)
+        axios.delete(url + this.state.studies[this.state.deleteIndex]._id).then((res) => {
+            
+            
+            console.log("DELETE RESPONSE: ", res)
+            // Now, I'll just update our local data...
+            let aux = this.state.studies
+            aux.splice(this.state.deleteIndex, 1)
+            this.setState({studies: aux})
+            this.props.studiesDataStoreAction({studies: aux})
+
+            // Just closing our dialog and exhibiting a successful message.
+            this.setState({ openDialog: false });
+
+            this.props.studyDeletedOk()
+            
+
+        }, (res) => {
+
+            console.log("Error: ", res)
+
+            // In case of failure on deletion, we just close our dialog and exhibit a failure message...
+            this.setState({ openDialog: false });
+
+            this.props.studyDeletedError();
+            
+        })
 
 
+        
+
+    }   
+    
+ 
     render() {
         const { classes } = this.props;
         const { secondary } = this.state;
+        
 
+        // If our studies are null... we should get them... 
         if (!this.state.studies){
             this.getStudies()
             return (
@@ -117,49 +175,69 @@ class MyStudies extends React.Component {
                 </div>
             )
         }else{
-            return(               
-                        
-                <div className={classes.demo}>
 
-                    { 
+            if (!this.state.studies.length){
 
-                        this.state.openDialog ? (
-                            <BinaryDialog ></BinaryDialog>
-                        ):(
-                            <span></span>
-                        )
+                return (
+                    <div>
 
-                    }
+                        <Typography variant='h1' align='center'>
+                            Você ainda não tem estudos.
+                        </Typography>
 
-                    <List >                        
-                        {
-                            this.state.studies.map((study, index) => (
 
-                                <ListItem key={index}>
-                                    <ListItemAvatar>
-                                        <Avatar>
-                                            <FolderIcon />
-                                        </Avatar>
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        primary={study.name}
-                                        secondary={study.objective}
-                                    />
-                                    <ListItemSecondaryAction>
-                                        <IconButton aria-label="Delete" color="secondary" onClick={(index) => this.openDialog(index)}>
-                                            <DeleteIcon />
-                                        </IconButton>
-                                    </ListItemSecondaryAction>
-                                </ListItem>
 
-                            ))
+                    </div>
+                )
+
+            }else{
+                
+                
+                return(               
                             
-                        }                    
-                        
-                    </List>
-                </div>
-            
-            )
+                    <div className={classes.demo}>
+
+                        <BinaryDialog title={"Tem certeza de que deseja excluir este estudo?"} 
+                                    open={this.state.openDialog}
+                                    text={`Depois de excluído, você não poderá recuperar os dados do seu estudo.`} 
+                                    denialButton="CANCELAR" 
+                                    grantedButton="EXCLUIR"
+                                    granted={() => this.granted()}
+                                    denial={() => this.denial()}
+                                    changeConfirmationColor={true}>
+                        </BinaryDialog>
+
+
+                        <List >                        
+                            {
+                                this.state.studies.map((study, index) => (
+
+                                    <ListItem key={index}>
+                                        <ListItemAvatar>
+                                            <Avatar>
+                                                <FolderIcon />
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText
+                                            primary={study.name}
+                                            secondary={study.objective}
+                                        />
+                                        <ListItemSecondaryAction>
+                                            <IconButton aria-label="Delete" color="secondary" onClick={() => this.openDialog(index)}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </ListItemSecondaryAction>
+                                    </ListItem>
+
+                                ))
+                                
+                            }                    
+                            
+                        </List>
+                    </div>
+                
+                )
+            }
 
         }
 
@@ -169,8 +247,18 @@ class MyStudies extends React.Component {
     }
 }
 
+const mapStateToProps = state => ({
+    ...state
+});
+
+const mapDispatchToProps = dispatch => ({
+
+    studiesDataStoreAction: (studiesData) => dispatch(studiesDataStoreAction(studiesData)),
+
+});
+
 MyStudies.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(MyStudies);
+export default compose(connect(mapStateToProps, mapDispatchToProps), withStyles(styles))(MyStudies);

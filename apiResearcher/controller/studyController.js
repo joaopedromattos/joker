@@ -55,14 +55,14 @@ exports.updateStudy = (req, res) => {
 
 exports.deleteStudy = (req, res) => {
 
-    Study.remove({
-        _id: req.params._id
+    Study.deleteMany({
+        _id: { $in: req.params._id.split(',') }
     }, (err, data) => {
         if (err) {
             res.send(err)
         }
 
-        res.json("Researcher successfully deleted.");
+        res.json(data);
 
     })
 

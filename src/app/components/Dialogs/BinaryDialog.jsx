@@ -1,5 +1,5 @@
 // Modularized binary dialog component. 
-// Props: denial, confirmation, text, denialButton, grantedButton
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
@@ -17,6 +17,7 @@ class BinaryDialog extends React.Component {
         this.state = {
             open: false,
         }
+        
     }
     
 
@@ -28,16 +29,6 @@ class BinaryDialog extends React.Component {
         this.setState({ open: false });
     };
 
-    permissionGranted = () => {
-        this.props.confirmation()
-        this.handleClose()
-    }
-
-    permissionDenied = () => {
-        this.props.denial()
-        this.handleClose()
-    }
-
     
 
     render() {
@@ -47,21 +38,21 @@ class BinaryDialog extends React.Component {
             <div>                
                 <Dialog
                     fullScreen={fullScreen}
-                    open={true}
+                    open={this.props.open}
                     onClose={this.handleClose}
                     aria-labelledby="responsive-dialog-title"
                 >
-                    <DialogTitle id="responsive-dialog-title">{"Use Google's location service?"}</DialogTitle>
+                    <DialogTitle id="responsive-dialog-title">{`${this.props.title}`}</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
                             {this.props.text}
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => this.permissionDenied()} color="primary">
+                        <Button onClick={() => this.props.denial()} color="primary">
                             {this.props.denialButton}
                         </Button>
-                        <Button onClick={() => this.permissionGranted()} color="primary" autoFocus>
+                        <Button onClick={() => this.props.granted()} color={this.props.changeConfirmationColor ? "secondary" : "primary"} autoFocus>
                             {this.props.grantedButton}
                         </Button>
                     </DialogActions>

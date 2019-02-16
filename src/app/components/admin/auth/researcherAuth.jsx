@@ -96,15 +96,7 @@ class ResearcherAuth extends Component{
 
 
         })
-    }
-
-
-
-    
-    
-    
-
-   
+    }   
     
     render(){
 

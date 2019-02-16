@@ -7,7 +7,7 @@ import BoardContainer from "./Board/BoardContainer";
 import LandingPage from "./LandingPage/LandingPage";
 import "./App.scss";
 
-const App = ({ user, isGuest}) => {
+const App = ({ user, isGuest }) => {
 
   // Serve different pages depending on if user is logged in or not
   if (user || isGuest) {

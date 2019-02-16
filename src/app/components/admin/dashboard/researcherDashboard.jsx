@@ -7,6 +7,7 @@ import { compose } from 'redux'
 import { loginAction } from "../../../actions/admin/loginAction";
 import { logoutAction } from "../../../actions/admin/logoutAction";
 import { userDataStoreAction } from "../../../actions/admin/userDataStoreAction";
+import { studiesDataStoreAction } from "../../../actions/admin/studiesDataStoreAction";
 import './researcherDashboard.scss';
 import DashboardDrawer from "../../DashboardDrawer/DashboardDrawer";
 import MainDrawer from "../../MainContentDashboard/MainDrawer";
@@ -49,13 +50,24 @@ class ResearcherDashboard extends Component {
             studyCreationOk: false,
             studyCreationError: false,
             studyRetrieveError: false,
+            studyDeletedOk: false,
+            studyDeletedError: false,
             mainElements: [ // The component of the tab you inserted right above should be added here. 
-                <MyStudies user={this.props.userDataReducer} studyRetrieveError={() => this.handleOpenStudyRetrieve()}/>, <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)} /> // The order should be the same of the tabs array...
+                <MyStudies user={this.props.userDataReducer} 
+                        studyRetrieveError={() => this.handleOpenStudyRetrieve()} 
+                        studyDeletedOk={this.handleOpenStudyDeletedOk} 
+                        studyDeletedError={this.handleOpenStudyDeletedError}/>, 
+                <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)} /> // The order should be the same of the tabs array...
             ],
             logoutClicked: false
 
 
         }
+
+        this.handleOpenStudyDeletedOk = this.handleOpenStudyDeletedOk.bind(this);
+        this.handleOpenStudyDeletedError = this.handleOpenStudyDeletedError.bind(this);
+
+        
     }
 
     // The following three functions are just handlers of the snackBars
@@ -84,7 +96,7 @@ class ResearcherDashboard extends Component {
     };
 
 
-    handleOpenStudyRetrieve() {
+    handleOpenStudyRetrieve = (event, reason) => {
         this.setState({ studyRetrieveError : true})
     }
 
@@ -95,6 +107,31 @@ class ResearcherDashboard extends Component {
         this.setState({ studyRetrieveError: false });
 
     };
+
+
+    handleOpenStudyDeletedOk = (event, reason) => {
+        this.setState({ studyDeletedOk: true })
+    }
+
+    handleCloseStudyDeletedOk = (event, reason) => {
+
+        if (reason === 'clickaway') {
+            return;
+        }
+        this.setState({ studyDeletedOk: false });
+
+    }
+
+    handleOpenStudyDeletedError = (event, reason) => {
+        this.setState({ studyDeletedError: true })
+    }
+
+    handleCloseStudyDeletedError = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        this.setState({ studyDeletedError: false });
+    }
 
     // Creating tab transition...
     clickHandler = (tab) => {
@@ -164,6 +201,8 @@ class ResearcherDashboard extends Component {
         this.setState({logoutClicked: true})
         this.props.logoutAction()
         this.props.userDataStoreAction({name:"", email:"", authId:"", studies:[]})
+        this.props.studiesDataStoreAction({studies: null})
+        
 
         console.log(this.state.logoutClicked)
         this.props.history.push("/researcherAuth")
@@ -173,10 +212,6 @@ class ResearcherDashboard extends Component {
     componentDidMount = () => {
         firebase.auth()
     }
-
-
-
-
 
     render() {        
 
@@ -216,6 +251,22 @@ class ResearcherDashboard extends Component {
                         message="Estudo criado com sucesso!"
                     />
                 </Snackbar>
+                
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.studyDeletedOk}
+                    autoHideDuration={3000}
+                    onClose={this.handleCloseStudyDeletedOk}
+                >
+                    <MySnackbarContent
+                        onClose={this.handleCloseStudyDeletedOk}
+                        variant="success"
+                        message="Estudo excluído com sucesso!"
+                    />
+                </Snackbar>
 
                 <Snackbar
                     anchorOrigin={{
@@ -232,7 +283,6 @@ class ResearcherDashboard extends Component {
                         message="Ocorreram erros ao tentar salvar seu estudo!"
                     />
                 </Snackbar>
-
                 
 
                 <Snackbar
@@ -248,6 +298,22 @@ class ResearcherDashboard extends Component {
                         onClose={this.handleCloseStudyRetrieve}
                         variant="error"
                         message="Não foi possível recuperar seus estudos!"
+                    />
+                </Snackbar>
+
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.studyDeletedError}
+                    autoHideDuration={3000}
+                    onClose={this.handleCloseStudyDeletedError}
+                >
+                    <MySnackbarContent
+                        onClose={this.handleCloseStudyDeletedError}
+                        variant="error"
+                        message="Não foi possível excluir seu estudo!"
                     />
                 </Snackbar>
 
@@ -284,7 +350,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     loginAction: () => dispatch(loginAction),
     logoutAction: () => dispatch(logoutAction),
-    userDataStoreAction: (userData) => dispatch(userDataStoreAction(userData))
+    userDataStoreAction: (userData) => dispatch(userDataStoreAction(userData)),
+    studiesDataStoreAction: (studiesData) => dispatch(studiesDataStoreAction(studiesData)),
+    
 });
 
 ResearcherDashboard.propTypes = {
