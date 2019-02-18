@@ -44,10 +44,10 @@ class ResearcherAuth extends Component{
                     name: user.displayName,
 
                 } ,).then(res => {
-                            this.setState({user: res.data[0]})
-                            this.props.userDataStoreAction(res.data[0])
-                            console.log("Usuario nao se encontrava na DB\n, agora ele ja fora inserido.")
                             console.log("User not in data base response: ", res)
+                            console.log("Usuario nao se encontrava na DB\n, agora ele ja fora inserido.")
+                            this.setState({user: res.data[0]})
+                            this.props.userDataStoreAction(res.data)
                             return res
                         }
                     )

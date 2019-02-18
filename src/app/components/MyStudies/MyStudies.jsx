@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { studiesDataStoreAction } from "../../actions/admin/studiesDataStoreAction";
+import { userDataStoreAction } from "../../actions/admin/userDataStoreAction";
 import { compose } from "redux";
 import { connect } from "react-redux"; 
 import { withStyles } from '@material-ui/core/styles';
@@ -36,43 +37,43 @@ class MyStudies extends React.Component {
 
     constructor(props){
         super(props)
-        this.state = {
-            
+        this.state = {    
+                    
             studies: this.props.studiesDataReducer.studies, 
             openDialog: false,
-            deleteIndex: 0,    
-
-                
+            deleteIndex: 0,                  
 
         }
     }
 
-    // Basically, this component cycle event is just responsible for updating our view in case of a study addition...
-    componentDidUpdate(prevProps){
+    // // Basically, this component cycle event is just responsible for updating our view in case of a study addition...
+    // componentDidUpdate(prevProps, prevState){
 
-        // Checking if our props 'userDataReducer' has changed...
-        if (this.props.userDataReducer.studies.length > prevProps.userDataReducer.studies.length ){
+    //     // Checking if our props 'userDataReducer' has changed...
+    //     // If affirmative, we have to fetch the new study to this view.
+    //     if (this.props.userDataReducer.studies.length > this.state.studies.length ){
 
-            // Declaring our api url...
-            let urlRequest = "http://localhost:3000/studies/_id=";
+    //         // Declaring our api url...
+    //         let urlRequest = "http://localhost:3000/studies/_id=";
 
-            // Taking the last element on our studies vector (the last one to be added, by mongo's default...)            
-            let newStudyUrl = this.props.userDataReducer.studies[this.props.userDataReducer.studies.length - 1]
+    //         // Taking the last element on our studies vector (the last one to be added, by mongo's default...)            
+    //         let newStudyUrl = this.props.userDataReducer.studies[this.props.userDataReducer.studies.length - 1]
         
 
-            urlRequest += newStudyUrl;
+    //         urlRequest += newStudyUrl;
 
-            // API request to get info about this last study...
-            axios.get(urlRequest).then(res => {
-                this.setState({ studies: [...this.state.studies[this.state.studies.length - 1], res.data] })
-                this.props.studiesDataStoreAction({ studies: [...this.state.studies[this.state.studies.length - 1], res.data] })
-            }, res => {
-                this.props.studyRetrieveError()
-            })
+    //         // API request to get info about this last study...
+    //         axios.get(urlRequest).then(res => {
+    //             this.setState({ studies: [...this.state.studies[this.state.studies.length - 1], res.data] })
+    //             this.props.studiesDataStoreAction({ studies: [...this.state.studies[this.state.studies.length - 1], res.data] })
+    //         }, res => {
+    //             this.props.studyRetrieveError()
+    //         })
 
             
-        }
-    }
+    //     }
+
+    // }
 
     getStudies(){
 
@@ -85,10 +86,11 @@ class MyStudies extends React.Component {
 
             }else{
                 url += study + ","
-            }       
-            
+            }                   
 
         })
+
+        console.log("Estudos que vamos pegar: " , url)
 
         axios.get(url).then(res => {
             this.setState({studies: res.data})
@@ -129,12 +131,17 @@ class MyStudies extends React.Component {
             let aux = this.state.studies
             aux.splice(this.state.deleteIndex, 1)
             this.setState({studies: aux})
+
+            // Updating our reducers to make sure everything is synced up... 
             this.props.studiesDataStoreAction({studies: aux})
+            this.props.userDataStoreAction(res.data)
+            
+            
 
             // Just closing our dialog and exhibiting a successful message.
             this.setState({ openDialog: false });
 
-            this.props.studyDeletedOk()
+            this.props.studyDeletedOk();
             
 
         }, (res) => {
@@ -157,10 +164,33 @@ class MyStudies extends React.Component {
     render() {
         const { classes } = this.props;
         const { secondary } = this.state;
-        
 
-        // If our studies are null... we should get them... 
-        if (!this.state.studies){
+        // Checking if our props 'userDataReducer' has changed...
+        // If affirmative, we have to fetch the new study to this view.
+        if (this.state.studies && this.props.userDataReducer.studies && this.props.userDataReducer.studies.length > this.state.studies.length) {
+
+            // Declaring our api url...
+            let urlRequest = "http://localhost:3000/studies/_id=";
+
+            // Taking the last element on our studies vector (the last one to be added, by mongo's default...)            
+            let newStudyUrl = this.props.userDataReducer.studies[this.props.userDataReducer.studies.length - 1]
+
+
+            urlRequest += newStudyUrl;
+
+            // API request to get info about this last study...
+            axios.get(urlRequest).then(res => {
+                this.setState({ studies: this.state.studies.concat(res.data) })                
+                this.props.studiesDataStoreAction({ studies: this.state.studies })
+            }, res => {
+                this.props.studyRetrieveError()
+            })
+
+
+        }
+
+        // If our studies are null and there are studies to retrieve, we should get them... 
+        if (!this.state.studies && this.props.userDataReducer.studies && this.props.userDataReducer.studies.length ){
             this.getStudies()
             return (
                 <div>
@@ -176,7 +206,7 @@ class MyStudies extends React.Component {
             )
         }else{
 
-            if (!this.state.studies.length){
+            if (!this.props.userDataReducer.studies.length){
 
                 return (
                     <div>
@@ -252,7 +282,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-
+    userDataStoreAction: (userData) => dispatch(userDataStoreAction(userData)),
     studiesDataStoreAction: (studiesData) => dispatch(studiesDataStoreAction(studiesData)),
 
 });

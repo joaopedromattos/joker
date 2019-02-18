@@ -32,6 +32,7 @@ class ResearcherDashboard extends Component {
 
     constructor(props) {
         super(props)
+        
         this.state = {            
             user: this.props.userDataReducer,
             tabs: {
@@ -55,8 +56,8 @@ class ResearcherDashboard extends Component {
             mainElements: [ // The component of the tab you inserted right above should be added here. 
                 <MyStudies user={this.props.userDataReducer} 
                         studyRetrieveError={() => this.handleOpenStudyRetrieve()} 
-                        studyDeletedOk={this.handleOpenStudyDeletedOk} 
-                        studyDeletedError={this.handleOpenStudyDeletedError}/>, 
+                        studyDeletedOk={() => this.handleOpenStudyDeletedOk()} 
+                        studyDeletedError={() => this.handleOpenStudyDeletedError()}/>, 
                 <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)} /> // The order should be the same of the tabs array...
             ],
             logoutClicked: false
@@ -174,7 +175,11 @@ class ResearcherDashboard extends Component {
                     user: res.data, 
                     studyCreationOk: true, 
                     mainElements: [
-                    <MyStudies user={this.props.userDataReducer} studyRetrieveError={() => this.handleOpenStudyRetrieve()} />, <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)} /> // The order should be the same of the tabs array...
+                    <MyStudies user={this.props.userDataReducer} studyRetrieveError={() => this.handleOpenStudyRetrieve()} 
+                            studyRetrieveError={() => this.handleOpenStudyRetrieve()}
+                            studyDeletedOk={() => this.handleOpenStudyDeletedOk()}
+                            studyDeletedError={() => this.handleOpenStudyDeletedError()}/>, 
+                    <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)} /> // The order should be the same of the tabs array...
                 ]})
 
             }, res => {
