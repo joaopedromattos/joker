@@ -88,10 +88,7 @@ class ResearcherAuth extends Component{
                 
             if (usr){
                 this.getUserInsideDatabase(usr)                
-                this.props.authReducer.authenticated ? (this.props.logoutAction()) : (this.props.loginAction())
-                
-                // console.log('http://localhost:3000/researchers/email=' + usr.email)
-                
+                this.props.authReducer.authenticated ? (this.props.logoutAction()) : (this.props.loginAction())                
             }
 
 
@@ -100,18 +97,18 @@ class ResearcherAuth extends Component{
     
     render(){
 
-        return (
-            
+        return (            
             <div className="login-card">
                 
-                <LoginCard />
+                    {/* <img src="http://via.placeholder.com/32x20/000000/ffffff?text=?" height="20" width="32" /> */}
+                    <LoginCard />                
                 
             </div>
         )
 
     }
     
-}
+}   
 
 const mapStateToProps = state => ({
     ...state

@@ -16,6 +16,11 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
+import FileCopyRounded from '@material-ui/icons/FileCopyRounded';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
 import axios from 'axios';
 import Loading from "../Loading/Loading";
 import BinaryDialog from "../Dialogs/BinaryDialog";
@@ -23,10 +28,18 @@ import BinaryDialog from "../Dialogs/BinaryDialog";
 const styles = theme => ({
     root: {
         flexGrow: 1,
-        maxWidth: 752,
+        // maxWidth: 752,
+    },
+    card: {
+        minWidth: 275,
     },
     demo: {
         backgroundColor: theme.palette.background.paper,
+        
+    },
+    noStudies: {
+        width: '100%',
+        
     },
     title: {
         margin: `${theme.spacing.unit * 4}px 0 ${theme.spacing.unit * 2}px`,
@@ -45,35 +58,6 @@ class MyStudies extends React.Component {
 
         }
     }
-
-    // // Basically, this component cycle event is just responsible for updating our view in case of a study addition...
-    // componentDidUpdate(prevProps, prevState){
-
-    //     // Checking if our props 'userDataReducer' has changed...
-    //     // If affirmative, we have to fetch the new study to this view.
-    //     if (this.props.userDataReducer.studies.length > this.state.studies.length ){
-
-    //         // Declaring our api url...
-    //         let urlRequest = "http://localhost:3000/studies/_id=";
-
-    //         // Taking the last element on our studies vector (the last one to be added, by mongo's default...)            
-    //         let newStudyUrl = this.props.userDataReducer.studies[this.props.userDataReducer.studies.length - 1]
-        
-
-    //         urlRequest += newStudyUrl;
-
-    //         // API request to get info about this last study...
-    //         axios.get(urlRequest).then(res => {
-    //             this.setState({ studies: [...this.state.studies[this.state.studies.length - 1], res.data] })
-    //             this.props.studiesDataStoreAction({ studies: [...this.state.studies[this.state.studies.length - 1], res.data] })
-    //         }, res => {
-    //             this.props.studyRetrieveError()
-    //         })
-
-            
-    //     }
-
-    // }
 
     getStudies(){
 
@@ -126,37 +110,43 @@ class MyStudies extends React.Component {
         axios.delete(url + this.state.studies[this.state.deleteIndex]._id).then((res) => {
             
             
-            console.log("DELETE RESPONSE: ", res)
-            // Now, I'll just update our local data...
-            let aux = this.state.studies
-            aux.splice(this.state.deleteIndex, 1)
-            this.setState({studies: aux})
+            // console.log("DELETE RESPONSE: ", res)
+            // // Now, I'll just update our local data...
+
+            // console.log("COMO ESTAVAM OS ESTUDOS ANTES: ", this.state.studies)
+            let removedItem = this.state.studies[this.state.deleteIndex]
+            const newItems = this.state.studies.filter((value) => {
+                return value !== removedItem;
+            })
+
+            // this.setState({
+            //     studies: [...newItems] 
+            // })
+
+            // console.log("COMO FICARAM: ", newItems)
 
             // Updating our reducers to make sure everything is synced up... 
-            this.props.studiesDataStoreAction({studies: aux})
+            // this.props.studiesDataStoreAction({studies: [...newItems]})
             this.props.userDataStoreAction(res.data)
-            
+            this.props.studiesDataStoreAction({studies: [...newItems]})  
+                      
             
 
             // Just closing our dialog and exhibiting a successful message.
-            this.setState({ openDialog: false });
+            this.setState({studies:[...newItems], openDialog: false });
 
             this.props.studyDeletedOk();
             
 
         }, (res) => {
 
-            console.log("Error: ", res)
-
+        
             // In case of failure on deletion, we just close our dialog and exhibit a failure message...
             this.setState({ openDialog: false });
 
             this.props.studyDeletedError();
             
         })
-
-
-        
 
     }   
     
@@ -195,9 +185,10 @@ class MyStudies extends React.Component {
             return (
                 <div>
 
-                    <Typography variant='h1' align='center'>
+                    {/* <Typography align='center'>
                             Carregando estudos...
-                    </Typography>
+                    </Typography> */}
+
                     <Loading></Loading>
 
                     
@@ -209,11 +200,14 @@ class MyStudies extends React.Component {
             if (!this.props.userDataReducer.studies.length){
 
                 return (
-                    <div>
-
-                        <Typography variant='h1' align='center'>
-                            Você ainda não tem estudos.
-                        </Typography>
+                    <div className={classes.noStudies}>
+                        {/* <Card className={classes.card}>
+                            <CardContent> */}
+                                <Typography align='center' gutterBottom variant="h5" component="h2">
+                                    Você ainda não tem estudos. É possível criar um estudo na aba "Novo estudo".
+                                </Typography>
+                            {/* </CardContent>
+                        </Card> */}
 
 
 
@@ -238,10 +232,11 @@ class MyStudies extends React.Component {
                         </BinaryDialog>
 
 
-                        <List >                        
+                        <List >            
+                            
                             {
                                 this.state.studies.map((study, index) => (
-
+                                    
                                     <ListItem key={index}>
                                         <ListItemAvatar>
                                             <Avatar>
@@ -253,15 +248,21 @@ class MyStudies extends React.Component {
                                             secondary={study.objective}
                                         />
                                         <ListItemSecondaryAction>
+                                            <IconButton aria-label="Copy link to study" onClick={() => this.openDialog(index)}>
+                                                <FileCopyRounded />
+                                            </IconButton>
                                             <IconButton aria-label="Delete" color="secondary" onClick={() => this.openDialog(index)}>
                                                 <DeleteIcon />
                                             </IconButton>
                                         </ListItemSecondaryAction>
                                     </ListItem>
 
+                                            
+
                                 ))
                                 
-                            }                    
+                            }  
+                            
                             
                         </List>
                     </div>

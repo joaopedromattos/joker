@@ -70,6 +70,7 @@ class NewStudyForm extends React.Component {
         
     };
 
+    // Function used to add cards to our study. It just modifies data locally.
     addCard = () =>{
         this.setState({
             cards:[{
@@ -81,11 +82,15 @@ class NewStudyForm extends React.Component {
         })
     }
 
+    // This function is used to remove cards from our local state.
     removeCard = (toBeRemoved) => {
         let newArray = this.state.cards.filter((_, i) => i !== toBeRemoved)
         this.setState({cards: newArray})
     }
 
+    // 
+    // These two functions below are just responsible for changing our cards order. 
+    // 
     moveCardDown = (index) => {
 
         let newArray = this.state.cards
@@ -214,14 +219,12 @@ class NewStudyForm extends React.Component {
                     />        
         
                 </form>
-
-                {/* <Fab color="primary" aria-label="Add" className={classes.fab} onClick={() => this.addCard()}>
-                    <AddIcon />
-                </Fab>  */}
-
+                
                 <Button className={classes.button} fullWidth={true} variant="contained" color="primary" onClick={() => this.addCard()}>
                     <AddIcon/>
                 </Button>
+
+                {/* Here is where we place our cards list... */}
                 <List className={classes.root}>
                         {
                             this.state.cards.map((card, index, cards) =>( 

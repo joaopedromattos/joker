@@ -8,7 +8,6 @@ import { loginAction } from "../../../actions/admin/loginAction";
 import { logoutAction } from "../../../actions/admin/logoutAction";
 import { userDataStoreAction } from "../../../actions/admin/userDataStoreAction";
 import { studiesDataStoreAction } from "../../../actions/admin/studiesDataStoreAction";
-import './researcherDashboard.scss';
 import DashboardDrawer from "../../DashboardDrawer/DashboardDrawer";
 import MainDrawer from "../../MainContentDashboard/MainDrawer";
 import InsertChart from '@material-ui/icons/InsertChartRounded';
@@ -21,10 +20,15 @@ import MyStudies from "../../MyStudies/MyStudies";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 
+
 const styles2 = theme => ({
     margin: {
         margin: theme.spacing.unit,
     },
+    dashboardBody: {
+        backgroundImage: 'none', 
+        backgroundColor: 'white',
+    }
 });
 
 
@@ -71,7 +75,7 @@ class ResearcherDashboard extends Component {
         
     }
 
-    // The following three functions are just handlers of the snackBars
+    // The following three functions are just handlers of the snackBars and should be ignored. 
     handleCloseLogin = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -152,7 +156,7 @@ class ResearcherDashboard extends Component {
 
     }
 
-
+    // Callback responsible for communicating to our database the data of the study we're creating
     newStudy = (studyName, studyObjective, cards) => {
         
         // Here I just create the study on the database.
@@ -199,6 +203,7 @@ class ResearcherDashboard extends Component {
 
     }
 
+    // Cleaning our current data to make our login/logout logic keep working.
     logOut(){
 
         firebase.auth().signOut()
@@ -218,13 +223,16 @@ class ResearcherDashboard extends Component {
         firebase.auth()
     }
 
-    render() {        
+    render() {  
+        
+        const { classes } = this.props;
 
         return (
 
-            <div className="dashboardBody">
+            <div className={classes.dashboardBody}>
                 <DashboardDrawer drawer={this.drawer} active={this.state.tabs.active} elements={this.state.tabs.elements} clickHandler={(tab) => this.clickHandler(tab)} logoutClick={() => this.logOut()} />
 
+                {/* All these snack bars are just warnings and sucess messages. */}
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',
@@ -289,7 +297,6 @@ class ResearcherDashboard extends Component {
                     />
                 </Snackbar>
                 
-
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',
@@ -322,19 +329,8 @@ class ResearcherDashboard extends Component {
                     />
                 </Snackbar>
 
-                {
-                    (this.state.tabs.active == 0 && this.state.user && this.state.user.studies) || (this.state.tabs.active != 0) ? (
-
-                        <MainDrawer content={this.state.mainElements[this.state.tabs.active]} ></MainDrawer>
-
-                    ) : (
-
-                        <MainDrawer content={this.state.mainElements[2]} ></MainDrawer>
-
-                    )
-
-
-                }
+                {/* This component is responsible for rendering the tab that's being passed through 'content' property */}
+                <MainDrawer content={this.state.mainElements[this.state.tabs.active]} ></MainDrawer>
 
 
             </div>
