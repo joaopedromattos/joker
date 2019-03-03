@@ -9,13 +9,14 @@ const ITEM_HEIGHT = 48;
 class ThreeDotsMenu extends React.Component {
     constructor(props){
         super(props)
-        state = {
+        this.state = {
             anchorEl: null,
 
             // This state variable will receive an object like this:
             // {lable:"Name of the action", callback: () => yourCallback()}
-            options: [...this.props.studyActions]
-            
+            options: [...this.props.studyLables],
+            callbacks: this.props.callbacks,
+            elementIndex: this.props.elementIndex
         };
 
     }
@@ -29,8 +30,8 @@ class ThreeDotsMenu extends React.Component {
         this.setState({ anchorEl: null });
     };
 
-    clickHandler = (index) => {
-        this.state.options[index].callback()
+    clickHandler = (action) => {
+        this.props.callbacks(action, this.state.elementIndex)
         this.handleClose()
     }
     
@@ -62,8 +63,8 @@ class ThreeDotsMenu extends React.Component {
                     }}
                 >
                     {this.state.options.map((option, index) => (
-                        <MenuItem key={index}  onClick={(index) => this.clickHandler(index)}>
-                            {option.lable}
+                        <MenuItem key={index}  onClick={() => this.clickHandler(index)}>
+                            {option}
                         </MenuItem>
                     ))}
                 </Menu>

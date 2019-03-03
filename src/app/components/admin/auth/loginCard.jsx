@@ -7,6 +7,7 @@ import './loginCard.scss';
 import firebase from 'firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import Link from "react-router";
+import Grid from '@material-ui/core/Grid';
 
 // Paper styling.
 const styles = theme => ({
@@ -27,6 +28,8 @@ const uiConfig = {
     signInFlow: "popup",
     signInOptions: [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        
     ],
     callbacks: {
         signInSuccessWithAuthResult: () => false
@@ -40,19 +43,30 @@ function LoginCard(props){
 
     return(
         <div className="login-card">
-            <Paper className={classes.root} >
-                <Typography variant="title" component="h3">
-                    Faça login para acessar o Joker:
-                </Typography>
+            <Paper className={classes.root} >                
+                <Grid
+                    container
+                    direction="column"
+                    justify="center"
+                    alignItems="center"
+                >
+                    <Grid item>
+                        <h1 >Faça login para acessar o Joker:</h1>
+                    </Grid>
 
-                <br/>
+                    <br />
+
+                    <Grid item>                    
+                        <StyledFirebaseAuth
+
+
+                            uiConfig={uiConfig}
+                            firebaseAuth={firebase.auth()}
+                        />   
+                    </Grid>
+                </Grid>
+
                 
-                <StyledFirebaseAuth
-
-                          
-                    uiConfig={uiConfig}
-                    firebaseAuth={firebase.auth()}
-                />   
 
                       
             </Paper>

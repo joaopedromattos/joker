@@ -47,6 +47,7 @@ exports.getStudy = (req, res) => {
 }
 
 exports.updateStudy = (req, res) => {
+    console.log("update requisition: ", req.body)
     Study.findOneAndUpdate({ _id: req.params._id }, req.body, { new: true }, (err, data) => {
         if (err) {
             res.send(err);

@@ -8,7 +8,7 @@ var studySchema = new mongoose.Schema({
     name: String,
     objective: String,
     cards: {
-        type: [{ titles: String, description: String }]
+        type: [{ name: String, description: String }]
     },
 }, { timestamps: true })
 

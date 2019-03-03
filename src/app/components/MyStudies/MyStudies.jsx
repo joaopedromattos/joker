@@ -21,29 +21,45 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import Loading from "../Loading/Loading";
 import BinaryDialog from "../Dialogs/BinaryDialog";
+import FormDialog from "../Dialogs/FormDialog";
+import ThreeDotsMenu from "../ThreeDotsMenu/ThreeDotsMenu";
+import Button from "@material-ui/core/Button";
+import NewStudyForm from "../NewStudyForm/NewStudyForm";
 
 const styles = theme => ({
     root: {
+        display: 'flex',
+        flexWrap: 'wrap',
         flexGrow: 1,
-        // maxWidth: 752,
+        width: '100%',
     },
     card: {
         minWidth: 275,
     },
     demo: {
-        backgroundColor: theme.palette.background.paper,
-        
-    },
-    noStudies: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        flexGrow: 1,
         width: '100%',
-        
+                
     },
     title: {
         margin: `${theme.spacing.unit * 4}px 0 ${theme.spacing.unit * 2}px`,
     },
+    studyTitle:{
+        paddingLeft: '3%',
+        paddingRight: '3%'
+    },
+    button: {
+        margin: theme.spacing.unit,
+    }, 
+    studiesList: {
+        width: '100%',
+    }
 });
 
 class MyStudies extends React.Component {
@@ -53,16 +69,20 @@ class MyStudies extends React.Component {
         this.state = {    
                     
             studies: this.props.studiesDataReducer.studies, 
-            openDialog: false,
-            deleteIndex: 0,                  
+            openDeleteDialog: false,
+            openEditDialog: false,
+            editIndex: 0,
+            deleteIndex: 0,
+            studyActionsLables: ["Copiar link para o estudo", "Alterar estudo", "Excluir estudo"], 
 
         }
     }
 
+    // Function that retrieves researcher's studies when he/she logs in.
     getStudies(){
 
+        // Building the api url to retrieve all studies...
         let url = "http://localhost:3000/studies/_id=";
-
         this.props.userDataReducer.studies.map((study, index) => {
 
             if (index === this.props.userDataReducer.studies.length - 1){
@@ -74,8 +94,7 @@ class MyStudies extends React.Component {
 
         })
 
-        console.log("Estudos que vamos pegar: " , url)
-
+        // The api requisition itself...
         axios.get(url).then(res => {
             this.setState({studies: res.data})
             this.props.studiesDataStoreAction({studies: res.data})
@@ -83,21 +102,81 @@ class MyStudies extends React.Component {
             this.props.studyRetrieveError()
         })
     }
-
-    openDialog = (index) => {
+    
+    openDeleteDialog = (index) => {
 
         console.log("Dentro de open dialog: ", index)
         
         
-        this.setState({ openDialog: true, deleteIndex: index })
+        this.setState({ openDeleteDialog: true, deleteIndex: index })
 
 
     }
+    
+    openEditDialog = (index) => {
+        this.setState({openEditDialog: true, editIndex: index })
 
-    denial = () => {
+    }
 
-        this.setState({ openDialog:false })
+    closeEditDialog = () => {
+        this.setState({openEditDialog: false })
+    }
 
+    denialDelete = () => {
+
+        this.setState({ openDeleteDialog:false })
+
+    }
+
+    
+    updateStudy = (newStudyName, newStudyObjective, newCards) => {
+        let url = "http://localhost:3000/studies/_id=" + this.props.userDataReducer.studies[this.state.editIndex];
+        axios.put(url, {
+            name: newStudyName, 
+            objective: newStudyObjective, 
+            cards: newCards
+        }).then(res => {            
+
+            if (res.data.message){
+                this.props.studyEditedError()
+                return;
+            }
+
+            let studiesRedux = this.props.studiesDataReducer.studies
+            studiesRedux[this.state.editIndex] = res.data
+
+            this.props.studiesDataStoreAction({ studies: [...studiesRedux] })  
+
+            this.setState({ studies: [...studiesRedux], openEditDialog: false });
+
+            this.props.studyEditedOk()
+            
+        }, err => {
+            this.setState({ studies: [...studiesRedux], openEditDialog: false });
+            this.props.studyEditedError()
+        })
+    }
+
+    // This function returns a function call. It exists because we can't pass an array of functions to a component. 
+    // So if you want to add to ThreeDotsMenu component a new function, you should add it's functionality here.
+    menuOptions = (action, index) => {
+        console.log("index: ", index)
+        // Add to this swich the functionality you want.
+        switch (action) {
+            case 0:
+                // 'Copiar link para estudo...'
+                this.openDeleteDialog(index)
+                break;        
+            case 1:
+                // 'Editar estudo'...
+                this.openEditDialog(index)
+                break;
+            case 2:
+                this.openDeleteDialog(index)
+                break;
+            default: 
+                return;
+        }
     }
     
     granted = () => {
@@ -133,7 +212,7 @@ class MyStudies extends React.Component {
             
 
             // Just closing our dialog and exhibiting a successful message.
-            this.setState({studies:[...newItems], openDialog: false });
+            this.setState({studies:[...newItems], openDeleteDialog: false });
 
             this.props.studyDeletedOk();
             
@@ -142,7 +221,7 @@ class MyStudies extends React.Component {
 
         
             // In case of failure on deletion, we just close our dialog and exhibit a failure message...
-            this.setState({ openDialog: false });
+            this.setState({ openDeleteDialog: false });
 
             this.props.studyDeletedError();
             
@@ -200,14 +279,27 @@ class MyStudies extends React.Component {
             if (!this.props.userDataReducer.studies.length){
 
                 return (
-                    <div className={classes.noStudies}>
+                    <div className={classes.root}>
                         {/* <Card className={classes.card}>
                             <CardContent> */}
-                                <Typography align='center' gutterBottom variant="h5" component="h2">
-                                    Você ainda não tem estudos. É possível criar um estudo na aba "Novo estudo".
-                                </Typography>
+                        <Grid
+                            container
+                            direction="row"
+                            justify="center"
+                            alignItems="center"
+                        >
+                            <Grid item>
+                                <h1 className="centerTitles">Você ainda não tem estudos. É possível criar um estudo na aba "Novo estudo".</h1>
+                            </Grid>
+                        </Grid>
+                        {/* <Typography align='center' gutterBottom variant="h5" component="h2">
+                            Você ainda não tem estudos. É possível criar um estudo na aba "Novo estudo".
+                        </Typography> */}
                             {/* </CardContent>
                         </Card> */}
+                        
+                        
+                        
 
 
 
@@ -220,51 +312,61 @@ class MyStudies extends React.Component {
                 return(               
                             
                     <div className={classes.demo}>
+                        
+                        
+                        <div>    
+                            {/* This Dialog is exhibited when we try to delete a study */}
+                            <BinaryDialog title={"Tem certeza de que deseja excluir este estudo?"} 
+                                        open={this.state.openDeleteDialog}
+                                        text={`Depois de excluído, você não poderá recuperar os dados do seu estudo.`} 
+                                        denialButton="CANCELAR" 
+                                        grantedButton="EXCLUIR"
+                                        granted={() => this.granted()}
+                                        denial={() => this.denialDelete()}
+                                        changeConfirmationColor={true}>
+                            </BinaryDialog>
 
-                        <BinaryDialog title={"Tem certeza de que deseja excluir este estudo?"} 
-                                    open={this.state.openDialog}
-                                    text={`Depois de excluído, você não poderá recuperar os dados do seu estudo.`} 
-                                    denialButton="CANCELAR" 
-                                    grantedButton="EXCLUIR"
-                                    granted={() => this.granted()}
-                                    denial={() => this.denial()}
-                                    changeConfirmationColor={true}>
-                        </BinaryDialog>
+                            {/* We exhibit this when trying to edit a study */}
+                            <FormDialog
+                                open={this.state.openEditDialog}
+                                cancel={() => this.closeEditDialog()}
+                                title={"Editar estudos"}
+                                submitButtonHandler={() => {return;}}
+                                submitButton={''}
+                                formFields={<NewStudyForm newStudy={(newStudyName, newstudyObjective, newCards) => this.updateStudy(newStudyName, newstudyObjective, newCards)}
+                                    firstButton={'Editar estudo '}
+                                    name={this.state.studies[this.state.editIndex].name}
+                                    objective={this.state.studies[this.state.editIndex].objective}
+                                    cards={this.state.studies[this.state.editIndex].cards} />}>
+                            </FormDialog>
 
 
-                        <List >            
-                            
+                        </div>          
+
+                        {/* <Button className={classes.button} fullWidth={true} variant="contained" color="primary" onClick={() => this.addCard()}>
+                            Criar estudo <span> </span>
+                        </Button> */}
+                                              
+                        
+                        {/* Here is the list of studies...  */}
+                        <List className={classes.studiesList}>            
                             {
                                 this.state.studies.map((study, index) => (
-                                    
-                                    <ListItem key={index}>
-                                        <ListItemAvatar>
-                                            <Avatar>
-                                                <FolderIcon />
-                                            </Avatar>
-                                        </ListItemAvatar>
+                                    <ListItem key={index} divider={true}>                                       
                                         <ListItemText
-                                            primary={study.name}
-                                            secondary={study.objective}
+                                        primary={<Typography variant="title" align="justify" gutterBottom>{study.name}</Typography>}
+                                        secondary={<Typography variant="subheading" align="justify" gutterBottom>{study.objective}</Typography>}
                                         />
                                         <ListItemSecondaryAction>
-                                            <IconButton aria-label="Copy link to study" onClick={() => this.openDialog(index)}>
-                                                <FileCopyRounded />
-                                            </IconButton>
-                                            <IconButton aria-label="Delete" color="secondary" onClick={() => this.openDialog(index)}>
-                                                <DeleteIcon />
-                                            </IconButton>
+                                            {/* Three dots menu that's in the same line of the study title. */}
+                                            <ThreeDotsMenu studyLables={this.state.studyActionsLables} callbacks={(action, index) => this.menuOptions(action, index)} elementIndex={index} />
                                         </ListItemSecondaryAction>
                                     </ListItem>
-
-                                            
-
                                 ))
-                                
                             }  
-                            
-                            
                         </List>
+                            
+                    
                     </div>
                 
                 )

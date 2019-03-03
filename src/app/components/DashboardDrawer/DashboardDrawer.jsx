@@ -24,7 +24,7 @@ const drawerWidth = 240;
 const styles = theme => ({
     root: {
         display: 'flex',
-        // flexGrow: 1
+        flexGrow: 1
     },
     grow: {
         flexGrow: 1,
@@ -104,24 +104,19 @@ class DashboardDrawer extends React.Component {
                 <div className={classes.root}>
                     {/* <CssBaseline /> */}
                     <AppBar position="absolute" className={classes.appBar}>
-                        
-                        
-                        <Toolbar >
-                            
+                        <Toolbar>
                             <IconButton
-                                color="inherit"
-                                aria-label="Open drawer"
-                                onClick={this.handleDrawerToggle}
-                                className={classes.menuButton}
-                            >
+                            color="inherit"
+                            aria-label="Open drawer"
+                            onClick={this.handleDrawerToggle}
+                            className={classes.menuButton}>
+
                                 <MenuIcon />
                             </IconButton>
-                                
+                            
                             <Typography variant="h6" color="inherit" className={classes.grow}>
                                 {this.props.elements[this.props.active].tabName}
                             </Typography>
-                            
-                                
                             
                         </Toolbar>
                     </AppBar>
@@ -163,10 +158,7 @@ class DashboardDrawer extends React.Component {
 
 DashboardDrawer.propTypes = {
     classes: PropTypes.object.isRequired,
-    // Injected by the documentation to work in an iframe.
-    // You won't need it on your project.
-    container: PropTypes.object,
-    theme: PropTypes.object.isRequired,
+    
 };
 
 export default withStyles(styles, { withTheme: true })(DashboardDrawer);

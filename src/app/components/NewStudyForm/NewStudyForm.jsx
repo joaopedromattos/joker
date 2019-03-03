@@ -62,11 +62,12 @@ const styles = theme => ({
 
 class NewStudyForm extends React.Component {
     state = {
-        name: '', 
-        objective: '', 
+        name: this.props.name, 
+        objective: this.props.objective, 
         currentCard: '',
         currentCardDescription: '', 
-        cards: []
+        cards: this.props.cards, 
+        
         
     };
 
@@ -136,10 +137,11 @@ class NewStudyForm extends React.Component {
 
         return (
             <div>
-
+                
                 <Button className={classes.button} onClick={() => this.props.newStudy(this.state.name, this.state.objective, this.state.cards)} fullWidth={true} variant="contained" color="primary" >
-                    Criar estudo <span> </span><AddIcon className={classes.leftIcon} />
+                    {this.props.firstButton} <span> </span><AddIcon className={classes.leftIcon} />
                 </Button>
+                
                 <form className={classes.container} noValidate autoComplete="off">
 
                     <Grid

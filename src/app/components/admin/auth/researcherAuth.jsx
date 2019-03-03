@@ -9,6 +9,7 @@ import { loginAction } from "../../../actions/admin/loginAction";
 import { logoutAction } from "../../../actions/admin/logoutAction";
 import { userDataStoreAction } from "../../../actions/admin/userDataStoreAction";
 import axios from "axios";
+
 import { withRouter } from "react-router-dom";
 
 
@@ -98,12 +99,9 @@ class ResearcherAuth extends Component{
     render(){
 
         return (            
-            <div className="login-card">
+            
+            <LoginCard/>                    
                 
-                    {/* <img src="http://via.placeholder.com/32x20/000000/ffffff?text=?" height="20" width="32" /> */}
-                    <LoginCard />                
-                
-            </div>
         )
 
     }

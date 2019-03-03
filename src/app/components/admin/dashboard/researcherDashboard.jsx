@@ -57,86 +57,34 @@ class ResearcherDashboard extends Component {
             studyRetrieveError: false,
             studyDeletedOk: false,
             studyDeletedError: false,
+            studyEditedOk: false, 
+            studyEditedError: false,
             mainElements: [ // The component of the tab you inserted right above should be added here. 
                 <MyStudies user={this.props.userDataReducer} 
-                        studyRetrieveError={() => this.handleOpenStudyRetrieve()} 
-                        studyDeletedOk={() => this.handleOpenStudyDeletedOk()} 
-                        studyDeletedError={() => this.handleOpenStudyDeletedError()}/>, 
-                <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)} /> // The order should be the same of the tabs array...
+                    studyRetrieveError={() => this.setState({ studyRetrieveError: true })}
+                    studyDeletedOk={() => this.setState({ studyDeletedOk: true })}
+                    studyDeletedError={() => this.setState({ studyDeletedError: true })}
+                    studyEditedOk={() => this.setState({ studyEditedOk: true })}
+                    studyEditedError={() => this.setState({ studyEditedError: true })}/>, 
+                <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)}
+                    firstButton={'Criar estudo '}
+                    name={''}
+                    objective={''}
+                    cards={[]} /> // The order should be the same of the tabs array...
             ],
             logoutClicked: false
 
 
         }
 
-        this.handleOpenStudyDeletedOk = this.handleOpenStudyDeletedOk.bind(this);
-        this.handleOpenStudyDeletedError = this.handleOpenStudyDeletedError.bind(this);
+        
+        
 
         
     }
 
     // The following three functions are just handlers of the snackBars and should be ignored. 
-    handleCloseLogin = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        this.setState({ open: false });
 
-    };
-
-    handleCloseStudyCreationOk = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        this.setState({ studyCreationOk: false });
-
-    };
-
-    handleCloseStudyCreationError = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        this.setState({ studyCreationError: false });
-
-    };
-
-
-    handleOpenStudyRetrieve = (event, reason) => {
-        this.setState({ studyRetrieveError : true})
-    }
-
-    handleCloseStudyRetrieve = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        this.setState({ studyRetrieveError: false });
-
-    };
-
-
-    handleOpenStudyDeletedOk = (event, reason) => {
-        this.setState({ studyDeletedOk: true })
-    }
-
-    handleCloseStudyDeletedOk = (event, reason) => {
-
-        if (reason === 'clickaway') {
-            return;
-        }
-        this.setState({ studyDeletedOk: false });
-
-    }
-
-    handleOpenStudyDeletedError = (event, reason) => {
-        this.setState({ studyDeletedError: true })
-    }
-
-    handleCloseStudyDeletedError = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        this.setState({ studyDeletedError: false });
-    }
 
     // Creating tab transition...
     clickHandler = (tab) => {
@@ -179,11 +127,17 @@ class ResearcherDashboard extends Component {
                     user: res.data, 
                     studyCreationOk: true, 
                     mainElements: [
-                    <MyStudies user={this.props.userDataReducer} studyRetrieveError={() => this.handleOpenStudyRetrieve()} 
-                            studyRetrieveError={() => this.handleOpenStudyRetrieve()}
-                            studyDeletedOk={() => this.handleOpenStudyDeletedOk()}
-                            studyDeletedError={() => this.handleOpenStudyDeletedError()}/>, 
-                    <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)} /> // The order should be the same of the tabs array...
+                    <MyStudies user={this.props.userDataReducer}  
+                            studyRetrieveError={() => this.setState({ studyRetrieveError: true })}
+                            studyDeletedOk={() => this.setState({ studyDeletedOk: true })}
+                            studyDeletedError={() => this.setState({ studyDeletedError: true })}
+                            studyEditedOk={() => this.setState({ studyEditedOk: true })}
+                            studyEditedError={() => this.setState({ studyEditedError: true })}/>, 
+                        <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)}
+                            firstButton={'Criar estudo '}
+                            name={''}
+                            objective={''}
+                            cards={[]} /> // The order should be the same of the tabs array...
                 ]})
 
             }, res => {
@@ -238,12 +192,74 @@ class ResearcherDashboard extends Component {
                         vertical: 'bottom',
                         horizontal: 'left',
                     }}
-                    open={this.state.open}
+                    open={this.state.studyEditedOk}
                     autoHideDuration={3000}
-                    onClose={this.handleCloseLogin}
+                    onClose={(event, reason) => {
+                        if (reason === 'clickaway') {
+                            return;
+                        }
+                        this.setState({ studyEditedOk: false });
+                    }}
                 >
                     <MySnackbarContent
-                        onClose={this.handleCloseLogin}
+                        onClose={(event, reason) => {
+                            if (reason === 'clickaway') {
+                                return;
+                            }
+                            this.setState({ studyEditedOk: false });
+                        }}
+                        variant="success"
+                        message="Estudo editado com sucesso!"
+                    />
+                </Snackbar>
+
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.studyEditedError}
+                    autoHideDuration={3000}
+                    onClose={(event, reason) => {
+                        if (reason === 'clickaway') {
+                            return;
+                        }
+                        this.setState({ studyEditedError: false });
+                    }}
+                >
+                    <MySnackbarContent
+                        onClose={(event, reason) => {
+                            if (reason === 'clickaway') {
+                                return;
+                            }
+                            this.setState({ studyEditedError: false });
+                        }}
+                        variant="error"
+                        message="Ocorreram erros ao editar seu estudo!"
+                    />
+                </Snackbar>
+
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.open}
+                    autoHideDuration={3000}
+                    onClose={(event, reason) => {
+                        if (reason === 'clickaway') {
+                            return;
+                        }
+                        this.setState({ open: false });
+                    }}
+                >
+                    <MySnackbarContent
+                        onClose={(event, reason) => {
+                            if (reason === 'clickaway') {
+                                return;
+                            }
+                            this.setState({ open: false });
+                        }}
                         variant="success"
                         message="Login efetuado com sucesso!"
                     />
@@ -256,10 +272,20 @@ class ResearcherDashboard extends Component {
                     }}
                     open={this.state.studyCreationOk}
                     autoHideDuration={3000}
-                    onClose={this.handleCloseStudyCreationOk}
+                    onClose={(event, reason) => {
+                        if (reason === 'clickaway') {
+                            return;
+                        }
+                        this.setState({ studyCreationOk: false });
+                    }}
                 >
                     <MySnackbarContent
-                        onClose={this.handleCloseStudyCreationOk}
+                        onClose={(event, reason) => {
+                            if (reason === 'clickaway') {
+                                return;
+                            }
+                            this.setState({ studyCreationOk: false });
+                        }}
                         variant="success"
                         message="Estudo criado com sucesso!"
                     />
@@ -272,10 +298,20 @@ class ResearcherDashboard extends Component {
                     }}
                     open={this.state.studyDeletedOk}
                     autoHideDuration={3000}
-                    onClose={this.handleCloseStudyDeletedOk}
+                    onClose={(event, reason ) => {
+                        if (reason === 'clickaway') {
+                            return;
+                        }
+                        this.setState({ studyDeletedOk: false });
+                    }}
                 >
                     <MySnackbarContent
-                        onClose={this.handleCloseStudyDeletedOk}
+                        onClose={(event, reason) => {
+                            if (reason === 'clickaway') {
+                                return;
+                            }
+                            this.setState({ studyDeletedOk: false });
+                        }}
                         variant="success"
                         message="Estudo excluído com sucesso!"
                     />
@@ -288,10 +324,20 @@ class ResearcherDashboard extends Component {
                     }}
                     open={this.state.studyCreationError}
                     autoHideDuration={3000}
-                    onClose={this.handleCloseStudyCreationError}
+                    onClose={(event, reason) => {
+                        if (reason === 'clickaway') {
+                            return;
+                        }
+                        this.setState({ studyCreationError: false });
+                    }}
                 >
                     <MySnackbarContent
-                        onClose={this.handleCloseStudyCreationError}
+                        onClose={(event, reason) => {
+                            if (reason === 'clickaway') {
+                            return;
+                        }
+                        this.setState({ studyCreationError: false });
+                        }}
                         variant="error"
                         message="Ocorreram erros ao tentar salvar seu estudo!"
                     />
@@ -304,10 +350,20 @@ class ResearcherDashboard extends Component {
                     }}
                     open={this.state.studyRetrieveError}
                     autoHideDuration={3000}
-                    onClose={this.handleCloseStudyRetrieve}
+                    onClose={(event, reason) => {
+                        if (reason === 'clickaway') {
+                            return;
+                        }
+                        this.setState({ studyRetrieveError: false });
+                    }}
                 >
                     <MySnackbarContent
-                        onClose={this.handleCloseStudyRetrieve}
+                        onClose={(event, reason) => {
+                            if (reason === 'clickaway') {
+                                return;
+                            }
+                            this.setState({ studyRetrieveError: false });
+                        }}
                         variant="error"
                         message="Não foi possível recuperar seus estudos!"
                     />
@@ -320,10 +376,20 @@ class ResearcherDashboard extends Component {
                     }}
                     open={this.state.studyDeletedError}
                     autoHideDuration={3000}
-                    onClose={this.handleCloseStudyDeletedError}
+                    onClose={(event, reason) => {
+                        if (reason === 'clickaway') {
+                            return;
+                        }
+                        this.setState({ studyDeletedError: false });
+                    }}
                 >
                     <MySnackbarContent
-                        onClose={this.handleCloseStudyDeletedError}
+                        onClose={(event, reason) => {
+                            if (reason === 'clickaway') {
+                                return;
+                            }
+                            this.setState({ studyDeletedError: false });
+                        }}
                         variant="error"
                         message="Não foi possível excluir seu estudo!"
                     />
@@ -332,12 +398,9 @@ class ResearcherDashboard extends Component {
                 {/* This component is responsible for rendering the tab that's being passed through 'content' property */}
                 <MainDrawer content={this.state.mainElements[this.state.tabs.active]} ></MainDrawer>
 
-
             </div>
 
         )
-
-
 
     }
 
