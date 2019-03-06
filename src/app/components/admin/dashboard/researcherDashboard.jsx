@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import firebase from 'firebase';
@@ -59,13 +58,15 @@ class ResearcherDashboard extends Component {
             studyDeletedError: false,
             studyEditedOk: false, 
             studyEditedError: false,
+            studyLinkCopied: false,
             mainElements: [ // The component of the tab you inserted right above should be added here. 
                 <MyStudies user={this.props.userDataReducer} 
                     studyRetrieveError={() => this.setState({ studyRetrieveError: true })}
                     studyDeletedOk={() => this.setState({ studyDeletedOk: true })}
                     studyDeletedError={() => this.setState({ studyDeletedError: true })}
                     studyEditedOk={() => this.setState({ studyEditedOk: true })}
-                    studyEditedError={() => this.setState({ studyEditedError: true })}/>, 
+                    studyEditedError={() => this.setState({ studyEditedError: true })}
+                    studyLinkCopied={() => this.setState({ studyLinkCopied: true })}/>,                    
                 <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)}
                     firstButton={'Criar estudo '}
                     name={''}
@@ -132,7 +133,8 @@ class ResearcherDashboard extends Component {
                             studyDeletedOk={() => this.setState({ studyDeletedOk: true })}
                             studyDeletedError={() => this.setState({ studyDeletedError: true })}
                             studyEditedOk={() => this.setState({ studyEditedOk: true })}
-                            studyEditedError={() => this.setState({ studyEditedError: true })}/>, 
+                            studyEditedError={() => this.setState({ studyEditedError: true })}
+                            studyLinkCopied={() => this.setState({ studyLinkCopied: true })}/>, 
                         <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)}
                             firstButton={'Criar estudo '}
                             name={''}
@@ -187,6 +189,32 @@ class ResearcherDashboard extends Component {
                 <DashboardDrawer drawer={this.drawer} active={this.state.tabs.active} elements={this.state.tabs.elements} clickHandler={(tab) => this.clickHandler(tab)} logoutClick={() => this.logOut()} />
 
                 {/* All these snack bars are just warnings and sucess messages. */}
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.studyLinkCopied}
+                    autoHideDuration={3000}
+                    onClose={(event, reason) => {
+                        if (reason === 'clickaway') {
+                            return;
+                        }
+                        this.setState({ studyLinkCopied: false });
+                    }}
+                >
+                    <MySnackbarContent
+                        onClose={(event, reason) => {
+                            if (reason === 'clickaway') {
+                                return;
+                            }
+                            this.setState({ studyLinkCopied: false });
+                        }}
+                        variant="success"
+                        message="Link para estudo copiado!"
+                    />
+                </Snackbar>
+
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',

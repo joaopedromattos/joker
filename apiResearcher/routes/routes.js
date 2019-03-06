@@ -3,6 +3,7 @@
 module.exports = (app) => {
     var researcher = require("../controller/researcherController");
     var study = require("../controller/studyController");
+    var board = require("../controller/boardController");
 
     // Researcher related routes...
     app.route('/researchers')
@@ -25,4 +26,12 @@ module.exports = (app) => {
         .get(study.getStudy) // Read 
         .put(study.updateStudy) // Update
         .delete(study.deleteStudy) // Delete
+
+    app.route("/boards")
+        .post(board.createBoard) // Create
+        
+    app.route("/boards/_id=:_id")
+        .get(board.getBoard) // Read
+        .put(board.updateBoard) // Update
+        .delete(board.deleteBoard) // Delete
 }

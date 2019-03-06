@@ -64,7 +64,9 @@ class ThreeDotsMenu extends React.Component {
                 >
                     {this.state.options.map((option, index) => (
                         <MenuItem key={index}  onClick={() => this.clickHandler(index)}>
-                            {option}
+                            <div>
+                                {option}
+                            </div>
                         </MenuItem>
                     ))}
                 </Menu>

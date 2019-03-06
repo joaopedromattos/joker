@@ -29,6 +29,7 @@ import FormDialog from "../Dialogs/FormDialog";
 import ThreeDotsMenu from "../ThreeDotsMenu/ThreeDotsMenu";
 import Button from "@material-ui/core/Button";
 import NewStudyForm from "../NewStudyForm/NewStudyForm";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const styles = theme => ({
     root: {
@@ -73,7 +74,7 @@ class MyStudies extends React.Component {
             openEditDialog: false,
             editIndex: 0,
             deleteIndex: 0,
-            studyActionsLables: ["Copiar link para o estudo", "Alterar estudo", "Excluir estudo"], 
+            localUrl: "http://localhost:1337",
 
         }
     }
@@ -164,8 +165,7 @@ class MyStudies extends React.Component {
         // Add to this swich the functionality you want.
         switch (action) {
             case 0:
-                // 'Copiar link para estudo...'
-                this.openDeleteDialog(index)
+                // 'Copiar link para estudo' has a callback on CopyToClipboard component.
                 break;        
             case 1:
                 // 'Editar estudo'...
@@ -188,21 +188,10 @@ class MyStudies extends React.Component {
         console.log("What we requested...", this.state.studies[this.state.deleteIndex]._id)
         axios.delete(url + this.state.studies[this.state.deleteIndex]._id).then((res) => {
             
-            
-            // console.log("DELETE RESPONSE: ", res)
-            // // Now, I'll just update our local data...
-
-            // console.log("COMO ESTAVAM OS ESTUDOS ANTES: ", this.state.studies)
             let removedItem = this.state.studies[this.state.deleteIndex]
             const newItems = this.state.studies.filter((value) => {
                 return value !== removedItem;
             })
-
-            // this.setState({
-            //     studies: [...newItems] 
-            // })
-
-            // console.log("COMO FICARAM: ", newItems)
 
             // Updating our reducers to make sure everything is synced up... 
             // this.props.studiesDataStoreAction({studies: [...newItems]})
@@ -280,8 +269,7 @@ class MyStudies extends React.Component {
 
                 return (
                     <div className={classes.root}>
-                        {/* <Card className={classes.card}>
-                            <CardContent> */}
+                        
                         <Grid
                             container
                             direction="row"
@@ -292,17 +280,7 @@ class MyStudies extends React.Component {
                                 <h1 className="centerTitles">Você ainda não tem estudos. É possível criar um estudo na aba "Novo estudo".</h1>
                             </Grid>
                         </Grid>
-                        {/* <Typography align='center' gutterBottom variant="h5" component="h2">
-                            Você ainda não tem estudos. É possível criar um estudo na aba "Novo estudo".
-                        </Typography> */}
-                            {/* </CardContent>
-                        </Card> */}
                         
-                        
-                        
-
-
-
                     </div>
                 )
 
@@ -343,10 +321,6 @@ class MyStudies extends React.Component {
 
                         </div>          
 
-                        {/* <Button className={classes.button} fullWidth={true} variant="contained" color="primary" onClick={() => this.addCard()}>
-                            Criar estudo <span> </span>
-                        </Button> */}
-                                              
                         
                         {/* Here is the list of studies...  */}
                         <List className={classes.studiesList}>            
@@ -359,7 +333,7 @@ class MyStudies extends React.Component {
                                         />
                                         <ListItemSecondaryAction>
                                             {/* Three dots menu that's in the same line of the study title. */}
-                                            <ThreeDotsMenu studyLables={this.state.studyActionsLables} callbacks={(action, index) => this.menuOptions(action, index)} elementIndex={index} />
+                                            <ThreeDotsMenu studyLables={[<CopyToClipboard text={this.state.localUrl + '/b/' + study._id} onCopy={() => this.props.studyLinkCopied()}><span>Copiar link para o estudo</span></CopyToClipboard>, "Alterar estudo", "Excluir estudo"]} callbacks={(action, index) => this.menuOptions(action, index)} elementIndex={index} />
                                         </ListItemSecondaryAction>
                                     </ListItem>
                                 ))

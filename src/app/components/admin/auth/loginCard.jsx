@@ -64,6 +64,12 @@ function LoginCard(props){
                             firebaseAuth={firebase.auth()}
                         />   
                     </Grid>
+                    
+                    <br/>
+                    
+                    <Grid item>
+                        <h4 >Não armazenaremos nenhum dado pessoal além de seu nome e e-mail.</h4>
+                    </Grid>
                 </Grid>
 
                 

@@ -5,6 +5,7 @@ var express = require("express"),
     mongoose = require("mongoose"),
     Study = require("./model/study"),
     Researcher = require("./model/researcher"),
+    Board = require("./model/board"),
     bodyParser = require("body-parser")
 
 mongoose.Promise = global.Promise;
