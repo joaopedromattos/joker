@@ -34,6 +34,7 @@ const fetchBoardData = db => (req, res, next) => {
 
     // Just create the welcome board if no user is logged in
   } else {
+    
     req.initialState = normalizeBoards([createWelcomeBoard()]);
     next();
   }
