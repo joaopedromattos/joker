@@ -60,7 +60,8 @@ const styles = theme => ({
     }, 
     studiesList: {
         width: '100%',
-    }
+    }, 
+    
 });
 
 class MyStudies extends React.Component {
@@ -328,8 +329,8 @@ class MyStudies extends React.Component {
                                 this.state.studies.map((study, index) => (
                                     <ListItem key={index} divider={true}>                                       
                                         <ListItemText
-                                        primary={<Typography variant="title" align="justify" gutterBottom>{study.name}</Typography>}
-                                        secondary={<Typography variant="subheading" align="justify" gutterBottom>{study.objective}</Typography>}
+                                            primary={study.name}
+                                            secondary={study.objective}
                                         />
                                         <ListItemSecondaryAction>
                                             {/* Three dots menu that's in the same line of the study title. */}

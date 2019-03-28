@@ -8,6 +8,7 @@ import firebase from 'firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import Link from "react-router";
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 // Paper styling.
 const styles = theme => ({
@@ -63,13 +64,22 @@ function LoginCard(props){
                             uiConfig={uiConfig}
                             firebaseAuth={firebase.auth()}
                         />   
+
+                        
                     </Grid>
+
+                    <Grid item>
+                        <Button href="/" >Retornar à página inicial</Button>
+                    </Grid>
+
                     
-                    <br/>
-                    
+
+
                     <Grid item>
                         <h4 >Não armazenaremos nenhum dado pessoal além de seu nome e e-mail.</h4>
                     </Grid>
+
+                    
                 </Grid>
 
                 

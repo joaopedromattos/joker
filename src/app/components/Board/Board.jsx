@@ -18,7 +18,7 @@ class Board extends Component {
     boardId: PropTypes.string.isRequired,
     boardTitle: PropTypes.string.isRequired,
     boardColor: PropTypes.string.isRequired,
-    dispatch: PropTypes.func.isRequired
+    dispatch: PropTypes.func.isRequired, 
   };
 
   constructor(props) {
@@ -130,6 +130,7 @@ class Board extends Component {
       window.scrollTo(window.scrollX - 80, 0);
     }
   };
+
 
   render = () => {
     const { lists, boardTitle, boardId, boardColor } = this.props;

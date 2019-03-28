@@ -1,5 +1,22 @@
 const boardsById = (state = {}, action) => {
   switch (action.type) {
+    case "BOARD_ACCESS":{
+      // const { boardTitle, boardId, userId, listId, boardColor} = action.payload;     
+      
+      // return {        
+
+      //   [boardId]: {
+      //     _id: boardId,
+      //     title: boardTitle,
+      //     lists: [listId],
+      //     users: [userId],
+      //     color: boardColor
+      //   }
+      // }
+
+      return action.payload.board;
+
+    }
     case "ADD_LIST": {
       const { boardId, listId } = action.payload;
       return {

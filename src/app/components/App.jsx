@@ -4,6 +4,7 @@ import { BrowserRouter , Route, Redirect, Switch, withRouter } from "react-route
 import { connect } from "react-redux";
 import Home from "./Home/Home";
 import BoardContainer from "./Board/BoardContainer";
+import BoardComponent from "./Board/BoardComponent";
 import LandingPage from "./LandingPage/LandingPage";
 import "./App.scss";
 
@@ -15,6 +16,7 @@ const App = ({ user, isGuest }) => {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/b/:boardId" component={BoardContainer} />
+        <Route path="/boardAccess" component={BoardComponent} />
         <Redirect to="/" />
       </Switch>
     // 
@@ -24,6 +26,7 @@ const App = ({ user, isGuest }) => {
   // If not logged in, always redirect to landing page
   return (
     <Switch>
+        <Route path="/b/:boardId" component={BoardContainer} />
         <Route path="/" component={LandingPage} />
         <Redirect to="/" />
       </Switch>

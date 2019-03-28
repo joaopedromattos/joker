@@ -11,7 +11,7 @@ var boardSchema = new mongoose.Schema({
         cards: [
             {
                 color: String,
-                name: String
+                title: String
             }
         ]
     }]

@@ -4,6 +4,7 @@ module.exports = (app) => {
     var researcher = require("../controller/researcherController");
     var study = require("../controller/studyController");
     var board = require("../controller/boardController");
+    var welcome = require("../controller/createWelcomeBoard");
 
     // Researcher related routes...
     app.route('/researchers')
@@ -34,4 +35,8 @@ module.exports = (app) => {
         .get(board.getBoard) // Read
         .put(board.updateBoard) // Update
         .delete(board.deleteBoard) // Delete
+
+    // Welcome board template is created
+    app.route("/fetchBoard/_id=:_id")
+        .get(welcome.createWelcomeBoard)
 }

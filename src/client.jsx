@@ -14,17 +14,25 @@ import App from "./app/components/App";
 import ResearcherAuth from "./app/components/admin/auth/researcherAuth";
 import ResearcherDashboard from "./app/components/admin/dashboard/researcherDashboard";
 import BoardContainer from './app/components/Board/BoardContainer';
+import BoardComponent from "./app/components/Board/BoardComponent";
 import firebase from "firebase";
+import { loadState, saveState } from "./server/reloadManager";
 
 // Extract initial redux state received from the server
-const preloadedState = window.PRELOADED_STATE;
-delete window.PRELOADED_STATE;
+// const preloadedState = window.PRELOADED_STATE;
+// delete window.PRELOADED_STATE;
 
+const persistedState = loadState();
 const store = createStore(
   rootReducer,
-  preloadedState,
-  composeWithDevTools(applyMiddleware(persistMiddleware))
+  persistedState,
+  composeWithDevTools(applyMiddleware(persistMiddleware)),
 );
+
+store.subscribe(() => {
+  saveState(store.getState());
+})
+
 
 var config = {
   apiKey: "AIzaSyB_NnYnVtuvvLQizJfjC3_3dlJ0hhfSXuU",
@@ -45,6 +53,8 @@ ReactDOM.hydrate(
         <Route path="/researcherAuth" component={ResearcherAuth}/>
         <Route path="/researcherDashboard" component={ResearcherDashboard} />
         <Route path="/b/:boardId" component={BoardContainer} />
+        <Route path="/boardAccess" component={BoardComponent} />
+
 
       </Switch>
     </BrowserRouter>

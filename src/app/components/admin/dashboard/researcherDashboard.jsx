@@ -77,14 +77,8 @@ class ResearcherDashboard extends Component {
 
 
         }
-
-        
-        
-
         
     }
-
-    // The following three functions are just handlers of the snackBars and should be ignored. 
 
 
     // Creating tab transition...

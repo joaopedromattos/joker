@@ -108,7 +108,7 @@ class Header extends Component {
             <button onClick={this.onCloseModalInstructions} className="buttonConfirm">Ok, entendi!</button>
         </Modal>
 
-        <Modal open={openDone} center>
+        <Modal open={openDone} onClose={() => this.onCloseModalDone()} center>
         
             <h2>Concluído</h2>
               

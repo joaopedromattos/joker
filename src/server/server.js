@@ -60,7 +60,12 @@ app.use(
 
 
 app.use("/api", api(db));
-app.use(fetchBoardData(db));
+// app.use(fetchBoardData(db));
+
+// app.use("/fetchBoard", fetchBoardData())
+
+// app.route("/fetchBoard/_id=:_id")
+//     .get(fetchBoardData(db));
 
 //app.use(fetchBoardData());
 

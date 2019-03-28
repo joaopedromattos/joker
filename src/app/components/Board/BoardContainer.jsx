@@ -9,9 +9,11 @@ import Board from "./Board";
 const BoardContainer = props =>
   props.board ? <Board board={props.board} /> : <Redirect to="/" />;
 
+
 BoardContainer.propTypes = { board: PropTypes.object };
 
 const mapStateToProps = (state, ownProps) => {
+  console.log("STATE DENTRO DE BOARDCONTAINER", state);
   const { boardId } = ownProps.match.params;
   const board = state.boardsById[boardId];
   return { board };
