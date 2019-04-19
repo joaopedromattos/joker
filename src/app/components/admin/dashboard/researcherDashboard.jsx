@@ -59,6 +59,7 @@ class ResearcherDashboard extends Component {
             studyEditedOk: false, 
             studyEditedError: false,
             studyLinkCopied: false,
+            cardLimitExceeded: false,
             mainElements: [ // The component of the tab you inserted right above should be added here. 
                 <MyStudies user={this.props.userDataReducer} 
                     studyRetrieveError={() => this.setState({ studyRetrieveError: true })}
@@ -101,53 +102,59 @@ class ResearcherDashboard extends Component {
 
     // Callback responsible for communicating to our database the data of the study we're creating
     newStudy = (studyName, studyObjective, cards) => {
-        
-        // Here I just create the study on the database.
-        axios.post('http://localhost:3000/studies', {
-            name: studyName,
-            objective: studyObjective,
-            cards: cards
-        }).then(res => {          
 
-            // Taking the response from api and inserting the study id on our user's studies field.
-            axios.put('http://localhost:3000/researchers/authId=' + this.state.user.authId, {
-                studies: res.data._id
-            }).then(res => {
-                
-                // Updating our redux reducer
-                this.props.userDataStoreAction(res.data)
-
-                // Updating our views' properties (because they were instantiated on state, they're not aware of the props change)
-                this.setState({
-                    user: res.data, 
-                    studyCreationOk: true, 
-                    mainElements: [
-                    <MyStudies user={this.props.userDataReducer}  
-                            studyRetrieveError={() => this.setState({ studyRetrieveError: true })}
-                            studyDeletedOk={() => this.setState({ studyDeletedOk: true })}
-                            studyDeletedError={() => this.setState({ studyDeletedError: true })}
-                            studyEditedOk={() => this.setState({ studyEditedOk: true })}
-                            studyEditedError={() => this.setState({ studyEditedError: true })}
-                            studyLinkCopied={() => this.setState({ studyLinkCopied: true })}/>, 
-                        <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)}
-                            firstButton={'Criar estudo '}
-                            name={''}
-                            objective={''}
-                            cards={[]} /> // The order should be the same of the tabs array...
-                ]})
-
+        // We'll only allow studies to be created with less than 
+        if (cards.length > 100){
+            this.setState({ cardLimitExceeded : true});
+        }else{            
+            // Here I just create the study on the database.
+            axios.post('http://localhost:3000/studies', {
+                name: studyName,
+                objective: studyObjective,
+                cards: cards
+            }).then(res => {          
+    
+                // Taking the response from api and inserting the study id on our user's studies field.
+                axios.put('http://localhost:3000/researchers/authId=' + this.state.user.authId, {
+                    studies: res.data._id
+                }).then(res => {
+                    
+                    // Updating our redux reducer
+                    this.props.userDataStoreAction(res.data)
+    
+                    // Updating our views' properties (because they were instantiated on state, they're not aware of the props change)
+                    this.setState({
+                        user: res.data, 
+                        studyCreationOk: true, 
+                        mainElements: [
+                        <MyStudies user={this.props.userDataReducer}  
+                                studyRetrieveError={() => this.setState({ studyRetrieveError: true })}
+                                studyDeletedOk={() => this.setState({ studyDeletedOk: true })}
+                                studyDeletedError={() => this.setState({ studyDeletedError: true })}
+                                studyEditedOk={() => this.setState({ studyEditedOk: true })}
+                                studyEditedError={() => this.setState({ studyEditedError: true })}
+                                studyLinkCopied={() => this.setState({ studyLinkCopied: true })}/>, 
+                            <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)}
+                                firstButton={'Criar estudo '}
+                                name={''}
+                                objective={''}
+                                cards={[]} /> // The order should be the same of the tabs array...
+                    ]})
+    
+                }, res => {
+                    
+                    // If we could not insert this study in our user's studies field...
+                    this.setState({ studyCreationError: true })
+                })
+    
             }, res => {
-                
-                // If we could not insert this study in our user's studies field...
+    
+                // If we could not insert our study in the database.
                 this.setState({ studyCreationError: true })
+    
             })
-
-        }, res => {
-
-            // If we could not insert our study in the database.
-            this.setState({ studyCreationError: true })
-
-        })
+        }
+        
 
 
 
@@ -183,6 +190,32 @@ class ResearcherDashboard extends Component {
                 <DashboardDrawer drawer={this.drawer} active={this.state.tabs.active} elements={this.state.tabs.elements} clickHandler={(tab) => this.clickHandler(tab)} logoutClick={() => this.logOut()} />
 
                 {/* All these snack bars are just warnings and sucess messages. */}
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.cardLimitExceeded}
+                    autoHideDuration={3000}
+                    onClose={(event, reason) => {
+                        if (reason === 'clickaway') {
+                            return;
+                        }
+                        this.setState({ cardLimitExceeded: false });
+                    }}
+                >
+                    <MySnackbarContent
+                        onClose={(event, reason) => {
+                            if (reason === 'clickaway') {
+                                return;
+                            }
+                            this.setState({ cardLimitExceeded: false });
+                        }}
+                        variant="error"
+                        message="Máximo de 100 cartões excedido!"
+                    />
+                </Snackbar>
+
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',

@@ -33,7 +33,10 @@ const styles = theme => ({
     disable: {
         backgroundColor: '#536bba'
         
-    }
+    },
+    progressParamRequest: {
+        margin: theme.spacing.unit * 2,
+    },
 
 });
 
@@ -47,8 +50,16 @@ class BoardComponent extends Component {
             studyLink: "", 
             boardRetrieveError: false,
             loading: false,
+            paramRequest: false
 
 
+        }
+    }
+
+    componentDidMount = () => {
+        if (this.props.match.params.boardId){
+            this.setState({ paramRequest: true });
+            this.boardSearch();
         }
     }
 
@@ -56,8 +67,6 @@ class BoardComponent extends Component {
         this.setState({
             [name]: event.target.value,
         });
-
-        
     };
 
     // Function that parses the link we've received...
@@ -107,25 +116,34 @@ class BoardComponent extends Component {
     };
 
     boardSearch = () => {
-        let id = this.fieldParse()
+        // If the studyId is getting here through the text field, we'll parse it. However, if we're getting it through params, it won't need this step.
+        let id = (!this.props.match.params.boardId) ? (this.fieldParse()) : (this.props.match.params.boardId);
+        console.log("The id we're getting...", id);
 
         if (id === null ){
-            this.setState({boardRetrieveError: true})
+            this.setState({ boardRetrieveError: true, paramRequest: false })
         }else{
-            axios.get("http://localhost:3000/fetchBoard/_id=" + id).then(res => {
-                const normBoards = this.normalizeBoards([res.data]);
-                console.log("NORM BOARDS: ", normBoards);
-
-                if (normBoards.entities.boardsById){this.props.boardInit(normBoards.entities.boardsById);}
-                if (normBoards.entities.listsById){this.props.listInit(normBoards.entities.listsById)};
-                if (normBoards.entities.cardsById){this.props.cardsInit(normBoards.entities.cardsById)};
-                if (normBoards.entities.boardId){this.props.currentBoardInit(normBoards.boardId)};
-                this.setState({loading: true});
-
-                this.props.history.push({
-                    pathname: `/b/${normBoards.boardId}`,
-                })
+            axios.get("http://localhost:3000/fetchBoard/_id=" + id).then( (res, err ) => {
                 
+                if (err){                    
+                    this.setState({ boardRetrieveError: true, paramRequest: false })
+                }else{
+
+                
+                    const normBoards = this.normalizeBoards([res.data]);
+                    console.log("NORM BOARDS: ", normBoards);
+
+                    if (normBoards.entities.boardsById){this.props.boardInit(normBoards.entities.boardsById);}
+                    if (normBoards.entities.listsById){this.props.listInit(normBoards.entities.listsById)};
+                    if (normBoards.entities.cardsById){this.props.cardsInit(normBoards.entities.cardsById)};
+                    if (normBoards.entities.boardId){this.props.currentBoardInit(normBoards.boardId)};
+                    this.setState({loading: true});
+
+                    this.props.history.push({
+                        pathname: `/b/${normBoards.boardId}`,
+                    })
+                    
+                }
             });
         }
 
@@ -137,7 +155,7 @@ class BoardComponent extends Component {
 
         const { classes } = this.props;
 
-    
+        
 
         return (
             <div className="landing-page">
@@ -154,18 +172,22 @@ class BoardComponent extends Component {
                         open={this.state.boardRetrieveError}
                         autoHideDuration={3000}
                         onClose={(event, reason) => {
+                            
                             if (reason === 'clickaway') {
                                 return;
                             }
                             this.setState({ boardRetrieveError: false });
+                            
                         }}
                     >
                         <MySnackbarContent
                             onClose={(event, reason) => {
+                                
                                 if (reason === 'clickaway') {
                                     return;
                                 }
                                 this.setState({ boardRetrieveError: false });
+                                
                             }}
                             variant="error"
                             message="Não foi possível encontrar o estudo. Verifique o Id/Link inserido!"
@@ -174,63 +196,67 @@ class BoardComponent extends Component {
                     
                     <Paper className={classes.root} elevation={1}>
 
-                        
-                        
-                        <Typography variant="h5" align="center" component="h3">
-                            Insira o link ou o id do estudo
-                        </Typography>
-
-                        <br/>
-                        
-                        <TextField
-                            id="outlined-full-width"
-                            label="Id ou Link do estudo"
-                            style={{ margin: 'auto' }}
-                            value={this.state.studyLink}
-                            onChange={this.handleChange('studyLink')}
-                            autoFocus={true}
-                            required={true}
-                            fullWidth
-                            margin="dense"
-                            variant="outlined"
+                        { (!this.state.paramRequest) ? 
                             
-                        />
+                            (
+                                <div>
+                                    <Typography variant="h5" align="center" component="h3">
+                                        Insira o link ou o id do estudo
+                                    </Typography>
 
-                        <br/>
-                        <br/>
-                        
-                        {/* {boards.map(board => (
-                            <Link
-                            key={board._id}
-                            to={`/b/${board._id}/${slugify(board.title, {
-                                lower: true
-                            })}`}
-                            onClick={this.enterAsGuest}
-                            >
-                            <div className="guest-button-wrapper">
-                                <button className="signin-button guest-button">
-                                Começar
-                            </button>
-                            </div>
-                            </Link>
-                        ))} */
+                                    <br/>
+                                    
+                                    <TextField
+                                        id="outlined-full-width"
+                                        label="Id ou Link do estudo"
+                                        style={{ margin: 'auto' }}
+                                        value={this.state.studyLink}
+                                        onChange={this.handleChange('studyLink')}
+                                        autoFocus={true}
+                                        required={true}
+                                        fullWidth
+                                        margin="dense"
+                                        variant="outlined"
+                                        
+                                    />
+
+                                    <br/>
+                                    <br/>
+
+                                    <Button style={{ backgroundColor: this.state.loading ? '#7e8cba' : '#3f51b5'}} disabled={this.state.loading} variant="contained" color="primary" fullWidth onClick={() => this.boardSearch()}>
+                                        {(!this.state.loading) ? ("Iniciar pesquisa") : ("")}
+                                        {this.state.loading && <CircularProgress size={20} className={classes.progress}  /> }                       
+                                    </Button>
+
+                                    <br/>
+                                    <br/>
+                                    
+                                    <Button variant="outlined" href='/' fullWidth >Retornar à página inicial</Button>
+                                </div>
+                            ) :
+
+                            (
+                                <div>
+                                    <Typography variant="h5" align="center" component="h3">
+                                        Carregando estudo...
+                                        <br/>
+                                        <CircularProgress className={classes.progressParamRequest} />
+                                    </Typography>
+
+                                </div>
+                            )
+
+
                         }
-
-                        <Button style={{ backgroundColor: this.state.loading ? '#7e8cba' : '#3f51b5'}} disabled={this.state.loading} variant="contained" color="primary" fullWidth onClick={() => this.boardSearch()}>
-                            {(!this.state.loading) ? ("Iniciar pesquisa") : ("")}
-                            {this.state.loading && <CircularProgress size={20} className={classes.progress}  /> }                       
-                        </Button>
-
-                        <br/>
-                        <br/>
                         
-                        <Button variant="outlined" href='/' fullWidth >Retornar à página inicial</Button>
+                        
                     </Paper>
 
                     
                 </div>
             </div>
         );
+
     }
 }
 
@@ -238,7 +264,7 @@ BoardComponent.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     ...state
 });
 

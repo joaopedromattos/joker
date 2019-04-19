@@ -43,6 +43,7 @@ const renderPage = (req, res) => {
           <Route path="/researcherDashboard" component={ResearcherDashboard} />
           <Route path="/b/:boardId" component={BoardContainer} />
           <Route path="/boardAccess" component={BoardComponent} />
+          <Route path="/boardAccess/:boardId" component={BoardComponent} />
         </Switch>
       </StaticRouter>
     </Provider>

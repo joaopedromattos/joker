@@ -18,11 +18,13 @@ exports.createWelcomeBoard = (req, res, userId) => {
 
     Study.find({_id: req.params._id}, (err, data) => {
         if (err){
+            console.log("createWelcomeBoard error...");
             res.send(err);
         }
 
-        let study = data[0];
         
+        let study = data[0];
+
         // Converting our cards to the format used by our open source code.
         const list1 = study.cards.map((cur) => {
             return { text: cur.name }
@@ -47,7 +49,10 @@ exports.createWelcomeBoard = (req, res, userId) => {
             users: userId ? [userId] : []
         };
 
+        console.log("Board requested: ", board);
         res.json(board);
+        
+        
     })
     
 };

@@ -8,13 +8,13 @@ import slugify from "slugify";
 
 class LandingPage extends Component {
   static propTypes = {
-    boards: PropTypes.arrayOf(
-      PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        color: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired
-      }).isRequired
-    ).isRequired,
+    // boards: PropTypes.arrayOf(
+    //   PropTypes.shape({
+    //     _id: PropTypes.string.isRequired,
+    //     color: PropTypes.string.isRequired,
+    //     title: PropTypes.string.isRequired
+    //   }).isRequired
+    // ).isRequired,
     listsById: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired

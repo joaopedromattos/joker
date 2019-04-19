@@ -53,9 +53,8 @@ ReactDOM.hydrate(
         <Route path="/researcherAuth" component={ResearcherAuth}/>
         <Route path="/researcherDashboard" component={ResearcherDashboard} />
         <Route path="/b/:boardId" component={BoardContainer} />
+        <Route path="/boardAccess/:boardId" component={BoardComponent} />
         <Route path="/boardAccess" component={BoardComponent} />
-
-
       </Switch>
     </BrowserRouter>
   </Provider>,
