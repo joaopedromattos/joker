@@ -33,6 +33,7 @@ exports.createWelcomeBoard = (req, res, userId) => {
         let board = {
             _id: shortid.generate(),
             title: study.name,
+            studyId: req.params._id,
             color: "green",
             lists: [
                 {

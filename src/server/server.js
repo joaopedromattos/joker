@@ -25,7 +25,8 @@ const app = express();
 const MongoStore = connectMongo(session);
 
   //MongoClient.connect("mongodb://localhost:27017").then(client => {
-mongoose.connect("mongodb://localhost:27017/joker_results", { useNewUrlParser: true }).then(client => {
+// mongoose.connect("mongodb://localhost:27017/joker_results", { useNewUrlParser: true }).then(client => {
+mongoose.connect("mongodb+srv://joaopedromattos:23yYiY43OrGJPiu4@joker-wrw9o.mongodb.net/test?retryWrites=true/joker_results", { useNewUrlParser: true }).then(client => {
   mongoose.Promise = global.Promise;
   const db = mongoose.connection.db;
 

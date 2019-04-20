@@ -50,6 +50,8 @@ class ResearcherDashboard extends Component {
 
 
             },
+            
+            
             open: true,
             studyCreationOk: false,
             studyCreationError: false,
@@ -104,16 +106,18 @@ class ResearcherDashboard extends Component {
     newStudy = (studyName, studyObjective, cards) => {
 
         // We'll only allow studies to be created with less than 
+        
         if (cards.length > 100){
             this.setState({ cardLimitExceeded : true});
         }else{            
             // Here I just create the study on the database.
+            console.log("Cards: ", cards);
             axios.post('http://localhost:3000/studies', {
                 name: studyName,
                 objective: studyObjective,
                 cards: cards
             }).then(res => {          
-    
+                console.log("res.data._id", res.data);
                 // Taking the response from api and inserting the study id on our user's studies field.
                 axios.put('http://localhost:3000/researchers/authId=' + this.state.user.authId, {
                     studies: res.data._id
