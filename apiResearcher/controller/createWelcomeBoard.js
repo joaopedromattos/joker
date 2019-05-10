@@ -8,7 +8,7 @@ var Study = mongoose.model("Study");
 const appendAttributes = list =>
     list.map(card => ({
         color: "white",
-        _id: shortid.generate(),
+        // _id: shortid.generate(),
         ...card
     }));
 
@@ -27,7 +27,7 @@ exports.createWelcomeBoard = (req, res, userId) => {
 
         // Converting our cards to the format used by our open source code.
         const list1 = study.cards.map((cur) => {
-            return { text: cur.name }
+            return { _id: cur._id, text: cur.name }
         });
 
         let board = {
