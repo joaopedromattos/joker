@@ -7,6 +7,8 @@ import classnames from "classnames";
 import List from "../List/List";
 import ListAdder from "../ListAdder/ListAdder";
 import Header from "../Header/Header";
+import { withRouter } from "react-router-dom";
+import { compose } from "redux";
 import BoardHeader from "../BoardHeader/BoardHeader";
 import "./Board.scss";
 
@@ -75,6 +77,7 @@ class Board extends Component {
           boardId
         }
       });
+      
     }
   };
 
@@ -131,6 +134,21 @@ class Board extends Component {
     }
   };
 
+  // Function that dispatches the processment of our results to 
+  // the middleware and redirects the participant to the landing page
+  processResult = () => {
+    const { boardId, dispatch } = this.props;
+
+    dispatch({
+      type: "PROCESS_RESULT",
+      payload: { boardId }
+    });
+
+    this.props.history.push({
+      pathname: `/`,
+    })
+  }
+
 
   render = () => {
     const { lists, boardTitle, boardId, boardColor } = this.props;
@@ -140,7 +158,7 @@ class Board extends Component {
           <Helmet>
             <title>{boardTitle} | Carding</title>
           </Helmet>
-          <Header />
+          <Header processResult={() => this.processResult()}/>
           
           {/*insstrucoes */}
           
@@ -192,4 +210,4 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps)(Board);
+export default compose(withRouter, connect(mapStateToProps))(Board);

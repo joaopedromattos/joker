@@ -25,56 +25,58 @@ const app = express();
 const MongoStore = connectMongo(session);
 
   //MongoClient.connect("mongodb://localhost:27017").then(client => {
-// mongoose.connect("mongodb://localhost:27017/joker_results", { useNewUrlParser: true }).then(client => {
-mongoose.connect("mongodb+srv://joaopedromattos:23yYiY43OrGJPiu4@joker-wrw9o.mongodb.net/test?retryWrites=true/joker_results", { useNewUrlParser: true }).then(client => {
+mongoose.connect("mongodb://localhost:27017/joker_results", { useNewUrlParser: true }).then(client => {
+// mongoose.connect("mongodb+srv://joaopedromattos:PAHgrR3SlzxPy3fT@joker-wrw9o.mongodb.net/admins?retryWrites=true", { useNewUrlParser: true }).then(client => {
   mongoose.Promise = global.Promise;
   const db = mongoose.connection.db;
 
   //configurePassport(db);
 
-// Uncomment next line for production to force https redirect
-// app.use(enforce.HTTPS({ trustProtoHeader: true }));
-app.use(helmet());
-app.use(logger("tiny"));
-app.use(compression());
-app.use(favicon("dist/public/favicons/favicon.ico"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-// aggressive cache static assets (1 year
-app.use("/static", express.static("dist/public", { maxAge: "1y" }));
+  // Uncomment next line for production to force https redirect
+  // app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  app.use(helmet());
+  app.use(logger("tiny"));
+  app.use(compression());
+  app.use(favicon("dist/public/favicons/favicon.ico"));
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+  // aggressive cache static assets (1 year
+  app.use("/static", express.static("dist/public", { maxAge: "1y" }));
 
-app.use(
-  session({
-    store: new MongoStore({ db }),
-    secret: "123456",
-    resave: true,
-    saveUninitialized: true
-  })
-);
+  app.use(
+    session({
+      store: new MongoStore({ db }),
+      secret: "123456",
+      resave: true,
+      saveUninitialized: true
+    })
+  );
 
-// This configs were made by the original developer
-//app.use(passport.initialize());
-//app.use(passport.session());
-// app.use("/auth", auth);
+  // This configs were made by the original developer
+  //app.use(passport.initialize());
+  //app.use(passport.session());
+  // app.use("/auth", auth);
 
-// app.use(passport.initialize())
+  // app.use(passport.initialize())
 
 
-app.use("/api", api(db));
-// app.use(fetchBoardData(db));
+  app.use("/api", api(db));
+  // app.use(fetchBoardData(db));
 
-// app.use("/fetchBoard", fetchBoardData())
+  // app.use("/fetchBoard", fetchBoardData())
 
-// app.route("/fetchBoard/_id=:_id")
-//     .get(fetchBoardData(db));
+  // app.route("/fetchBoard/_id=:_id")
+  //     .get(fetchBoardData(db));
 
-//app.use(fetchBoardData());
+  //app.use(fetchBoardData());
 
-app.get("*", renderPage);
+  app.get("*", renderPage);
 
-var router = Router()
+  var router = Router()
 
-const port = process.env.PORT || "1337";
-/* eslint-disable no-console */
-app.listen(port, () => console.log(`Server listening on port ${port}`));
+  const port = process.env.PORT || "1337";
+  /* eslint-disable no-console */
+  app.listen(port, () => console.log(`Server listening on port ${port}`));
+ }).catch((reason ) => {
+   console.log("Crash reason: ", reason);
  });

@@ -13,7 +13,7 @@ const api = db => {
     boards
       .updateOne(
         { _id: board._id },
-        { $set: { board}  },
+        { $set: board  },
         { upsert: true }
       )
       .then(result => {

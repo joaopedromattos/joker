@@ -39,10 +39,12 @@ class Header extends Component {
 
   onOpenModalDone = () => {
     this.setState({ openDone: true, done: true });
+    setTimeout(() => this.onCloseModalDone().bind(this), 5000);
   };
 
   onCloseModalDone = () => {
     this.setState({ openDone: false });
+    this.props.processResult();
   };
 
 
