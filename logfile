@@ -1,0 +1,4 @@
+2019-03-27 10:46:18.897 -03 [6554] LOG:  listening on IPv6 address "::1", port 5432
+2019-03-27 10:46:18.898 -03 [6554] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2019-03-27 10:46:18.901 -03 [6554] FATAL:  could not create lock file "/run/postgresql/.s.PGSQL.5432.lock": Arquivo ou diretório inexistente
+2019-03-27 10:46:18.901 -03 [6554] LOG:  database system is shut down

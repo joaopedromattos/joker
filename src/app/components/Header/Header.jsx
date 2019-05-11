@@ -39,10 +39,12 @@ class Header extends Component {
 
   onOpenModalDone = () => {
     this.setState({ openDone: true, done: true });
+    setTimeout(() => this.onCloseModalDone().bind(this), 5000);
   };
 
   onCloseModalDone = () => {
     this.setState({ openDone: false });
+    this.props.processResult();
   };
 
 
@@ -108,7 +110,7 @@ class Header extends Component {
             <button onClick={this.onCloseModalInstructions} className="buttonConfirm">Ok, entendi!</button>
         </Modal>
 
-        <Modal open={openDone} center>
+        <Modal open={openDone} onClose={() => this.onCloseModalDone()} center>
         
             <h2>Concluído</h2>
               

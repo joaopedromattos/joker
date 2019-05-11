@@ -75,7 +75,7 @@
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
     "serve-favicon": "^2.4.5",
-    "shortid": "^2.2.8",
+    "shortid": "^2.2.14",
     "slugify": "^1.2.9",
     "typeface-lato": "0.0.54"
   },

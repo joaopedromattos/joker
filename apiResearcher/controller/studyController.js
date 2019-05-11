@@ -6,6 +6,7 @@ var Study = mongoose.model("Study")
 
 var Researcher = mongoose.model("Researcher")
 
+var Board = mongoose.model("Board")
 // Here is where the CRUD (create, read, update, delete) Study is implemented
 
 // This will consume a large bandwidth, so I won't create a route for it right now...
@@ -58,8 +59,6 @@ exports.updateStudy = (req, res) => {
 
 exports.deleteStudy = (req, res) => {
 
-    let firstResponse = {}
-
     Study.deleteMany({
         _id: { $in: req.params._id.split(',') }
     }, (err, data) => {
@@ -71,7 +70,6 @@ exports.deleteStudy = (req, res) => {
         } else {
 
             console.log("Conseguiu deletar o estudo em si")
-
             
             // Due to the fact that mongoDB is a non-relational DB and to our database models
             Researcher.findOneAndUpdate({ studies: { $in: req.params._id.split(',') } },
@@ -84,20 +82,24 @@ exports.deleteStudy = (req, res) => {
                         res.send(err)
                     } else {
 
-                        console.log("Conseguiu modificar o estudo...", data)
-                        res.json(data);
+                        
+                        Board.deleteMany({ studyId: { $in: req.params._id.split(',') } }, (err, data) => {
+                            if (err) {
+                                console.log("Wasn't possible to delete all boards of this study. :(");
+                                res.send(err);
+                            } else {
+                                console.log("Boards exclusion succeeded :)");
+                                res.send(data);
+                            }
+
+                        })
                     }
     
                 }
             )
+
         }
 
-
-        
-
-
     })
-
-    
-
+       
 }

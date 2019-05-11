@@ -10,7 +10,10 @@ import App from "../app/components/App";
 import rootReducer from "../app/reducers";
 import ResearcherAuth from "../app/components/admin/auth/researcherAuth";
 import ResearcherDashboard from "../app/components/admin/dashboard/researcherDashboard";
+import BoardComponent from "../app/components/Board/BoardComponent";
+import BoardContainer from '../app/components/Board/BoardContainer';
 import { Switch, Route } from "react-router-dom";
+
 
 // Get the manifest which contains the names of the generated files. The files contain hashes
 // that change every time they are updated, which enables aggressive caching.
@@ -21,7 +24,8 @@ const manifest = JSON.parse(
 const renderPage = (req, res) => {
   // Put initialState (which contains board state) into a redux store that will be passed to the client
   // through the window object in the generated html string
-  const store = createStore(rootReducer, req.initialState);
+  
+  const store = createStore(rootReducer);
 
   const context = {};
 
@@ -37,12 +41,20 @@ const renderPage = (req, res) => {
           <Route path="/" exact={true} component={App}/>
           <Route path="/researcherAuth" component={ResearcherAuth}/>
           <Route path="/researcherDashboard" component={ResearcherDashboard} />
+          <Route path="/b/:boardId" component={BoardContainer} />
+          <Route path="/boardAccess" component={BoardComponent} />
+          <Route path="/boardAccess/:boardId" component={BoardComponent} />
         </Switch>
       </StaticRouter>
     </Provider>
   );
 
+
   const preloadedState = store.getState();
+
+
+
+  console.log("PRE LOADED STATE: ", preloadedState);
 
   // Extract head data (title) from the app
   const helmet = Helmet.renderStatic();

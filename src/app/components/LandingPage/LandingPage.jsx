@@ -8,13 +8,13 @@ import slugify from "slugify";
 
 class LandingPage extends Component {
   static propTypes = {
-    boards: PropTypes.arrayOf(
-      PropTypes.shape({
-        _id: PropTypes.string.isRequired,
-        color: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired
-      }).isRequired
-    ).isRequired,
+    // boards: PropTypes.arrayOf(
+    //   PropTypes.shape({
+    //     _id: PropTypes.string.isRequired,
+    //     color: PropTypes.string.isRequired,
+    //     title: PropTypes.string.isRequired
+    //   }).isRequired
+    // ).isRequired,
     listsById: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired
@@ -27,6 +27,8 @@ class LandingPage extends Component {
   render = () => {
 
     const { boards, listsById, history } = this.props;
+
+    
 
     return (
     <div className="landing-page">
@@ -89,7 +91,13 @@ class LandingPage extends Component {
 
             <div className="guest-button-wrapper">
 
-              {boards.map(board => (
+              <Link to="/boardAccess">
+                <button className="signin-button guest-button">
+                  Começar
+                </button>
+              </Link>
+
+              {/* {boards.map(board => (
                 <Link
                   key={board._id}
                   to={`/b/${board._id}/${slugify(board.title, {
@@ -103,7 +111,7 @@ class LandingPage extends Component {
                   </button>
                   </div>
                 </Link>
-              ))}
+              ))} */}
               <br/>
               <Link to="/researcherAuth">
                 <button className="signin-button guest-button">

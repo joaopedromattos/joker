@@ -1,5 +1,8 @@
 const listsById = (state = {}, action) => {
   switch (action.type) {
+    case "LIST_ACCESS": {
+      return action.payload.list;
+    }
     case "ADD_CARD": {
       const { listId, cardId } = action.payload;
       return {
