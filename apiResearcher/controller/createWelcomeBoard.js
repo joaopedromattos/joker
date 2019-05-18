@@ -3,14 +3,19 @@
 var mongoose = require("mongoose");
 var shortid = require("shortid");
 var Study = mongoose.model("Study");
+var Board = mongoose.model("Board");
 
 // Give every card in a list an _id and the color white UNLESS those properties already exist
-const appendAttributes = list =>
-    list.map(card => ({
+const appendAttributes = list =>{
+    
+    let a = list.map(card => ({
         color: "white",
         // _id: shortid.generate(),
         ...card
     }));
+    
+    return a;
+}
 
 // Generate the initial showcase board that every user and guest gets when they first log in
 exports.createWelcomeBoard = (req, res, userId) => {
@@ -31,18 +36,17 @@ exports.createWelcomeBoard = (req, res, userId) => {
         });
 
         let board = {
-            _id: shortid.generate(),
             title: study.name,
             studyId: req.params._id,
             color: "green",
             lists: [
                 {
-                    _id: 1,
+                    
                     title: "Arraste um cartão de cada vez",
-                    cards: appendAttributes(list1)
+                    cards: [...appendAttributes(list1)]
                 },
                 {
-                    _id: shortid.generate(),
+                    
                     title: "Categoria 1",
                     cards: []
                 },
@@ -50,9 +54,16 @@ exports.createWelcomeBoard = (req, res, userId) => {
             users: userId ? [userId] : []
         };
 
-        console.log("Board requested: ", board);
-        res.json(board);
+        var emptyBoard = new Board(board);
         
+        
+        emptyBoard.save(function (err, data) {
+            if (err) {
+                res.send(err);
+            }
+            res.json(data);
+        });
+               
         
     })
     

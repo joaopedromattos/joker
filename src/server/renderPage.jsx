@@ -53,9 +53,6 @@ const renderPage = (req, res) => {
   const preloadedState = store.getState();
 
 
-
-  console.log("PRE LOADED STATE: ", preloadedState);
-
   // Extract head data (title) from the app
   const helmet = Helmet.renderStatic();
 

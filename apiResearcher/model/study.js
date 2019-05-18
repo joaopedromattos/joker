@@ -10,7 +10,6 @@ var studySchema = new mongoose.Schema({
     cards: {
         type: [{ name: String, description: String }]
     },
-    results: []
 }, { timestamps: true })
 
 module.exports = mongoose.model('Study', studySchema);

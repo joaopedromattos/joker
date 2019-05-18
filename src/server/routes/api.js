@@ -1,5 +1,8 @@
 import { Router } from "express";
+import axios from "axios";
 
+// The methods of this API will consume and encapsulate the use of the other api's methods.
+// This will add a little overhead, but will make our functionalities modular.
 const api = db => {
   const router = Router();
   const boards = db.collection("boards");
@@ -8,24 +11,29 @@ const api = db => {
   // This solution sends more data than necessary, but cuts down on code and
   // effectively prevents the db and client from ever getting out of sync
   router.put("/board", (req, res) => {
-    const board = req.body;
-    console.log(req.body)
-    boards
-      .updateOne(
-        { _id: board._id },
-        { $set: board  },
-        { upsert: true }
-      )
-      .then(result => {
-        res.send(result);
+    console.log("Body that went out : req.body ", req.body);
+    if (req.body.studyId){
+      axios.put("http://localhost:3000/boards/_id=" + req.body._id, req.body).then((result) => {
+        res.send(result.data);
+      }).catch((err) => {
+        res.send(err.data)
       });
+    }
   });
 
   router.delete("/board", (req, res) => {
-    const { boardId } = req.body;
-    boards.deleteOne({ _id: boardId }).then(result => {
-      res.send(result);
-    });
+    // const { boardId } = req.body;
+    // boards.deleteOne({ _id: boardId }).then(result => {
+    //   res.send(result);
+    // });
+
+    if (req.body._id) {
+      axios.delete("http://localhost:3000/boards/_id=" + req.body._id).then((result) => {
+        res.send(result.data);
+      }).catch((err) => {
+        res.send(err.data)
+      });
+    }
   });
 
   return router;

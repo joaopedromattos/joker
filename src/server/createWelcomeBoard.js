@@ -1,6 +1,7 @@
 import shortid from "shortid";
 import axios from "axios";
 
+
 const getStudy = (id) => {
 
   // Building the api url to retrieve all studies...
@@ -23,6 +24,7 @@ const appendAttributes = list =>
 const createWelcomeBoard = (studyId, callBack, userId) => {
   console.log("StudyID: ", studyId);
   getStudy(studyId).then(res => {
+
     let study = res.data[0];
     console.log("Get study result: ", study);
   
@@ -32,7 +34,7 @@ const createWelcomeBoard = (studyId, callBack, userId) => {
     });
   
     let board = {
-      _id: shortid.generate(),
+      
       title: study.name,
       color: "green",
       lists: [
@@ -49,6 +51,7 @@ const createWelcomeBoard = (studyId, callBack, userId) => {
       ],
       users: userId ? [userId] : []
     };
+
 
     return callBack(board);
 

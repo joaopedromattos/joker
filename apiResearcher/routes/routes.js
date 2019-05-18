@@ -29,10 +29,13 @@ module.exports = (app) => {
         .delete(study.deleteStudy) // Delete
 
     app.route("/boards")
+    .get(board.listBoard)
+    
+    app.route("/boards/studyId=:studyId")
         .post(board.createBoard) // Create
+        .get(board.getBoard) // Read
         
     app.route("/boards/_id=:_id")
-        .get(board.getBoard) // Read
         .put(board.updateBoard) // Update
         .delete(board.deleteBoard) // Delete
 

@@ -20,7 +20,7 @@ exports.listBoard = (req, res) => {
 
 exports.createBoard = (req, res) => {
 
-    var newBoard = new Researcher(req.body);
+    var newBoard = new Board(req.body);
 
     console.log("requisition", req.body);
 
@@ -34,20 +34,29 @@ exports.createBoard = (req, res) => {
 }
 
 exports.getBoard = (req, res) => {
-    Board.find({ studyId: { $in: req.params.studyId.split(',') } }, (err, data) => {
+
+    Board.find({ studyId: { $in: req.params.studyId.split(',') } }, (err, data) => {   
+             
         if (err) {
+            console.log("There was an error");
             res.send(err);
         }
-
+        console.log("getBoard requisition result: ", data);
         res.json(data);
     });
+
 }
 
 exports.updateBoard = (req, res) => {
-    Board.findOneAndUpdate({ _id: req.params._id }, { $push: req.body }, { new: true }, (err, data) => {
+
+    console.log("REQ.body: ", req.body);
+
+    Board.findOneAndUpdate({ _id: req.params._id },  { valid: req.body.valid, lists: req.body.lists }, { new: true }, (err, data) => {
         if (err) {
+            console.log("Err", err);
             res.send(err);
         }
+        console.log("updateBoard requisition result: ", data)
         res.json(data);
     });
 }
@@ -58,9 +67,11 @@ exports.deleteBoard = (req, res) => {
         _id: req.params._id
     }, (err, data) => {
         if (err) {
+            console.log("Err", err);
             res.send(err)
         }
 
+        console.log("deleteBoard requisition result: ", data);
         res.json(data);
 
     })

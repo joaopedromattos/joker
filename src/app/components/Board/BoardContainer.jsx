@@ -13,7 +13,6 @@ const BoardContainer = props =>
 BoardContainer.propTypes = { board: PropTypes.object };
 
 const mapStateToProps = (state, ownProps) => {
-  console.log("STATE DENTRO DE BOARDCONTAINER", state, "OWN PROPS: ", ownProps);
   const { boardId } = ownProps.match.params;
   const board = state.boardsById[boardId];
   return { board, boardId };

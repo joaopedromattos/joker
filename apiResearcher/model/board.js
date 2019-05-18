@@ -6,12 +6,13 @@ var boardSchema = new mongoose.Schema({
     studyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Study' },
     title: String,
     color: String,
+    valid: { type: Boolean, default: false },
     lists: [{
         title: String,
         cards: [
             {
                 color: String,
-                title: String
+                text: String
             }
         ]
     }]

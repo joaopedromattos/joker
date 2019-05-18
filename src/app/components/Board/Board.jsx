@@ -138,9 +138,9 @@ class Board extends Component {
   // the middleware and redirects the participant to the landing page
   processResult = () => {
     const { boardId, dispatch } = this.props;
-
+   
     dispatch({
-      type: "PROCESS_RESULT",
+      type: "BOARD_VALIDATED",
       payload: { boardId }
     });
 
