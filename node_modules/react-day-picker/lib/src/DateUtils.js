@@ -4,8 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.clone = clone;
+exports.isDate = isDate;
 exports.addMonths = addMonths;
 exports.isSameDay = isSameDay;
+exports.isSameMonth = isSameMonth;
 exports.isDayBefore = isDayBefore;
 exports.isDayAfter = isDayAfter;
 exports.isPastDay = isPastDay;
@@ -23,6 +25,17 @@ exports.getWeekNumber = getWeekNumber;
  */
 function clone(d) {
   return new Date(d.getTime());
+}
+
+/**
+ * Return `true` if the passed value is a valid JavaScript Date object.
+ *
+ * @export
+ * @param {any} value
+ * @returns {Boolean}
+ */
+function isDate(value) {
+  return value instanceof Date && !isNaN(value.valueOf());
 }
 
 /**
@@ -51,6 +64,21 @@ function isSameDay(d1, d2) {
     return false;
   }
   return d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
+}
+
+/**
+ * Return `true` if two dates fall in the same month.
+ *
+ * @export
+ * @param  {Date}  d1
+ * @param  {Date}  d2
+ * @return {Boolean}
+ */
+function isSameMonth(d1, d2) {
+  if (!d1 || !d2) {
+    return false;
+  }
+  return d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
 }
 
 /**
@@ -195,12 +223,14 @@ exports.default = {
   addMonths: addMonths,
   clone: clone,
   getWeekNumber: getWeekNumber,
+  isDate: isDate,
   isDayAfter: isDayAfter,
   isDayBefore: isDayBefore,
   isDayBetween: isDayBetween,
   isDayInRange: isDayInRange,
   isFutureDay: isFutureDay,
   isPastDay: isPastDay,
-  isSameDay: isSameDay
+  isSameDay: isSameDay,
+  isSameMonth: isSameMonth
 };
 //# sourceMappingURL=DateUtils.js.map

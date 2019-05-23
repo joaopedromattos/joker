@@ -29,7 +29,7 @@ module.exports = (app) => {
         .delete(study.deleteStudy) // Delete
 
     app.route("/boards")
-    .get(board.listBoard)
+        .get(board.listBoard)
     
     app.route("/boards/studyId=:studyId")
         .post(board.createBoard) // Create

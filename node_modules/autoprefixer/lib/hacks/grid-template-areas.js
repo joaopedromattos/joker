@@ -12,7 +12,11 @@ var Declaration = require('../declaration');
 
 var _require = require('./grid-utils'),
     parseGridAreas = _require.parseGridAreas,
-    insertAreas = _require.insertAreas;
+    insertAreas = _require.insertAreas,
+    prefixTrackProp = _require.prefixTrackProp,
+    prefixTrackValue = _require.prefixTrackValue,
+    getGridGap = _require.getGridGap,
+    warnGridGap = _require.warnGridGap;
 
 function getGridRows(tpl) {
     return tpl.trim().slice(1, -1).split(/['"]\s*['"]?/g);
@@ -33,7 +37,65 @@ var GridTemplateAreas = function (_Declaration) {
     GridTemplateAreas.prototype.insert = function insert(decl, prefix, prefixes, result) {
         if (prefix !== '-ms-') return _Declaration.prototype.insert.call(this, decl, prefix, prefixes);
 
-        var areas = parseGridAreas(getGridRows(decl.value));
+        var hasColumns = false;
+        var hasRows = false;
+        var parent = decl.parent;
+        var gap = getGridGap(decl);
+
+        // remove already prefixed rows and columns
+        // without gutter to prevent doubling prefixes
+        parent.walkDecls(/-ms-grid-(rows|columns)/, function (i) {
+            return i.remove();
+        });
+
+        // add empty tracks to rows and columns
+        parent.walkDecls(/grid-template-(rows|columns)/, function (trackDecl) {
+            if (trackDecl.prop === 'grid-template-rows') {
+                hasRows = true;
+                var prop = trackDecl.prop,
+                    value = trackDecl.value;
+
+                trackDecl.cloneBefore({
+                    prop: prefixTrackProp({ prop: prop, prefix: prefix }),
+                    value: prefixTrackValue({ value: value, gap: gap.row })
+                });
+            } else {
+                hasColumns = true;
+                var _prop = trackDecl.prop,
+                    _value = trackDecl.value;
+
+                trackDecl.cloneBefore({
+                    prop: prefixTrackProp({ prop: _prop, prefix: prefix }),
+                    value: prefixTrackValue({ value: _value, gap: gap.column })
+                });
+            }
+        });
+
+        var gridRows = getGridRows(decl.value);
+
+        if (hasColumns && !hasRows && gap.row && gridRows.length > 1) {
+            decl.cloneBefore({
+                prop: '-ms-grid-rows',
+                value: prefixTrackValue({
+                    value: 'repeat(' + gridRows.length + ', auto)',
+                    gap: gap.row
+                }),
+                raws: {}
+            });
+        }
+
+        // warnings
+        warnGridGap({
+            gap: gap,
+            hasColumns: hasColumns,
+            decl: decl,
+            result: result
+        });
+
+        var areas = parseGridAreas({
+            rows: gridRows,
+            gap: gap
+        });
 
         insertAreas(areas, decl, result);
 

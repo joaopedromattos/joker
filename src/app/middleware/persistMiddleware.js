@@ -1,6 +1,14 @@
 import { denormalize, schema } from "normalizr";
 import axios from "axios";
 
+const idRemover = lists => {
+  return lists.map((element)=>{
+    let aux = element;
+    delete aux['_id'];
+    return aux;
+  })
+}
+
 // Persist the board to the database after almost every action.
 const persistMiddleware = store => next => action => {
   next(action);
@@ -35,17 +43,22 @@ const persistMiddleware = store => next => action => {
       );
       const entities = { cardsById, listsById, boardsById };
 
-      const boardData = denormalize(boardId, board, entities);
+      let boardData = denormalize(boardId, board, entities);
       
       console.log("Board data from MiddleWare", boardData);
-      
-      // TODO: Provide warning message to user when put request doesn't work for whatever reason
-      if (action.type === "BOARD_VALIDATED"){
-        console.log("Dentro de BOARD_VALIDATED");
-        axios.put("/api/board", {...boardData, valid:true});
-      }else{
-        axios.put("/api/board", boardData);        
-      }
+      if (boardData != undefined){
+
+        // We'll remove all the ids, since the database will replace them with correct ones.
+        boardData['lists'] = idRemover(boardData['lists'])
+        
+        // TODO: Provide warning message to user when put request doesn't work for whatever reason
+        if (action.type === "BOARD_VALIDATED"){
+          
+          axios.put("/api/board", {...boardData, valid:true});
+        }else{
+          axios.put("/api/board", boardData);        
+        }
+      }  
     }
   //}
 };
