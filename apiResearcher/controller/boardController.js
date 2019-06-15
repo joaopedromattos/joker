@@ -18,6 +18,19 @@ exports.listBoard = (req, res) => {
 };
 
 
+exports.countBoards = (req, res) => {
+    Board.find({ studyId: { $in: req.params.studyId.split(',') }}, (err, data) => {
+        if (err){
+            res.send(err);
+        }
+        var count = data.length
+
+        res.json({
+            results: count
+        });
+    })
+}
+
 exports.createBoard = (req, res) => {
 
     var newBoard = new Board(req.body);

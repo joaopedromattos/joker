@@ -23,8 +23,6 @@ class ResearcherAuth extends Component{
         user: {},
     }
 
-    
-
     // Here is the plan:
     // If a user has already signed into the application, he/she will already be in our database...
     // ... so we can just fetch this data and pass to our dashboard.
@@ -34,11 +32,11 @@ class ResearcherAuth extends Component{
 
         
         
-        axios.get('http://localhost:3000/researchers/email=' + user.email).then( res => {
+        axios.get(process.env.REACT_APP_ADMIN_API + '/researchers/email=' + user.email).then( res => {
             console.log("First database response: ", res);
             if (!(res.data.length)){
                 // User not in our database
-                axios.post('http://localhost:3000/researchers', {
+                axios.post(process.env.REACT_APP_ADMIN_API + '/researchers', {
 
                     authId: user.uid,
                     email: user.email,
@@ -94,6 +92,7 @@ class ResearcherAuth extends Component{
 
 
         })
+
     }   
     
     render(){

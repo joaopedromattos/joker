@@ -10,6 +10,7 @@ import "./App.scss";
 
 const App = ({ user, isGuest }) => {
 
+
   // Serve different pages depending on if user is logged in or not
   if (user || isGuest) {
     return (

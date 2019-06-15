@@ -57,8 +57,9 @@ class ThreeDotsMenu extends React.Component {
                     onClose={this.handleClose}
                     PaperProps={{
                         style: {
-                            maxHeight: ITEM_HEIGHT * 4.5,
-                            width: 200,
+                            maxHeight: ITEM_HEIGHT*4.5,
+                            width: '100%',
+                            maxWidth: 360,
                         },
                     }}
                 >

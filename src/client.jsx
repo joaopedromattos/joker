@@ -22,6 +22,7 @@ import { loadState, saveState } from "./server/reloadManager";
 // const preloadedState = window.PRELOADED_STATE;
 // delete window.PRELOADED_STATE;
 
+
 const persistedState = loadState();
 const store = createStore(
   rootReducer,
@@ -35,12 +36,12 @@ store.subscribe(() => {
 
 
 var config = {
-  apiKey: "AIzaSyB_NnYnVtuvvLQizJfjC3_3dlJ0hhfSXuU",
-  authDomain: "joker-1544625266228.firebaseapp.com",
-  databaseURL: "https://joker-1544625266228.firebaseio.com",
-  projectId: "joker-1544625266228",
-  storageBucket: "joker-1544625266228.appspot.com",
-  messagingSenderId: "20089384964"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
 };
 
 firebase.initializeApp(config);

@@ -5,6 +5,9 @@ const DashboardPlugin = require("webpack-dashboard/plugin");
 const ManifestPlugin = require("webpack-manifest-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const autoprefixer = require("autoprefixer");
+const Dotenv = require('dotenv-webpack');
+
+
 
 module.exports = {
   name: "client",
@@ -73,7 +76,8 @@ module.exports = {
     new ExtractTextPlugin("bundle.[hash:6].css"),
     new CopyWebpackPlugin([{ from: "src/assets/favicons", to: "favicons" }]),
     new DashboardPlugin(),
-    new ManifestPlugin()
+    new ManifestPlugin(),
+    new Dotenv()
   ],
   resolve: {
     extensions: [".js", ".jsx"]

@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
+import { connect } from "react-redux";
+import { compose } from 'redux';
 import { withStyles } from '@material-ui/core/styles';
 import '../../App.scss';
 import './loginCard.scss';
@@ -20,7 +22,11 @@ const styles = theme => ({
       
     },
 
-    square: false
+    square: false,
+    
+    progress: {
+        margin: theme.spacing.unit * 2,
+      },
     
 });
 
@@ -40,11 +46,14 @@ const uiConfig = {
 
 
 function LoginCard(props){
+    
+
     const { classes, className } = props;
 
     return(
         <div className="login-card">
             <Paper className={classes.root} >                
+
                 <Grid
                     container
                     direction="column"
@@ -59,8 +68,6 @@ function LoginCard(props){
 
                     <Grid item>                    
                         <StyledFirebaseAuth
-
-
                             uiConfig={uiConfig}
                             firebaseAuth={firebase.auth()}
                         />   
@@ -72,22 +79,17 @@ function LoginCard(props){
                         <Button href="/" >Retornar à página inicial</Button>
                     </Grid>
 
-                    
-
-
                     <Grid item>
                         <h4 >Não armazenaremos nenhum dado pessoal além de seu nome e e-mail.</h4>
                     </Grid>
 
-                    
                 </Grid>
-
                 
-
-                      
+      
             </Paper>
         </div>
     )
 }
+
 
 export default withStyles(styles)(LoginCard);

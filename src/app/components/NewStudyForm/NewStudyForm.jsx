@@ -230,9 +230,7 @@ class NewStudyForm extends React.Component {
                 <List className={classes.root}>
                         {
                             this.state.cards.map((card, index, cards) =>( 
-                                
-                                                        
-                                < ListItem key={index} divider={true}>
+                                < ListItem key={index} divider={true}>                                    
                                     <ListItemText
                                         primary={cards[index].name}
                                         secondary={
@@ -241,7 +239,6 @@ class NewStudyForm extends React.Component {
                                             </React.Fragment>
                                         }
                                         />
-
                                     <ListItemSecondaryAction >
                                         <IconButton aria-label="Delete" color="secondary" onClick={() => this.removeCard(index)}>
                                             <DeleteIcon />

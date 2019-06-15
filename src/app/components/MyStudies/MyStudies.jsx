@@ -18,15 +18,18 @@ import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FileCopyRounded from '@material-ui/icons/FileCopyRounded';
 import Card from '@material-ui/core/Card';
+import EditIcon from "@material-ui/icons/Edit";
 import CardContent from '@material-ui/core/CardContent';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import AttachFileIcon from "@material-ui/icons/AttachFile"
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import Loading from "../Loading/Loading";
 import BinaryDialog from "../Dialogs/BinaryDialog";
 import FormDialog from "../Dialogs/FormDialog";
 import ThreeDotsMenu from "../ThreeDotsMenu/ThreeDotsMenu";
+import ResultExhibition from "../ResultExhibition/ResultExhibition";
 import Button from "@material-ui/core/Button";
 import NewStudyForm from "../NewStudyForm/NewStudyForm";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -73,18 +76,23 @@ class MyStudies extends React.Component {
             studies: this.props.studiesDataReducer.studies, 
             openDeleteDialog: false,
             openEditDialog: false,
+            openResultsDialog: false,
+            openResultsExhibition: false,
+            boardsNumber: 0,
             editIndex: 0,
             deleteIndex: 0,
-            localUrl: "http://localhost:1337",
+            resultsIndex: 0,
+            currentDendogram: '',
+            localUrl: process.env.REACT_APP_HOME_URL,
 
         }
     }
 
     // Function that retrieves researcher's studies when he/she logs in.
     getStudies(){
-
+        
         // Building the api url to retrieve all studies...
-        let url = "http://localhost:3000/studies/_id=";
+        let url = process.env.REACT_APP_ADMIN_API +  "/studies/_id=";
         this.props.userDataReducer.studies.map((study, index) => {
 
             if (index === this.props.userDataReducer.studies.length - 1){
@@ -104,14 +112,22 @@ class MyStudies extends React.Component {
             this.props.studyRetrieveError()
         })
     }
+
+    openResultsDialog = (index) => {
+        console.log("GETTIN' THE RESULTS: ", this.state.studies[index]._id);
+        axios.get(process.env.REACT_APP_ADMIN_API + '/countResults/studyId=' + this.state.studies[index]._id)
+            .then((res) => {
+                this.setState({ openResultsDialog: true, resultsIndex: index, boardsNumber: res.data.results })
+            })
+            .catch(err => {
+                console.log("Err", err);
+                this.props.boardsRetrievalError()
+            })
+    }
     
     openDeleteDialog = (index) => {
-
-        console.log("Dentro de open dialog: ", index)
-        
-        
+       
         this.setState({ openDeleteDialog: true, deleteIndex: index })
-
 
     }
     
@@ -124,15 +140,23 @@ class MyStudies extends React.Component {
         this.setState({openEditDialog: false })
     }
 
+    closeResultsExhibition = () => {
+        this.setState({ openResultsExhibition : false })
+    }
+
     denialDelete = () => {
 
         this.setState({ openDeleteDialog:false })
 
     }
 
+    denialResults = () => {
+        this.setState({ openResultsDialog: false });
+    }
+
     
     updateStudy = (newStudyName, newStudyObjective, newCards) => {
-        let url = "http://localhost:3000/studies/_id=" + this.props.userDataReducer.studies[this.state.editIndex];
+        let url = process.env.REACT_APP_ADMIN_API + "/studies/_id=" + this.props.userDataReducer.studies[this.state.editIndex];
         axios.put(url, {
             name: newStudyName, 
             objective: newStudyObjective, 
@@ -170,18 +194,22 @@ class MyStudies extends React.Component {
                 break;        
             case 1:
                 // 'Editar estudo'...
-                this.openEditDialog(index)
+                this.openEditDialog(index);
                 break;
             case 2:
-                this.openDeleteDialog(index)
+                // 'Resultados parciais'...
+                this.openResultsDialog(index);
+                break;
+            case 3:
+                this.openDeleteDialog(index);
                 break;
             default: 
                 return;
         }
     }
-    
+
     granted = () => {
-        let url = "http://localhost:3000/studies/_id=";  
+        let url = process.env.REACT_APP_ADMIN_API + "/studies/_id=";  
         
         
         // Handling deletion with api...
@@ -225,8 +253,15 @@ class MyStudies extends React.Component {
         })
 
     }   
-    
- 
+
+
+    grantedResultsExhibition = () => {
+        axios.get(process.env.REACT_APP_ADMIN_API + "/getResults/studyId=" + this.state.studies[this.state.resultsIndex]._id)
+            .then(res => {
+                this.setState({ openResultsExhibition : true, currentDendogram: res.data.url })
+            })
+    }
+
     render() {
         const { classes } = this.props;
         const { secondary } = this.state;
@@ -236,7 +271,7 @@ class MyStudies extends React.Component {
         if (this.state.studies && this.props.userDataReducer.studies && this.props.userDataReducer.studies.length > this.state.studies.length) {
 
             // Declaring our api url...
-            let urlRequest = "http://localhost:3000/studies/_id=";
+            let urlRequest = process.env.REACT_APP_ADMIN_API + "/studies/_id=";
 
             // Taking the last element on our studies vector (the last one to be added, by mongo's default...)            
             let newStudyUrl = this.props.userDataReducer.studies[this.props.userDataReducer.studies.length - 1]
@@ -312,8 +347,32 @@ class MyStudies extends React.Component {
                                         changeConfirmationColor={true}>
                             </BinaryDialog>
 
-                            {/* We exhibit this when trying to edit a study */}
+                            <BinaryDialog title={"Tem certeza que deseja gerar seus resultados agora?"} 
+                                        open={this.state.openResultsDialog}
+                                        text={`Constam ${this.state.boardsNumber} participações em seu estudo. Lembre-se 
+                                        de que essas amostras serão validadas no processamento do Card Sorting, logo 
+                                        participações incompletas não serão consideradas para o resultado final do seu estudo.`} 
+                                        denialButton="CANCELAR" 
+                                        grantedButton="GERAR RESULTADOS"
+                                        granted={() => this.grantedResultsExhibition()}
+                                        denial={() => this.denialResults()}
+                                        changeConfirmationColor={false}>
+                            </BinaryDialog>
+
                             
+                            {/* This Dialog is used to show the dendogram and the download buttons. */}
+                            <FormDialog
+                                open={this.state.openResultsExhibition}
+                                cancel={() => this.closeResultsExhibition()}
+                                title={"Resultados"}
+                                submitButtonHandler={() => {return;}}
+                                submitButton={''}
+                                formFields={
+                                    <ResultExhibition imageSrc={this.state.currentDendogram}/>
+                                }>
+                            </FormDialog>
+
+                            {/* We exhibit this Dialog when trying to edit a study */}                            
                             <FormDialog
                                 open={this.state.openEditDialog}
                                 cancel={() => this.closeEditDialog()}
@@ -326,8 +385,6 @@ class MyStudies extends React.Component {
                                     objective={this.state.studies[this.state.editIndex].objective}
                                     cards={this.state.studies[this.state.editIndex].cards} />}>
                             </FormDialog>
-
-
                         </div>          
 
                         
@@ -342,7 +399,26 @@ class MyStudies extends React.Component {
                                         />
                                         <ListItemSecondaryAction>
                                             {/* Three dots menu that's in the same line of the study title. */}
-                                            <ThreeDotsMenu studyLables={[<CopyToClipboard text={this.state.localUrl + '/b/' + study._id} onCopy={() => this.props.studyLinkCopied()}><span>Copiar link para o estudo</span></CopyToClipboard>, "Alterar estudo", "Excluir estudo"]} callbacks={(action, index) => this.menuOptions(action, index)} elementIndex={index} />
+                                            <ThreeDotsMenu studyLables={[<CopyToClipboard 
+                                                                            text={this.state.localUrl + '/b/' + study._id} 
+                                                                            onCopy={() => this.props.studyLinkCopied()}>
+
+                                                                                <Typography variant="button" display="block" gutterBottom>
+                                                                                    COPIAR LINK PARA ESTUDO
+                                                                                </Typography>
+                                                                                
+                                                                        </CopyToClipboard>, 
+                                                                         <Typography variant="button" display="block" gutterBottom>
+                                                                            ALTERAR ESTUDO
+                                                                        </Typography>,
+                                                                        <Typography variant="button" display="block" color="primary" gutterBottom>
+                                                                            RESULTADOS PARCIAIS
+                                                                        </Typography>,
+                                                                        <Typography variant="button" display="block" color="secondary" gutterBottom>
+                                                                            EXCLUIR ESTUDO
+                                                                        </Typography>]} 
+                                                            callbacks={(action, index) => this.menuOptions(action, index)} 
+                                                            elementIndex={index} />
                                         </ListItemSecondaryAction>
                                     </ListItem>
                                 ))
@@ -350,16 +426,10 @@ class MyStudies extends React.Component {
                         </List>
                             
                     
-                    </div>
-                
+                    </div>              
                 )
             }
-
         }
-
-
-
-
     }
 }
 

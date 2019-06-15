@@ -123,7 +123,7 @@ class BoardComponent extends Component {
         if (id === null ){
             this.setState({ boardRetrieveError: true, paramRequest: false })
         }else{
-            axios.get("http://localhost:3000/fetchBoard/_id=" + id).then( (res, err ) => {
+            axios.get(process.env.REACT_APP_ADMIN_API + "/fetchBoard/_id=" + id).then( (res, err ) => {
                 
                 if (err){                    
                     this.setState({ boardRetrieveError: true, paramRequest: false })

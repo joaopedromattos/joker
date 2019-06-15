@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import firebase from 'firebase';
 import { connect } from "react-redux";
-import { compose } from 'redux'
+import { compose } from 'redux';
 import { loginAction } from "../../../actions/admin/loginAction";
 import { logoutAction } from "../../../actions/admin/logoutAction";
 import { userDataStoreAction } from "../../../actions/admin/userDataStoreAction";
@@ -69,7 +69,8 @@ class ResearcherDashboard extends Component {
                     studyDeletedError={() => this.setState({ studyDeletedError: true })}
                     studyEditedOk={() => this.setState({ studyEditedOk: true })}
                     studyEditedError={() => this.setState({ studyEditedError: true })}
-                    studyLinkCopied={() => this.setState({ studyLinkCopied: true })}/>,                    
+                    studyLinkCopied={() => this.setState({ studyLinkCopied: true })}
+                    boardsRetrievalError={() =>  this.setState({ boardsRetrievalError : true})}/>,                    
                 <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)}
                     firstButton={'Criar estudo '}
                     name={''}
@@ -112,14 +113,14 @@ class ResearcherDashboard extends Component {
         }else{            
             // Here I just create the study on the database.
             console.log("Cards: ", cards);
-            axios.post('http://localhost:3000/studies', {
+            axios.post(process.env.REACT_APP_ADMIN_API + '/studies' , {
                 name: studyName,
                 objective: studyObjective,
                 cards: cards
             }).then(res => {          
                 console.log("res.data._id", res.data);
                 // Taking the response from api and inserting the study id on our user's studies field.
-                axios.put('http://localhost:3000/researchers/authId=' + this.state.user.authId, {
+                axios.put(process.env.REACT_APP_ADMIN_API + '/researchers/authId=' + this.state.user.authId, {
                     studies: res.data._id
                 }).then(res => {
                     
@@ -137,7 +138,8 @@ class ResearcherDashboard extends Component {
                                 studyDeletedError={() => this.setState({ studyDeletedError: true })}
                                 studyEditedOk={() => this.setState({ studyEditedOk: true })}
                                 studyEditedError={() => this.setState({ studyEditedError: true })}
-                                studyLinkCopied={() => this.setState({ studyLinkCopied: true })}/>, 
+                                studyLinkCopied={() => this.setState({ studyLinkCopied: true })}
+                                boardsRetrievalError={() =>  this.setState({ boardsRetrievalError : true})}/>,                                
                             <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)}
                                 firstButton={'Criar estudo '}
                                 name={''}
@@ -181,7 +183,12 @@ class ResearcherDashboard extends Component {
 
     // Logout register and redirectioner
     componentDidMount = () => {
-        firebase.auth()
+        // If the user is not authenticated, he/she should not be in this page...
+        if (this.props.authReducer.authenticated){
+            firebase.auth() // If the user is authenticated, he/she can log out.
+        }else{
+            this.props.history.push("/researcherAuth")
+        }
     }
 
     render() {  
@@ -194,6 +201,32 @@ class ResearcherDashboard extends Component {
                 <DashboardDrawer drawer={this.drawer} active={this.state.tabs.active} elements={this.state.tabs.elements} clickHandler={(tab) => this.clickHandler(tab)} logoutClick={() => this.logOut()} />
 
                 {/* All these snack bars are just warnings and sucess messages. */}
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.boardsRetrievalError}
+                    autoHideDuration={3000}
+                    onClose={(event, reason) => {
+                        if (reason === 'clickaway') {
+                            return;
+                        }
+                        this.setState({ boardsRetrievalError: false });
+                    }}
+                >
+                    <MySnackbarContent
+                        onClose={(event, reason) => {
+                            if (reason === 'clickaway') {
+                                return;
+                            }
+                            this.setState({ boardsRetrievalError: false });
+                        }}
+                        variant="error"
+                        message="Não foi possível acessar a base de dados!"
+                    />
+                </Snackbar>
+
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',

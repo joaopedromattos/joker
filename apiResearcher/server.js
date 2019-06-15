@@ -16,6 +16,7 @@ mongoose.connect('mongodb://localhost:27017/admins', { useNewUrlParser: true })
 // mongoose.connect('mongodb+srv://joaopedromattos:PAHgrR3SlzxPy3fT@joker-wrw9o.mongodb.net/test?retryWrites=true', {useNewUrlParser: true}).catch((reason) =>{
 //     console.log("API Server crashed: ", reason);
 // })
+app.use(express.static('statisticalModule/results'))
 app.use(cors())
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.json())
