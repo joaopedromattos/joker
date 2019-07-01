@@ -13,6 +13,8 @@ import ResearcherDashboard from "../app/components/admin/dashboard/researcherDas
 import BoardComponent from "../app/components/Board/BoardComponent";
 import BoardContainer from '../app/components/Board/BoardContainer';
 import { Switch, Route } from "react-router-dom";
+import { ServerStyleSheets, ThemeProvider } from '@material-ui/styles';
+import theme from '../assets/theme/theme';
 
 
 // Get the manifest which contains the names of the generated files. The files contain hashes
@@ -21,10 +23,13 @@ const manifest = JSON.parse(
   readFileSync(`./dist/public/manifest.json`, "utf8")
 );
 
+
 const renderPage = (req, res) => {
+
+  const sheets = new ServerStyleSheets();
+
   // Put initialState (which contains board state) into a redux store that will be passed to the client
-  // through the window object in the generated html string
-  
+  // through the window object in the generated html string  
   const store = createStore(rootReducer);
 
   const context = {};
@@ -34,21 +39,26 @@ const renderPage = (req, res) => {
   // This is where the magic happens
   // Some kind of route black-magic is happening here.
   // Please, keep yourself away, little wanderer.
-  const appString = renderToString(
-    <Provider store={store}>
-      <StaticRouter location={req.url} context={context}>        
-        <Switch>
-          <Route path="/" exact={true} component={App}/>
-          <Route path="/researcherAuth" component={ResearcherAuth}/>
-          <Route path="/researcherDashboard" component={ResearcherDashboard} />
-          <Route path="/b/:boardId" component={BoardContainer} />
-          <Route path="/boardAccess" component={BoardComponent} />
-          <Route path="/boardAccess/:boardId" component={BoardComponent} />
-        </Switch>
-      </StaticRouter>
-    </Provider>
+  const appString = renderToString( 
+    sheets.collect(
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <StaticRouter location={req.url} context={context}>        
+            <Switch>
+              <Route path="/" exact={true} component={App}/>
+              <Route path="/researcherAuth" component={ResearcherAuth}/>
+              <Route path="/researcherDashboard" component={ResearcherDashboard} />
+              <Route path="/b/:boardId" component={BoardContainer} />
+              <Route path="/boardAccess" component={BoardComponent} />
+              <Route path="/boardAccess/:boardId" component={BoardComponent} />
+            </Switch>
+          </StaticRouter>
+        </ThemeProvider>
+      </Provider>
+    )
   );
-
+  
+  const css = sheets.toString();
 
   const preloadedState = store.getState();
 
@@ -72,9 +82,13 @@ const renderPage = (req, res) => {
         <meta name="msapplication-TileImage" content="/static/favicons/mstile-144x144.png" />
         <meta property="og:image" content="https://reactkanban.com/static/favicons/og-kanban-logo.png">
         <link rel="stylesheet" href=${manifest["main.css"]}>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
         <link href="https://fonts.googleapis.com/css?family=Lato|Lato:300" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
         ${helmet.title.toString()}
+
+        <style id="jss-server-side">${css}</style>
       </head>
       <body>
         <div id="app">${appString}</div>

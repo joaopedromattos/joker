@@ -68,9 +68,11 @@ class FormDialog extends React.Component {
                             </Button>
                         </Toolbar>
                     </AppBar>
-                    {
-                        this.props.formFields
-                    }
+                    <div>
+                        {
+                            this.props.formFields
+                        }
+                    </div>
                 </Dialog>
             </div>
         );
