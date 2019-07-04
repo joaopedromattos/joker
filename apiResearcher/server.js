@@ -12,7 +12,7 @@ mongoose.Promise = global.Promise;
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
-mongoose.connect('mongodb://localhost:27017/admins', { useNewUrlParser: true })
+mongoose.connect('mongodb://mongo:27017/admins', { useNewUrlParser: true })
 // mongoose.connect('mongodb+srv://joaopedromattos:PAHgrR3SlzxPy3fT@joker-wrw9o.mongodb.net/test?retryWrites=true', {useNewUrlParser: true}).catch((reason) =>{
 //     console.log("API Server crashed: ", reason);
 // })

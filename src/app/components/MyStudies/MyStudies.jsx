@@ -78,6 +78,7 @@ class MyStudies extends React.Component {
             openEditDialog: false,
             openResultsDialog: false,
             openResultsExhibition: false,
+            loadingAnimationResultsExhibition : false,
             boardsNumber: 0,
             editIndex: 0,
             deleteIndex: 0,
@@ -114,7 +115,7 @@ class MyStudies extends React.Component {
     }
 
     openResultsDialog = (index) => {
-        console.log("GETTIN' THE RESULTS: ", this.state.studies[index]._id);
+        
         axios.get(process.env.REACT_APP_ADMIN_API + '/countResults/studyId=' + this.state.studies[index]._id)
             .then((res) => {
                 this.setState({ openResultsDialog: true, resultsIndex: index, boardsNumber: res.data.results })
@@ -256,9 +257,10 @@ class MyStudies extends React.Component {
 
 
     grantedResultsExhibition = () => {
+        this.setState({ loadingAnimationResultsExhibition : true })
         axios.get(process.env.REACT_APP_ADMIN_API + "/getResults/studyId=" + this.state.studies[this.state.resultsIndex]._id)
             .then(res => {
-                this.setState({ openResultsExhibition : true, currentDendogram: res.data.url })
+                this.setState({ openResultsExhibition : true, currentDendogram: res.data.url, loadingAnimationResultsExhibition : false})
             })
     }
 
@@ -349,9 +351,13 @@ class MyStudies extends React.Component {
 
                             <BinaryDialog title={"Tem certeza que deseja gerar seus resultados agora?"} 
                                         open={this.state.openResultsDialog}
-                                        text={`Constam ${this.state.boardsNumber} participações em seu estudo. Lembre-se 
+                                        text={this.state.loadingAnimationResultsExhibition ? (
+                                            
+                                            <Loading/>
+                                            
+                                        ) : (`Constam ${this.state.boardsNumber} participações em seu estudo. Lembre-se 
                                         de que essas amostras serão validadas no processamento do Card Sorting, logo 
-                                        participações incompletas não serão consideradas para o resultado final do seu estudo.`} 
+                                        participações incompletas não serão consideradas para o resultado final do seu estudo.`)} 
                                         denialButton="CANCELAR" 
                                         grantedButton="GERAR RESULTADOS"
                                         granted={() => this.grantedResultsExhibition()}

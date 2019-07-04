@@ -1,6 +1,7 @@
 // Required polyfills
-import "core-js/fn/array/values";
-import "core-js/fn/object/values";
+import "core-js/features/array/values";
+import "core-js/features/object/values";
+
 
 import React from "react";
 import ReactDOM from "react-dom";
