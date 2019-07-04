@@ -24,8 +24,8 @@ const app = express();
 
 const MongoStore = connectMongo(session);
 
-  //MongoClient.connect("mongodb://localhost:27017").then(client => {
-mongoose.connect("mongodb://localhost:27017/admins", { useNewUrlParser: true }).then(client => {
+  //MongoClient.connect("mongodb://mongo:27017").then(client => {
+mongoose.connect("mongodb://mongo:27017/admins", { useNewUrlParser: true }).then(client => {
 // mongoose.connect("mongodb+srv://joaopedromattos:PAHgrR3SlzxPy3fT@joker-wrw9o.mongodb.net/admins?retryWrites=true", { useNewUrlParser: true }).then(client => {
   mongoose.Promise = global.Promise;
   const db = mongoose.connection.db;

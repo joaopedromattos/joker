@@ -1,7 +1,7 @@
 {
-  "name": "react-kanban",
+  "name": "joker",
   "version": "0.1.0",
-  "description": "An open source kanban application created with React and Redux.",
+  "description": "A React app based on https://github.com/markusenglund/react-kanban to make use of Card Sorting technique for a Scientific Iniciation project about the relationship of users with software privacy policies.",
   "main": "dist/server.js",
   "scripts": {
     "build": "NODE_PATH=./src webpack-dashboard -- webpack --watch --mode development",

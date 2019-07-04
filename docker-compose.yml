@@ -1,4 +1,4 @@
-version: "2"
+version: "3.7"
 services: 
   api:
     container_name: api
@@ -8,6 +8,8 @@ services:
     ports:
       - "3000:3000"
     links:
+      - mongo
+    depends_on:
       - mongo
   
   mongo:
@@ -23,4 +25,11 @@ services:
     image: joker
     restart: always
     build: .
+    ports:
+      - "1337:1337"
+    links:
+      - mongo
+    depends_on:
+      - mongo
+      - api
 
