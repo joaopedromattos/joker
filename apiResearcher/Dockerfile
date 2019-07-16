@@ -23,8 +23,8 @@ COPY ./controller /usr/src/api/controller
 COPY ./model /usr/src/api/model
 COPY ./routes /usr/src/api/routes
 COPY ./statisticalModule /usr/src/api/statisticalModule
-COPY package.json /usr/src/api
-COPY server.js /usr/src/api
+COPY package.json /usr/src/api/
+COPY server.js /usr/src/api/
 # COPY server.cert /usr/src/api
 # COPY server.key /usr/src/api
 

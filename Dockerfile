@@ -4,16 +4,16 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 COPY ./src /usr/src/app/src
-COPY .babelrc /usr/src/app
-COPY .env /usr/src/app
-COPY .eslintrc.js /usr/src/app
-COPY .gitignore /usr/src/app
-COPY package.json /usr/src/app
-COPY webpack.config.client.js /usr/src/app
-COPY webpack.config.server.js /usr/src/app
-COPY webpack.config.js /usr/src/app
-COPY server.cert /usr/src/app
-COPY server.key /usr/src/app
+COPY .babelrc /usr/src/app/
+COPY .env /usr/src/app/
+COPY .eslintrc.js /usr/src/app/
+COPY .gitignore /usr/src/app/
+COPY package.json /usr/src/app/
+COPY webpack.config.client.js /usr/src/app/
+COPY webpack.config.server.js /usr/src/app/
+COPY webpack.config.js /usr/src/app/
+COPY server.cert /usr/src/app/
+COPY server.key /usr/src/app/
 
 RUN npm install
 RUN npm run build:prod
