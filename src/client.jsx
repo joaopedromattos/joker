@@ -70,13 +70,7 @@ function Main(){
               <Route path="/researcherDashboard" component={ResearcherDashboard} />
               <Route path="/b/:boardId" component={BoardContainer} />
               <Route path="/boardAccess/:boardId" component={BoardComponent} />
-              <Route path="/boardAccess" component={
-                <ThemeProvider theme={theme}>
-
-                  BoardComponent
-                
-                </ThemeProvider>
-                } />
+              <Route path="/boardAccess" component={BoardComponent} />
             </Switch>
           </BrowserRouter>
 

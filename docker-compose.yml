@@ -1,8 +1,8 @@
 version: "3.7"
 services: 
-  api:
-    container_name: api
-    image: api
+  api-python-node:
+    container_name: api-python-node
+    image: api-python-node
     restart: always
     build: ./apiResearcher
     ports:
@@ -11,6 +11,8 @@ services:
       - mongo
     depends_on:
       - mongo
+    environment:
+      WAIT_HOSTS: mongo:27017
   
   mongo:
     container_name: mongo
@@ -19,7 +21,8 @@ services:
       - ~/data:/data/db
     ports:
       - "27017:27017"
-  
+    
+        
   joker:
     container_name: joker
     image: joker
@@ -31,5 +34,8 @@ services:
       - mongo
     depends_on:
       - mongo
-      - api
+      - api-python-node
+    environment:
+      WAIT_HOSTS: mongo:27017, api-python-node:3000
+    
 

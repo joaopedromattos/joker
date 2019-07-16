@@ -20,6 +20,8 @@ import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp"
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import Button from "@material-ui/core/Button";
+import D3Dendogram from "../D3/D3Dendogram/D3Dendogram";
+import D3Wrapper from "../D3/D3Wrapper/D3Wrapper";
 
 
 const drawerWidth = 240
@@ -34,7 +36,7 @@ const styles = theme => ({
         
     },
     textField: {
-        marginLeft: theme.spacing.unit,
+        marginLeft: theme.spacing(1),
         // marginRight: theme.spacing.unit,
     },
     dense: {
@@ -63,7 +65,7 @@ const styles = theme => ({
     },    
     
     rightIcon: {
-        marginLeft: theme.spacing.unit,
+        marginLeft: theme.spacing(1),
     },
     
 });
@@ -89,25 +91,30 @@ class ResultExhibition extends React.Component {
                 
                 <img src={this.props.imageSrc} alt="Logo" className={classes.image}/>
 
+                {/* <D3Wrapper wrapperName="D3DendogramWrapper" width={960} height={600}>
+                    <D3Dendogram width={960} height={600} data={""}></D3Dendogram>
+                </D3Wrapper> */}
+
                 <Grid container direction="row" justify="center" alignItems="center" >
                     
                     
-                        
-                        <Button variant="contained" color="primary" >
-                            Baixar Dendograma
-                            <span></span>
-                            <PhotoIcon className={classes.rightIcon} />
-                        </Button>
+                                        
+                    <Button variant="contained" color="primary" >
+                        Baixar Dendograma
+                        <span></span>
+                        <PhotoIcon className={classes.rightIcon} />
+                    </Button>
+                      
 
-                        
-
-                        <Button variant="contained" color="primary">
-                            Baixar amostras
-                            <span></span>
-                            {/* This Button uses a Font Icon, see the installation instructions in the docs. */}
-                            <ArrowDownward className={classes.rightIcon} />
-                        </Button>
-
+                    
+                    
+                    <Button variant="contained" color="primary">
+                        Baixar amostras
+                        <span></span>
+                        {/* This Button uses a Font Icon, see the installation instructions in the docs. */}
+                        <ArrowDownward className={classes.rightIcon} />
+                    </Button>
+                    
                     
 
                 </Grid>

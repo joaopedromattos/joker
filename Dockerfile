@@ -12,6 +12,8 @@ COPY package.json /usr/src/app
 COPY webpack.config.client.js /usr/src/app
 COPY webpack.config.server.js /usr/src/app
 COPY webpack.config.js /usr/src/app
+COPY server.cert /usr/src/app
+COPY server.key /usr/src/app
 
 RUN npm install
 RUN npm run build:prod

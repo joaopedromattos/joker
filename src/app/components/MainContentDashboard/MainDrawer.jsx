@@ -37,7 +37,7 @@ const styles = theme => ({
         backgroundImage: "none",
         
         flexGrow: 1,
-        padding: theme.spacing.unit * 3,
+        padding: theme.spacing(3),
         [theme.breakpoints.up('sm')]: {
             // width: `calc(100% - ${drawerWidth}px)`,
             paddingLeft: drawerWidth * 1.15

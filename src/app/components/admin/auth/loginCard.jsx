@@ -16,8 +16,8 @@ import Button from '@material-ui/core/Button';
 const styles = theme => ({
     root: {
       ...theme.mixins.gutters(),
-      paddingTop: theme.spacing.unit * 2,
-      paddingBottom: theme.spacing.unit * 2,
+      paddingTop: theme.spacing(2),
+      paddingBottom: theme.spacing(2),
       
       
     },
@@ -25,7 +25,7 @@ const styles = theme => ({
     square: false,
     
     progress: {
-        margin: theme.spacing.unit * 2,
+        margin: theme.spacing(2),
       },
     
 });

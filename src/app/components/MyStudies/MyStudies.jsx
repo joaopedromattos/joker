@@ -52,14 +52,14 @@ const styles = theme => ({
                 
     },
     title: {
-        margin: `${theme.spacing.unit * 4}px 0 ${theme.spacing.unit * 2}px`,
+        margin: `${theme.spacing(4)}px 0 ${theme.spacing(2)}px`,
     },
     studyTitle:{
         paddingLeft: '3%',
         paddingRight: '3%'
     },
     button: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
     }, 
     studiesList: {
         width: '100%',

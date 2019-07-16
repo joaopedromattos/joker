@@ -44,6 +44,7 @@ module.exports = (app) => {
     app.route("/fetchBoard/_id=:_id")
         .get(welcome.createWelcomeBoard)
 
+    // Making a GET request will process your studies here...
     app.route('/getResults/studyId=:studyId')
         .get(getResults.getResults)
     

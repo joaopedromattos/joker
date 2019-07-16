@@ -34,7 +34,7 @@ const styles = theme => ({
         
     },
     textField: {
-        marginLeft: theme.spacing.unit,
+        marginLeft: theme.spacing(1),
         // marginRight: theme.spacing.unit,
     },
     dense: {
@@ -50,11 +50,11 @@ const styles = theme => ({
         // backgroundColor: theme.palette.background.paper,
     },
     button: {
-        margin: theme.spacing.unit,
+        margin: theme.spacing(1),
     }, 
     
     leftIcon: {
-        marginRight: theme.spacing.unit,
+        marginRight: theme.spacing(1),
     },
     
 });
