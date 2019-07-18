@@ -60,7 +60,7 @@ mongoose.connect(process.env.REACT_APP_MONGODB_HOST_ADDRESS, { useNewUrlParser: 
   app.get("*", renderPage);
 
 
-  const port = process.env.PORT || "1337";
+  const port = process.env.REACT_APP_PORT || "1337";
   /* eslint-disable no-console */
 
   
