@@ -11,6 +11,7 @@
   "license": "ISC",
   "repository": {},
   "dependencies": {
+    "lodash": ">=4.17.13",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
