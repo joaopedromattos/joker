@@ -31,4 +31,4 @@ COPY server.js /usr/src/api/
 RUN npm install 
 
 EXPOSE 3000
-CMD npm run api
+CMD npm run api:prod

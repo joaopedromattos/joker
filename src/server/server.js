@@ -17,6 +17,7 @@ import api from "./routes/api";
 import fetchBoardData from "./fetchBoardData";
 import fs from "fs";
 import https from 'https';
+import { database } from "firebase";
 
 
 // Load environment variables from .env file
@@ -26,8 +27,10 @@ const app = express();
 
 const MongoStore = connectMongo(session);
 
-  
-mongoose.connect(process.env.REACT_APP_MONGODB_HOST_ADDRESS, { useNewUrlParser: true }).then(client => {
+// Automating the switching database address process by using this 'if' statement
+const databaseUrl = (process.env.NODE_ENV === 'development') ? 'mongodb://localhost:27017/admins' : process.env.REACT_APP_MONGODB_HOST_ADDRESS
+
+mongoose.connect(databaseUrl, { useNewUrlParser: true }).then(client => {
 
   mongoose.Promise = global.Promise;
   const db = mongoose.connection.db;
@@ -62,7 +65,8 @@ mongoose.connect(process.env.REACT_APP_MONGODB_HOST_ADDRESS, { useNewUrlParser: 
 
   const port = process.env.REACT_APP_PORT || "1337";
   /* eslint-disable no-console */
-
+  
+  
   
   app.listen(port, () => console.log(`Server listening on port ${port}`));
 }).catch((reason ) => {

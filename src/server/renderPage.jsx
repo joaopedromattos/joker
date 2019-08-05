@@ -57,6 +57,8 @@ const renderPage = (req, res) => {
       </Provider>
     )
   );
+
+  
   
   const css = sheets.toString();
 
@@ -94,6 +96,7 @@ const renderPage = (req, res) => {
         <div id="app">${appString}</div>
       </body>
       <script>
+        
         window.PRELOADED_STATE = ${JSON.stringify(preloadedState)}
       </script>
       <script src=${manifest["main.js"]}></script>

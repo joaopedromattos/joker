@@ -11,7 +11,7 @@ module.exports = (app) => {
     app.route('/researchers')
         .post(researcher.createResearcher) // Create
         // .get(researcher.listResearchers)
-    
+
     app.route('/researchers/email=:email')
         .get(researcher.getResearcher) // Read
     app.route('/researchers/authId=:authId')
@@ -23,19 +23,19 @@ module.exports = (app) => {
     app.route('/studies')
         .post(study.createStudy) // Create
         // .get(study.listStudies)
-    
+
     app.route("/studies/_id=:_id")
-        .get(study.getStudy) // Read 
+        .get(study.getStudy) // Read
         .put(study.updateStudy) // Update
         .delete(study.deleteStudy) // Delete
 
     app.route("/boards")
         .get(board.listBoard)
-    
+
     app.route("/boards/studyId=:studyId")
         .post(board.createBoard) // Create
         .get(board.getBoard) // Read
-        
+
     app.route("/boards/_id=:_id")
         .put(board.updateBoard) // Update
         .delete(board.deleteBoard) // Delete
@@ -47,7 +47,7 @@ module.exports = (app) => {
     // Making a GET request will process your studies here...
     app.route('/getResults/studyId=:studyId')
         .get(getResults.getResults)
-    
+
     app.route('/countResults/studyId=:studyId')
         .get(board.countBoards)
-}
+}   

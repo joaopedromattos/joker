@@ -5,17 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "npm test",
-    "api": "nodemon server.js"
+    "api": "NODE_ENV=development nodemon server.js",
+    "api:prod": "NODE_ENV=production nodemon server.js"
   },
   "author": "João Pedro Rodrigues Mattos",
   "license": "ISC",
   "repository": {},
   "dependencies": {
-    "lodash": ">=4.17.13",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
     "express": "^4.16.4",
+    "helmet": "^3.19.0",
+    "lodash": ">=4.17.13",
     "mongoose": "^5.4.1",
     "shortid": "^2.2.14"
   },

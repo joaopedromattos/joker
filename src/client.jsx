@@ -17,7 +17,8 @@ import ResearcherAuth from "./app/components/admin/auth/researcherAuth";
 import ResearcherDashboard from "./app/components/admin/dashboard/researcherDashboard";
 import BoardContainer from './app/components/Board/BoardContainer';
 import BoardComponent from "./app/components/Board/BoardComponent";
-import firebase from "firebase";
+import firebase from 'firebase';
+
 import { loadState, saveState } from "./server/reloadManager";
 import theme from "./assets/theme/theme";
 
@@ -54,7 +55,7 @@ function Main(){
 
   React.useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side');
-    
+
     if (jssStyles) {
       jssStyles.parentNode.removeChild(jssStyles);
     }
@@ -62,7 +63,7 @@ function Main(){
 
   return (
       <Provider store={store}>
-        
+
           <BrowserRouter>
             <Switch>
               <Route path="/" exact={true} component={App}/>

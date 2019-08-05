@@ -9,6 +9,7 @@ import authReducer from "./authReducer";
 import userDataReducer from "./userDataReducer";
 import studiesDataReducer from "./studiesDataReducer";
 
+
 export default combineReducers({
   cardsById,
   listsById,

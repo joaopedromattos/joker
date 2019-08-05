@@ -9,11 +9,7 @@ import { loginAction } from "../../../actions/admin/loginAction";
 import { logoutAction } from "../../../actions/admin/logoutAction";
 import { userDataStoreAction } from "../../../actions/admin/userDataStoreAction";
 import axios from "axios";
-
 import { withRouter } from "react-router-dom";
-
-
-
 
 class ResearcherAuth extends Component{
 
@@ -29,9 +25,7 @@ class ResearcherAuth extends Component{
     // However, he/she might have signed in for the first time...
     // ... in this case, we insert this new user in our database :) 
     getUserInsideDatabase(user){
-
-        
-        
+        console.log("Getting user inside database...");
         axios.get(process.env.REACT_APP_ADMIN_API + '/researchers/email=' + user.email).then( res => {
             console.log("First database response: ", res);
             if (!(res.data.length)){
@@ -83,7 +77,8 @@ class ResearcherAuth extends Component{
     componentDidMount(){
 
         firebase.auth().onAuthStateChanged(usr => {
-
+            
+            console.log("Firebase response:", usr);
                 
             if (usr){
                 this.getUserInsideDatabase(usr)                
@@ -96,7 +91,7 @@ class ResearcherAuth extends Component{
     }   
     
     render(){
-
+        
         return (            
             
             <LoginCard/>                    
