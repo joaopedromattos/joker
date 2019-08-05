@@ -135,15 +135,4 @@ fig.savefig('./statisticalModule/results/' + study.json()[0]['_id'] + '.png',
             bbox_inches='tight')
 # plt.ioff()
 
-
-# # Creating a tree object...
-# T = shc.to_tree(Z, rd=False)
-
-# d3Dendro = dict(children=[], name="Root1")
-
-# # Adding, recursively, our nodes into a tree structure.
-# add_node(T, d3Dendro)
-# insertLabel(d3Dendro["children"][0])
-
-# # Exhibiting our data to stdout.
-# json.dumps(d3Dendro)
+ 
