@@ -135,4 +135,3 @@ fig.savefig('./statisticalModule/results/' + study.json()[0]['_id'] + '.png',
             bbox_inches='tight')
 # plt.ioff()
 
- 

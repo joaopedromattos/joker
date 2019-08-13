@@ -6,7 +6,7 @@ import { Router } from "express";
 // Boards are stored in a tree structure inside mongoDB.
 // This function takes the tree shaped boards and returns a flat structure more suitable to a redux store.
 const normalizeBoards = boards => {
-  
+
   const card = new schema.Entity("cardsById", {}, { idAttribute: "_id" });
   const list = new schema.Entity(
     "listsById",
@@ -19,20 +19,20 @@ const normalizeBoards = boards => {
     { idAttribute: "_id" }
   );
   const { entities } = normalize(boards, [board]);
-  
+
   return entities;
 };
 
 const callBackResponse = (req, res, board) => {
-  return normalizeBoards([board]); 
-  
+  return normalizeBoards([board]);
+
 }
 
 // Fetch board data and append to req object as intialState which will be put inside redux store on the client
 const fetchBoardData = db => {
 
   const router = Router();
-  
+
 
   // Fetch a user's private boards from db if a user is logged in
   // if (req.user) {
@@ -54,7 +54,7 @@ const fetchBoardData = db => {
   // }
 
   return router;
-  
+
 };
 
 export default fetchBoardData;
