@@ -14,11 +14,9 @@ import renderPage from "./renderPage";
 import api from "./routes/api";
 // import configurePassport from "./passport";
 // import auth from "./routes/auth";
-import fetchBoardData from "./fetchBoardData";
 import fs from "fs";
-import https from 'https';
+import https from "https";
 import { database } from "firebase";
-
 
 // Load environment variables from .env file
 dotenv.config();
@@ -28,50 +26,51 @@ const app = express();
 const MongoStore = connectMongo(session);
 
 // Automating the switching database address process by using this 'if' statement
-const databaseUrl = (process.env.NODE_ENV === 'development') ? 'mongodb://localhost:27017/admins' : process.env.REACT_APP_MONGODB_HOST_ADDRESS
+const databaseUrl =
+    process.env.NODE_ENV === "development"
+        ? "mongodb://localhost:27017/admins"
+        : process.env.REACT_APP_MONGODB_HOST_ADDRESS;
 
-mongoose.connect(databaseUrl, { useNewUrlParser: true }).then(client => {
+mongoose
+    .connect(databaseUrl, { useNewUrlParser: true })
+    .then(client => {
+        mongoose.Promise = global.Promise;
+        const db = mongoose.connection.db;
 
-  mongoose.Promise = global.Promise;
-  const db = mongoose.connection.db;
+        //configurePassport(db);
 
-  //configurePassport(db);
+        // app.use(enforce.HTTPS({ trustProtoHeader: true }));
+        app.use(helmet());
+        app.use(logger("tiny"));
+        app.use(compression());
+        app.use(favicon("dist/public/favicons/favicon.ico"));
+        app.use(express.json());
+        app.use(express.urlencoded({ extended: true }));
 
-  
-  // app.use(enforce.HTTPS({ trustProtoHeader: true }));
-  app.use(helmet());
-  app.use(logger("tiny"));
-  app.use(compression());
-  app.use(favicon("dist/public/favicons/favicon.ico"));
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-  
-  // aggressive cache static assets (1 year
-  app.use("/static", express.static("dist/public", { maxAge: "1y" }));
+        // aggressive cache static assets (1 year
+        app.use("/static", express.static("dist/public", { maxAge: "1y" }));
 
-  app.use(
-    session({
-      store: new MongoStore({ db }),
-      secret: process.env.REACT_APP_MONGODB_SECRET,
-      resave: true,
-      saveUninitialized: true
+        app.use(
+            session({
+                store: new MongoStore({ db }),
+                secret: process.env.REACT_APP_MONGODB_SECRET,
+                resave: true,
+                saveUninitialized: true
+            })
+        );
+
+        app.use("/api", api(db));
+
+        app.get("*", renderPage);
+
+        const port = process.env.REACT_APP_PORT || "1337";
+        /* eslint-disable no-console */
+
+        app.listen(port, () => console.log(`Server listening on port ${port}`));
     })
-  );
-
-  app.use("/api", api(db));
-
-  app.get("*", renderPage);
-
-
-  const port = process.env.REACT_APP_PORT || "1337";
-  /* eslint-disable no-console */
-  
-  
-  
-  app.listen(port, () => console.log(`Server listening on port ${port}`));
-}).catch((reason ) => {
-  console.log("Crash reason: ", reason);
-});
+    .catch(reason => {
+        console.log("Crash reason: ", reason);
+    });
 
 // TODO: Uncomment the lines below to use https. This will be implemented on a later version of Joker...
 //   https.createServer({
@@ -81,7 +80,7 @@ mongoose.connect(databaseUrl, { useNewUrlParser: true }).then(client => {
 //   .listen(port, function () {
 //     console.log(`App listening on port ${port}! Go to https://localhost:${port}/`);
 //   })
-  
+
 //  }).catch((reason ) => {
 //    console.log("Crash reason: ", reason);
 //  });

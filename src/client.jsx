@@ -1,8 +1,6 @@
 // Required polyfills
 import "core-js/features/array/values";
 import "core-js/features/object/values";
-
-
 import React from "react";
 import ReactDOM from "react-dom";
 import { createStore, applyMiddleware } from "redux";
@@ -18,7 +16,6 @@ import ResearcherDashboard from "./app/components/admin/dashboard/researcherDash
 import BoardContainer from './app/components/Board/BoardContainer';
 import BoardComponent from "./app/components/Board/BoardComponent";
 import firebase from 'firebase';
-
 import { loadState, saveState } from "./server/reloadManager";
 import theme from "./assets/theme/theme";
 
