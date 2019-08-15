@@ -14,7 +14,9 @@ const api = db => {
         if (req.body.studyId) {
             axios
                 .put(
-                    "http://localhost:3000/boards/_id=" + req.body._id,
+                    process.env.REACT_APP_ADMIN_API +
+                        "/boards/_id=" +
+                        req.body._id,
                     req.body
                 )
                 .then(result => {
@@ -34,7 +36,11 @@ const api = db => {
 
         if (req.body._id) {
             axios
-                .delete("http://localhost:3000/boards/_id=" + req.body._id)
+                .delete(
+                    process.env.REACT_APP_ADMIN_API +
+                        "/boards/_id=" +
+                        req.body._id
+                )
                 .then(result => {
                     res.send(result.data);
                 })

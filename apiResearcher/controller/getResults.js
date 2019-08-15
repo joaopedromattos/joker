@@ -24,7 +24,7 @@ exports.getResults = (req, res) => {
             console.log("Files in our results folder: ", files);
         });
         res.json({
-            url: process.env.RESULTS_HOST_ADDRESS + req.params.studyId + ".png"
+            url: process.env.RESULTS_HOST_ADDRESS + '/' + req.params.studyId + ".png"
         });
     });
 };
