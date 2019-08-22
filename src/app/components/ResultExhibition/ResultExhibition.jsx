@@ -1,127 +1,71 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { compose } from "redux";
-import classNames from "classnames";
-import { withStyles } from "@material-ui/core/styles";
-import MenuItem from "@material-ui/core/MenuItem";
-import Divider from "@material-ui/core/Divider";
-import TextField from "@material-ui/core/TextField";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
-import Paper from "@material-ui/core/Paper";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import PhotoIcon from "@material-ui/icons/Photo";
-import ArrowDownward from "@material-ui/icons/ArrowDownwardRounded";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import IconButton from "@material-ui/core/IconButton";
-import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 
-const drawerWidth = 240;
-
-const styles = theme => ({
-    container: {
-        display: "flex",
-        flexWrap: "wrap",
-        flexGrow: 1
-        // padding: theme.spacing.unit * 3,
-        // width: 10000
-    },
-    textField: {
-        marginLeft: theme.spacing(1)
-        // marginRight: theme.spacing.unit,
-    },
-    dense: {
-        marginTop: 16
-    },
-    menu: {
-        // width: theme.zIndex.drawer,
-    },
-    root: {
-        width: "100%",
-        flexGrow: 1
-        // maxWidth: 360,
-
-        // backgroundColor: theme.palette.background.paper,
-    },
-    image: {
-        marginRight: "40px",
-        marginLeft: "40px",
-        display: "block"
-    },
-    button: {
-        marginRight: "auto",
+const useStyles = makeStyles({
+    card: {
+        maxWidth: "60%",
+        marginTop: "2%",
         marginLeft: "auto",
-        display: "block"
-        // margin: theme.spacing.unit,
-    },
-
-    rightIcon: {
-        marginLeft: theme.spacing(1)
+        marginRight: "auto"
     }
 });
 
-class ResultExhibition extends React.Component {
-    state = {
-        name: this.props.name,
-        objective: this.props.objective,
-        currentCard: "",
-        currentCardDescription: "",
-        cards: this.props.cards
-    };
-
-    render() {
-        const { classes } = this.props;
-
-        return (
-            <div>
-                <img
-                    src={this.props.imageSrc}
-                    alt="Logo"
-                    className={classes.image}
+export default function ResultExhibition(props) {
+    const classes = useStyles();
+    return (
+        <Card className={classes.card}>
+            <CardActionArea>
+                <CardMedia
+                    component="img"
+                    alt="Resultado do dendograma"
+                    height="20%"
+                    image={props.imageSrc}
+                    title="Resultado do dendograma"
                 />
-
-                <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="center"
+                <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                        {props.resultsName}
+                    </Typography>
+                    <Typography
+                        variant="body2"
+                        color="textSecondary"
+                        component="p"
+                    >
+                        {props.resultsObjective}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+            <CardActions>
+                <Button
+                    size="small"
+                    color="primary"
+                    onClick={() => props.dendogramDownload()}
+                    href={
+                        process.env.REACT_APP_ADMIN_API +
+                        `/getResults/dendogram/studyId=${props.studyId}`
+                    }
                 >
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        className={classes.button}
-                    >
-                        Baixar Dendograma
-                        <span></span>
-                        <PhotoIcon className={classes.rightIcon} />
-                    </Button>
-
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        className={classes.button}
-                    >
-                        Baixar amostras
-                        <span></span>
-                        <ArrowDownward className={classes.rightIcon} />
-                    </Button>
-                </Grid>
-
-                <div className={classes.button}>
-                    <span></span>
-                </div>
-            </div>
-        );
-    }
+                    Baixar dendograma
+                </Button>
+                <Button
+                    size="small"
+                    color="primary"
+                    onClick={() => props.jsonDownload()}
+                    href={
+                        process.env.REACT_APP_ADMIN_API +
+                        `/getResults/json/studyId=${props.studyId}`
+                    }
+                >
+                    Baixar amostras
+                </Button>
+            </CardActions>
+        </Card>
+    );
 }
-
-ResultExhibition.propTypes = {
-    classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(ResultExhibition);

@@ -84,6 +84,12 @@ print(">>> Data received. \n Study: ",
 
 filteredBoards = boardFilter(boards.json())
 
+print(">>> Dumping our valid boards into a json file...")
+json_file = open("./statisticalModule/json/" + studyId + '.json', 'w')
+# json.dump(filteredBoards, json_file)
+# json_file.close()
+json_file.write(str(filteredBoards))
+
 lists = []
 
 # We'll take the names of all cards
@@ -113,25 +119,24 @@ fig = plt.figure(figsize=(16, 9))
 
 # plt.title(study.json()[0]['name'])
 Z = shc.linkage(
-                observationVectors.transpose(),
-                method='ward',
-                metric='euclidean')
+    observationVectors.transpose(),
+    method='ward',
+    metric='euclidean')
 
 # xright = min(Z[:, 2]) - 0.1 * min(Z[:, 2])
 # xleft = max(Z[:, 2]) + 0.1 * max(Z[:, 2])
 # plt.xlim((xright, xleft))
 
 dend = shc.dendrogram(
-                    Z,
-                    labels=names,
-                    orientation='left',
-                    leaf_font_size=8,
-                    distance_sort='descending',
-                    )
+    Z,
+    labels=names,
+    orientation='left',
+    leaf_font_size=8,
+    distance_sort='descending',
+)
 
 print(">>> Saving the plot...")
 # plt.tight_layout()
 fig.savefig('./statisticalModule/results/' + study.json()[0]['_id'] + '.png',
             bbox_inches='tight')
 # plt.ioff()
-

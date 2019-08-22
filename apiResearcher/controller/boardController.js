@@ -54,7 +54,6 @@ exports.getBoard = (req, res) => {
             console.log(">>> There was an error");
             res.send(err);
         }
-        console.log(">>> getBoard requisition result: ", data);
         res.json(data);
     });
 

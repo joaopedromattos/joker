@@ -1,7 +1,9 @@
 "use strict";
 
+const mongoose = require("mongoose");
 const { spawn } = require("child_process");
 const fs = require("fs");
+const Board = mongoose.model("Board");
 
 exports.getResults = (req, res) => {
     console.log("Study ID", req.params.studyId);
@@ -24,7 +26,39 @@ exports.getResults = (req, res) => {
             console.log("Files in our results folder: ", files);
         });
         res.json({
-            url: process.env.RESULTS_HOST_ADDRESS + '/' + req.params.studyId + ".png"
+            url: req.params.studyId + ".png"
         });
+    });
+};
+
+exports.downloadDendogram = (req, res) => {
+    const { studyId } = req.params;
+
+    res.download("./statisticalModule/results/" + studyId + ".png");
+};
+
+exports.downloadJson = (req, res) => {
+    const { studyId } = req.params;
+
+    Board.find({ studyId: studyId }, (err, data) => {
+        if (err) {
+            console.log("createWelcomeBoard error...");
+            res.send(err);
+        } else {
+            fs.writeFile(
+                `./statisticalModule/json/${studyId}.json`,
+                JSON.stringify(data),
+                "utf8",
+                err => {
+                    if (err) {
+                        res.json(err);
+                    } else {
+                        res.download(
+                            "./statisticalModule/json/" + studyId + ".json"
+                        );
+                    }
+                }
+            );
+        }
     });
 };
