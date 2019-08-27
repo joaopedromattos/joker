@@ -8,14 +8,17 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
-const useStyles = makeStyles({
-    card: {
+const useStyles = makeStyles(theme => ({
+    card: props => ({
         maxWidth: "60%",
         marginTop: "2%",
         marginLeft: "auto",
-        marginRight: "auto"
-    }
-});
+        marginRight: "auto",
+        [theme.breakpoints.down("sm")]: {
+            maxWidth: "100%"
+        }
+    })
+}));
 
 export default function ResultExhibition(props) {
     const classes = useStyles();
