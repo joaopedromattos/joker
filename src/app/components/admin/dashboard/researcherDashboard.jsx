@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import firebase from 'firebase';
 import { connect } from "react-redux";
+import { Helmet } from "react-helmet";
 import { compose } from 'redux';
 import { loginAction } from "../../../actions/admin/loginAction";
 import { logoutAction } from "../../../actions/admin/logoutAction";
@@ -199,6 +200,9 @@ class ResearcherDashboard extends Component {
         return (
 
             <div className={classes.dashboardBody}>
+                <Helmet>
+                    <title>{this.state.tabs.elements[this.state.tabs.active].tabName}</title>
+                </Helmet>
                 <DashboardDrawer drawer={this.drawer} active={this.state.tabs.active} elements={this.state.tabs.elements} clickHandler={(tab) => this.clickHandler(tab)} logoutClick={() => this.logOut()} />
 
                 {/* All these snack bars are just warnings and sucess messages. */}

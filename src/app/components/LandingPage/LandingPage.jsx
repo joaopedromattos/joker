@@ -28,12 +28,12 @@ class LandingPage extends Component {
 
     const { boards, listsById, history } = this.props;
 
-    
+
 
     return (
     <div className="landing-page">
       <Helmet>
-        <title>Carding Sort Project</title>
+        <title>Joker - An Open Source Card Sorting Application</title>
       </Helmet>
       <div className="landing-page-info-wrapper">
         <div className="landing-page-info">
@@ -41,7 +41,7 @@ class LandingPage extends Component {
             Olá,</p>
 
             <p className="landing-page-description">
-              Esta atividade dura menos de 5 min, as instruções de como completá-la serão exibidas assim que prosseguir para a mesma. 
+              Esta atividade dura menos de 5 min, as instruções de como completá-la serão exibidas assim que prosseguir para a mesma.
             </p>
 
             <p className="landing-page-description">
@@ -51,7 +51,7 @@ class LandingPage extends Component {
                 <li>Me. André de Lima Salgado (Doutorando)</li>
                 <li>Felipe Silva Dias (Mestrando)</li>
                 <li>Anderson Canale Garcia (Mestrando) </li>
-                <li>Dra. Renata P. M. Fortes (Professora)</li>            
+                <li>Dra. Renata P. M. Fortes (Professora)</li>
               </ul>
             <p className="landing-page-description">
               Nossa pesquisa é sobre o controle (limites no uso) feito por pais e mães sobre o uso da Internet pelos filhos.
@@ -76,17 +76,17 @@ class LandingPage extends Component {
 
               André, Felipe, Anderson e Renata
             </p>
-            
+
             <p><i>Agradecimentos  aos  processos  nº  2017/15239
                 -
                 0  e  nº  2015/24525
                 -
                 0,  da  Fundação  de Amparo à Pesquisa do Estado de São Paulo (FAPESP), que financiaram esta pesquisa.</i></p>
-          
+
             <p><i>
             As opiniões, hipóteses e conclusões ou recomendações expressas neste material são de responsabilidade do(s) autor(es) e não necessariamente refletem a visão da FAPESP.
-              
-              </i></p>  
+
+              </i></p>
           <div className="signin-buttons">
 
             <div className="guest-button-wrapper">
@@ -118,8 +118,8 @@ class LandingPage extends Component {
                   Área do pesquisador
                 </button>
               </Link>
-              
-            </div>                        
+
+            </div>
           </div>
         </div>
       </div>
