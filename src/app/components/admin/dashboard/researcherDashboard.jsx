@@ -25,8 +25,9 @@ const styles2 = theme => ({
         margin: theme.spacing(1),
     },
     dashboardBody: {
-        backgroundImage: 'none', 
+        backgroundImage: 'none',
         backgroundColor: 'white',
+        width: '100%',
     }
 });
 
@@ -35,8 +36,8 @@ class ResearcherDashboard extends Component {
 
     constructor(props) {
         super(props)
-        
-        this.state = {            
+
+        this.state = {
             user: this.props.userDataReducer,
             tabs: {
                 active: 0,
@@ -50,27 +51,27 @@ class ResearcherDashboard extends Component {
 
 
             },
-            
-            
+
+
             open: true,
             studyCreationOk: false,
             studyCreationError: false,
             studyRetrieveError: false,
             studyDeletedOk: false,
             studyDeletedError: false,
-            studyEditedOk: false, 
+            studyEditedOk: false,
             studyEditedError: false,
             studyLinkCopied: false,
             cardLimitExceeded: false,
-            mainElements: [ // The component of the tab you inserted right above should be added here. 
-                <MyStudies user={this.props.userDataReducer} 
+            mainElements: [ // The component of the tab you inserted right above should be added here.
+                <MyStudies user={this.props.userDataReducer}
                     studyRetrieveError={() => this.setState({ studyRetrieveError: true })}
                     studyDeletedOk={() => this.setState({ studyDeletedOk: true })}
                     studyDeletedError={() => this.setState({ studyDeletedError: true })}
                     studyEditedOk={() => this.setState({ studyEditedOk: true })}
                     studyEditedError={() => this.setState({ studyEditedError: true })}
                     studyLinkCopied={() => this.setState({ studyLinkCopied: true })}
-                    boardsRetrievalError={() =>  this.setState({ boardsRetrievalError : true})}/>,                    
+                    boardsRetrievalError={() =>  this.setState({ boardsRetrievalError : true})}/>,
                 <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)}
                     firstButton={'Criar estudo '}
                     name={''}
@@ -81,7 +82,7 @@ class ResearcherDashboard extends Component {
 
 
         }
-        
+
     }
 
 
@@ -106,61 +107,61 @@ class ResearcherDashboard extends Component {
     // Callback responsible for communicating to our database the data of the study we're creating
     newStudy = (studyName, studyObjective, cards) => {
 
-        // We'll only allow studies to be created with less than 
-        
+        // We'll only allow studies to be created with less than
+
         if (cards.length > 100){
             this.setState({ cardLimitExceeded : true});
-        }else{            
+        }else{
             // Here I just create the study on the database.
             console.log("Cards: ", cards);
             axios.post(process.env.REACT_APP_ADMIN_API + '/studies' , {
                 name: studyName,
                 objective: studyObjective,
                 cards: cards
-            }).then(res => {          
+            }).then(res => {
                 console.log("res.data._id", res.data);
                 // Taking the response from api and inserting the study id on our user's studies field.
                 axios.put(process.env.REACT_APP_ADMIN_API + '/researchers/authId=' + this.state.user.authId, {
                     studies: res.data._id
                 }).then(res => {
-                    
+
                     // Updating our redux reducer
                     this.props.userDataStoreAction(res.data)
-    
+
                     // Updating our views' properties (because they were instantiated on state, they're not aware of the props change)
                     this.setState({
-                        user: res.data, 
-                        studyCreationOk: true, 
+                        user: res.data,
+                        studyCreationOk: true,
                         mainElements: [
-                        <MyStudies user={this.props.userDataReducer}  
+                        <MyStudies user={this.props.userDataReducer}
                                 studyRetrieveError={() => this.setState({ studyRetrieveError: true })}
                                 studyDeletedOk={() => this.setState({ studyDeletedOk: true })}
                                 studyDeletedError={() => this.setState({ studyDeletedError: true })}
                                 studyEditedOk={() => this.setState({ studyEditedOk: true })}
                                 studyEditedError={() => this.setState({ studyEditedError: true })}
                                 studyLinkCopied={() => this.setState({ studyLinkCopied: true })}
-                                boardsRetrievalError={() =>  this.setState({ boardsRetrievalError : true})}/>,                                
+                                boardsRetrievalError={() =>  this.setState({ boardsRetrievalError : true})}/>,
                             <NewStudyForm newStudy={(studyName, studyObjective, cards) => this.newStudy(studyName, studyObjective, cards)}
                                 firstButton={'Criar estudo '}
                                 name={''}
                                 objective={''}
                                 cards={[]} /> // The order should be the same of the tabs array...
                     ]})
-    
+
                 }, res => {
-                    
+
                     // If we could not insert this study in our user's studies field...
                     this.setState({ studyCreationError: true })
                 })
-    
+
             }, res => {
-    
+
                 // If we could not insert our study in the database.
                 this.setState({ studyCreationError: true })
-    
+
             })
         }
-        
+
 
 
 
@@ -175,7 +176,7 @@ class ResearcherDashboard extends Component {
         this.props.logoutAction()
         this.props.userDataStoreAction({name:"", email:"", authId:"", studies:[]})
         this.props.studiesDataStoreAction({studies: null})
-        
+
 
         console.log(this.state.logoutClicked)
         this.props.history.push("/researcherAuth")
@@ -191,8 +192,8 @@ class ResearcherDashboard extends Component {
         }
     }
 
-    render() {  
-        
+    render() {
+
         const { classes } = this.props;
 
         return (
@@ -382,7 +383,7 @@ class ResearcherDashboard extends Component {
                         message="Estudo criado com sucesso!"
                     />
                 </Snackbar>
-                
+
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',
@@ -434,7 +435,7 @@ class ResearcherDashboard extends Component {
                         message="Ocorreram erros ao tentar salvar seu estudo!"
                     />
                 </Snackbar>
-                
+
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',
@@ -488,7 +489,7 @@ class ResearcherDashboard extends Component {
                 </Snackbar>
 
                 {/* This component is responsible for rendering the tab that's being passed through 'content' property */}
-                <MainDrawer content={this.state.mainElements[this.state.tabs.active]} ></MainDrawer>
+                <MainDrawer >{this.state.mainElements[this.state.tabs.active]}</MainDrawer>
 
             </div>
 
@@ -508,7 +509,7 @@ const mapDispatchToProps = dispatch => ({
     logoutAction: () => dispatch(logoutAction),
     userDataStoreAction: (userData) => dispatch(userDataStoreAction(userData)),
     studiesDataStoreAction: (studiesData) => dispatch(studiesDataStoreAction(studiesData)),
-    
+
 });
 
 ResearcherDashboard.propTypes = {

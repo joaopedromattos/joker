@@ -31,7 +31,7 @@ exports.getResults = (req, res) => {
     });
 };
 
-exports.downloadDendogram = (req, res) => {
+exports.downloadDendrogram = (req, res) => {
     const { studyId } = req.params;
 
     res.download("./statisticalModule/results/" + studyId + ".png");

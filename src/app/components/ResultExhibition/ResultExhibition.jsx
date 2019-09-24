@@ -27,10 +27,10 @@ export default function ResultExhibition(props) {
             <CardActionArea>
                 <CardMedia
                     component="img"
-                    alt="Resultado do dendograma"
+                    alt="Resultado do dendrograma"
                     height="20%"
                     image={props.imageSrc}
-                    title="Resultado do dendograma"
+                    title="Resultado do dendrograma"
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
@@ -49,13 +49,13 @@ export default function ResultExhibition(props) {
                 <Button
                     size="small"
                     color="primary"
-                    onClick={() => props.dendogramDownload()}
+                    onClick={() => props.dendrogramDownload()}
                     href={
                         process.env.REACT_APP_ADMIN_API +
-                        `/getResults/dendogram/studyId=${props.studyId}`
+                        `/getResults/dendrogram/studyId=${props.studyId}`
                     }
                 >
-                    Baixar dendograma
+                    Baixar dendrograma
                 </Button>
                 <Button
                     size="small"

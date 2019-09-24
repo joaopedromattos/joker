@@ -41,8 +41,8 @@ module.exports = app => {
     // Making a GET request will process your studies here...
     app.route("/getResults/studyId=:studyId").get(getResults.getResults);
 
-    app.route("/getResults/dendogram/studyId=:studyId").get(
-        getResults.downloadDendogram
+    app.route("/getResults/dendrogram/studyId=:studyId").get(
+        getResults.downloadDendrogram
     );
 
     app.route("/getResults/json/studyId=:studyId").get(getResults.downloadJson);

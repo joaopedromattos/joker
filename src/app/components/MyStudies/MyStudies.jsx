@@ -30,13 +30,6 @@ const styles = theme => ({
     card: {
         minWidth: 275,
     },
-    demo: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        flexGrow: 1,
-        width: '100%',
-
-    },
     title: {
         margin: `${theme.spacing(4)}px 0 ${theme.spacing(2)}px`,
     },
@@ -49,6 +42,7 @@ const styles = theme => ({
     },
     studiesList: {
         width: '100%',
+        flexGrow: 1
     },
 
 });
@@ -69,7 +63,7 @@ class MyStudies extends React.Component {
             editIndex: 0,
             deleteIndex: 0,
             resultsIndex: 0,
-            currentDendogram: '',
+            currentDendrogram: '',
             localUrl: process.env.REACT_APP_HOME_URL,
 
         }
@@ -248,7 +242,7 @@ class MyStudies extends React.Component {
         axios.get(process.env.REACT_APP_ADMIN_API + "/getResults/studyId=" + this.state.studies[this.state.resultsIndex]._id)
             .then(res => {
                 this.setState({ openResultsExhibition : true,
-                    currentDendogram: process.env.REACT_APP_ADMIN_API + '/' + res.data.url,
+                    currentDendrogram: process.env.REACT_APP_ADMIN_API + '/' + res.data.url,
                     loadingAnimationResultsExhibition : false})
             })
     }
@@ -323,7 +317,7 @@ class MyStudies extends React.Component {
 
                 return(
 
-                    <div className={classes.demo}>
+                    <div className={classes.root}>
 
 
                         <div>
@@ -355,7 +349,7 @@ class MyStudies extends React.Component {
                             </BinaryDialog>
 
 
-                            {/* This Dialog is used to show the dendogram and the download buttons. */}
+                            {/* This Dialog is used to show the dendrogram and the download buttons. */}
                             <FormDialog
                                 open={this.state.openResultsExhibition}
                                 cancel={() => this.closeResultsExhibition()}
@@ -366,7 +360,7 @@ class MyStudies extends React.Component {
                                     <ResultExhibition
                                     resultsObjective={ (this.state.studies[this.state.resultsIndex]) ? this.state.studies[this.state.resultsIndex].objective : ""}
                                     resultsName={(this.state.studies[this.state.resultsIndex]) ? this.state.studies[this.state.resultsIndex].name : ""}
-                                    imageSrc={this.state.currentDendogram}
+                                    imageSrc={this.state.currentDendrogram}
                                     studyId={this.state.studies[this.state.resultsIndex]._id}/>
                                 }>
                             </FormDialog>

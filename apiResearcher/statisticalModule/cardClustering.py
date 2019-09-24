@@ -5,7 +5,7 @@ import scipy.cluster.hierarchy as shc
 import sys
 
 
-# This function will help us to convert our dendogram...
+# This function will help us to convert our dendrogram...
 # ...to a result that can be used to D3 (A JSON data structure)
 # It is just a function that, recursively, adds everything to a dictionary
 def add_node(node, parent):
