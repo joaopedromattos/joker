@@ -20,9 +20,17 @@ mongoose.set("useCreateIndex", true);
 
 const dbUrl = process.env.NODE_ENV === "development" ? "localhost" : "mongo";
 
-mongoose.connect("mongodb://" + dbUrl + ":27017/admins", {
-    useNewUrlParser: true
-});
+mongoose
+    .connect("mongodb://" + dbUrl + ":27017/admins", {
+        useNewUrlParser: true
+    })
+    .catch(reason => {
+        // Catching an error of when we can't connect to DB.
+        console.log(
+            "Could not reach MongoDB. Please verify the status of your database or try running the API again."
+        );
+        process.exit(1);
+    });
 
 app.use(express.static("./statisticalModule/results"));
 app.use(cors());
