@@ -18,7 +18,7 @@
         "express": "^4.16.4",
         "helmet": "^3.19.0",
         "lodash": ">=4.17.13",
-        "mongoose": "^5.4.1",
+        "mongoose": "^5.7.5",
         "shortid": "^2.2.14"
     },
     "devDependencies": {
