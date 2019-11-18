@@ -1,162 +1,160 @@
 @import "../../variables.scss";
 
 .landing-page {
-  height: 1000px;
-  width: 100%;
-  color: white;
-  background-color: #300; // is shown before image loads
-  background-image: url("../../../assets/images/cards.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-
-  // Smaller image for smaller screens
-  @media (max-device-width: 1367px) {
+    height: 1000px;
+    width: 100%;
+    color: white;
+    background-color: #300; // is shown before image loads
     background-image: url("../../../assets/images/cards.jpg");
-  }
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    // Smaller image for smaller screens
+    @media (max-device-width: 1367px) {
+        background-image: url("../../../assets/images/cards.jpg");
+    }
 }
 
 // wrapper added as a hack to make background
 .landing-page-info-wrapper {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
 }
 
 .landing-page-info {
-  padding: 100px 30px;
+    padding: 100px 30px;
 }
 
 .landing-page-heading {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .landing-page-logo {
-  height: 55px;
+    height: 55px;
 }
 
 .landing-page-description {
-  font-size: 16px;
-  line-height: 1.2;
+    font-size: 16px;
+    line-height: 1.2;
 }
 
 .signin-buttons {
-  display: flex;
-  justify-content: space-between;
-  width: 650px;
-  text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    width: 650px;
+    text-decoration: none;
 }
 
 .signin-button {
-  display: inline-flex;
-  flex-shrink: 1;
-  align-self: flex-start;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  width: 210px;
-  height: 40px;
-  margin-top: 10px;
-  border: 0;
-  border-radius: 3px;
-  color: white;
-  font-size: 16px;
-  font-weight: 400;
-  text-decoration: none;
-  cursor: pointer;
+    display: inline-flex;
+    flex-shrink: 1;
+    align-self: flex-start;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 210px;
+    height: 40px;
+    margin-top: 10px;
+    border: 0;
+    border-radius: 3px;
+    color: white;
+    font-size: 16px;
+    font-weight: 400;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .twitter-button {
-  background: #1da1f2;
+    background: #1da1f2;
 
-  &:hover,
-  &:focus {
-    background: #0090e2;
-  }
+    &:hover,
+    &:focus {
+        background: #0090e2;
+    }
 }
 
 .google-button {
-  background: white;
-  color: $black-text;
+    background: white;
+    color: $black-text;
 }
 
 .google-button:hover,
 .google-button:focus {
-  background: #ddd;
+    background: #ddd;
 }
 
 .logo-icon {
-  font-size: 30px;
+    font-size: 30px;
 }
 
 .google-logo {
-  height: 30px;
+    height: 30px;
 }
 
 .guest-button-wrapper {
-  position: relative;
+    position: relative;
 }
 
 .guest-button {
-  background: white;
-  color: $black-text;
+    background: white;
+    color: $black-text;
 }
 
 .guest-button:hover,
 .guest-button:focus {
-  background: #ddd;
+    background: #ddd;
 }
 
 @media (max-width: 800px) {
-  .landing-page-info-wrapper {
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.6);
-  }
+    .landing-page-info-wrapper {
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.6);
+    }
 
-  .landing-page-info {
-    padding: 10px;
-    justify-content: center;
-  }
+    .landing-page-info {
+        padding: 10px;
+        justify-content: center;
+    }
 
-  .landing-page-description {
-    line-height: 1.2;
-  }
+    .landing-page-description {
+        line-height: 1.2;
+    }
 
-  .signin-buttons {
-    flex-direction: column;
-    align-items: center;
-    width: auto;
-    text-decoration: none;
-  }
-  .signin-button {
-    width: 320px;
-    text-decoration: none;
-  }
+    .signin-buttons {
+        flex-direction: column;
+        align-items: center;
+        width: auto;
+        text-decoration: none;
+    }
+    .signin-button {
+        width: 320px;
+        text-decoration: none;
+    }
 }
 
 @media (max-width: 440px) {
-  .signin-button {
-    width: 240px;
-    text-decoration: none;
-  }
-  .landing-page-description {
-    line-height: 1.2;
-  }
+    .signin-button {
+        width: 240px;
+        text-decoration: none;
+    }
+    .landing-page-description {
+        line-height: 1.2;
+    }
 }
 
 @media (max-height: 350px) {
-  .landing-page-heading h1 {
-    margin: 10px 0;
-  }
-  .landing-page-description {
-    line-height: 1.2;
-  }
+    .landing-page-heading h1 {
+        margin: 10px 0;
+    }
+    .landing-page-description {
+        line-height: 1.2;
+    }
 }
-
 
 .head-h1 {
-  font-size: 18px;
+    font-size: 18px;
 }
-

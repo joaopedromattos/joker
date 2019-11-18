@@ -26,13 +26,13 @@ const styles = theme => ({
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
         margin: 'auto',
-    }, 
+    },
     progress: {
         color: '#FFFFFF',
     },
     disable: {
         backgroundColor: '#536bba'
-        
+
     },
     progressParamRequest: {
         margin: theme.spacing(2),
@@ -47,7 +47,7 @@ class BoardComponent extends Component {
         super(props)
         this.state = {
 
-            studyLink: "", 
+            studyLink: "",
             boardRetrieveError: false,
             loading: false,
             paramRequest: false
@@ -78,18 +78,18 @@ class BoardComponent extends Component {
         let studyId = '';
 
         // If we've had no match with the input string...
-        if (parseResult === null){ 
+        if (parseResult === null){
             // ... we consider our user has already typed our raw id.
-            studyId = this.state.studyLink;         
+            studyId = this.state.studyLink;
         }else{
             // When we have a match, we just remove the '/b/' part of the string and get the id.
             studyId = parseResult[0].split("/b/")[1]
         }
 
-        // Second parse to decide if we have in our hands is a real id or just rubbish 
+        // Second parse to decide if we have in our hands is a real id or just rubbish
         if (/(\`|\~|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\+|\=|\[|\{|\]|\}|\||\\|\'|\<|\,|\.|\>|\?|\/|\""|\;|\:|\s)/.exec(studyId) === null){
             return studyId; // If there are no special characters in our string...
-        }else{ 
+        }else{
             return null;
         }
     }
@@ -124,12 +124,12 @@ class BoardComponent extends Component {
             this.setState({ boardRetrieveError: true, paramRequest: false })
         }else{
             axios.get(process.env.REACT_APP_ADMIN_API + "/fetchBoard/_id=" + id).then( (res, err ) => {
-                
-                if (err){                    
+
+                if (err){
                     this.setState({ boardRetrieveError: true, paramRequest: false })
                 }else{
 
-                
+
                     const normBoards = this.normalizeBoards([res.data]);
                     console.log("NORM BOARDS: ", normBoards);
 
@@ -142,20 +142,20 @@ class BoardComponent extends Component {
                     this.props.history.push({
                         pathname: `/b/${normBoards.boardId}`,
                     })
-                    
+
                 }
             });
         }
 
-        
-        
+
+
     }
 
     render = () => {
 
         const { classes } = this.props;
 
-        
+
 
         return (
             <div className="landing-page">
@@ -172,32 +172,32 @@ class BoardComponent extends Component {
                         open={this.state.boardRetrieveError}
                         autoHideDuration={3000}
                         onClose={(event, reason) => {
-                            
+
                             if (reason === 'clickaway') {
                                 return;
                             }
                             this.setState({ boardRetrieveError: false });
-                            
+
                         }}
                     >
                         <MySnackbarContent
                             onClose={(event, reason) => {
-                                
+
                                 if (reason === 'clickaway') {
                                     return;
                                 }
                                 this.setState({ boardRetrieveError: false });
-                                
+
                             }}
                             variant="error"
                             message="Não foi possível encontrar o estudo. Verifique o Id/Link inserido!"
                         />
                     </Snackbar>
-                    
+
                     <Paper className={classes.root} elevation={1}>
 
-                        { (!this.state.paramRequest) ? 
-                            
+                        { (!this.state.paramRequest) ?
+
                             (
                                 <div>
                                     <Typography variant="h5" align="center" component="h3">
@@ -205,7 +205,7 @@ class BoardComponent extends Component {
                                     </Typography>
 
                                     <br/>
-                                    
+
                                     <TextField
                                         id="outlined-full-width"
                                         label="Id ou Link do estudo"
@@ -217,7 +217,7 @@ class BoardComponent extends Component {
                                         fullWidth
                                         margin="dense"
                                         variant="outlined"
-                                        
+
                                     />
 
                                     <br/>
@@ -225,12 +225,12 @@ class BoardComponent extends Component {
 
                                     <Button style={{ backgroundColor: this.state.loading ? '#7e8cba' : '#3f51b5'}} disabled={this.state.loading} variant="contained" color="primary" fullWidth onClick={() => this.boardSearch()}>
                                         {(!this.state.loading) ? ("Iniciar pesquisa") : ("")}
-                                        {this.state.loading && <CircularProgress size={20} className={classes.progress}  /> }                       
+                                        {this.state.loading && <CircularProgress size={20} className={classes.progress}  /> }
                                     </Button>
 
                                     <br/>
                                     <br/>
-                                    
+
                                     <Button variant="outlined" href='/' fullWidth >Retornar à página inicial</Button>
                                 </div>
                             ) :
@@ -248,11 +248,11 @@ class BoardComponent extends Component {
 
 
                         }
-                        
-                        
+
+
                     </Paper>
 
-                    
+
                 </div>
             </div>
         );
