@@ -42,6 +42,26 @@ const uiConfig = {
 function LoginCard(props) {
     const { classes, className } = props;
 
+    var config = {
+        apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+        authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+        databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+        projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+        storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID
+    };
+
+    // This function checks if a firebase app is already defined in our code...
+    // We need this kind of verification since firebase doesn't
+    // allow us to redefine our app on each new user session (For obvious security reasons).
+    const firebaseAuthWrapper = () => {
+        if (firebase.apps.length === 0) {
+            firebase.initializeApp(config);
+        }
+
+        return firebase.auth();
+    };
+
     return (
         <div className="login-card">
             <Paper className={classes.root}>
@@ -60,7 +80,7 @@ function LoginCard(props) {
                     <Grid item>
                         <StyledFirebaseAuth
                             uiConfig={uiConfig}
-                            firebaseAuth={firebase.auth()}
+                            firebaseAuth={firebaseAuthWrapper()}
                         />
                     </Grid>
 
