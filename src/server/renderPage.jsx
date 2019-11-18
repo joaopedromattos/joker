@@ -11,64 +11,73 @@ import rootReducer from "../app/reducers";
 import ResearcherAuth from "../app/components/admin/auth/researcherAuth";
 import ResearcherDashboard from "../app/components/admin/dashboard/researcherDashboard";
 import BoardComponent from "../app/components/Board/BoardComponent";
-import BoardContainer from '../app/components/Board/BoardContainer';
+import BoardContainer from "../app/components/Board/BoardContainer";
 import { Switch, Route } from "react-router-dom";
-import { ServerStyleSheets, ThemeProvider } from '@material-ui/styles';
-import theme from '../assets/theme/theme';
-
+import { ServerStyleSheets, ThemeProvider } from "@material-ui/styles";
+import theme from "../assets/theme/theme";
 
 // Get the manifest which contains the names of the generated files. The files contain hashes
 // that change every time they are updated, which enables aggressive caching.
 const manifest = JSON.parse(
-  readFileSync(`./dist/public/manifest.json`, "utf8")
+    readFileSync(`./dist/public/manifest.json`, "utf8")
 );
 
-
 const renderPage = (req, res) => {
+    const sheets = new ServerStyleSheets();
 
-  const sheets = new ServerStyleSheets();
+    // Put initialState (which contains board state) into a redux store that will be passed to the client
+    // through the window object in the generated html string
+    const store = createStore(rootReducer);
 
-  // Put initialState (which contains board state) into a redux store that will be passed to the client
-  // through the window object in the generated html string  
-  const store = createStore(rootReducer);
+    const context = {};
 
-  const context = {};
+    resetContext();
 
-  resetContext();
+    // This is where the magic happens
+    // Some kind of route black-magic is happening here.
+    // Please, keep yourself away, little wanderer.
+    const appString = renderToString(
+        sheets.collect(
+            <Provider store={store}>
+                <ThemeProvider theme={theme}>
+                    <StaticRouter location={req.url} context={context}>
+                        <Switch>
+                            <Route path="/" exact={true} component={App} />
+                            <Route
+                                path="/researcherAuth"
+                                component={ResearcherAuth}
+                            />
+                            <Route
+                                path="/researcherDashboard"
+                                component={ResearcherDashboard}
+                            />
+                            <Route
+                                path="/b/:boardId"
+                                component={BoardContainer}
+                            />
+                            <Route
+                                path="/boardAccess"
+                                component={BoardComponent}
+                            />
+                            <Route
+                                path="/boardAccess/:boardId"
+                                component={BoardComponent}
+                            />
+                        </Switch>
+                    </StaticRouter>
+                </ThemeProvider>
+            </Provider>
+        )
+    );
 
-  // This is where the magic happens
-  // Some kind of route black-magic is happening here.
-  // Please, keep yourself away, little wanderer.
-  const appString = renderToString( 
-    sheets.collect(
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <StaticRouter location={req.url} context={context}>        
-            <Switch>
-              <Route path="/" exact={true} component={App}/>
-              <Route path="/researcherAuth" component={ResearcherAuth}/>
-              <Route path="/researcherDashboard" component={ResearcherDashboard} />
-              <Route path="/b/:boardId" component={BoardContainer} />
-              <Route path="/boardAccess" component={BoardComponent} />
-              <Route path="/boardAccess/:boardId" component={BoardComponent} />
-            </Switch>
-          </StaticRouter>
-        </ThemeProvider>
-      </Provider>
-    )
-  );
+    const css = sheets.toString();
 
-  
-  
-  const css = sheets.toString();
+    const preloadedState = store.getState();
 
-  const preloadedState = store.getState();
+    // Extract head data (title) from the app
+    const helmet = Helmet.renderStatic();
 
-
-  // Extract head data (title) from the app
-  const helmet = Helmet.renderStatic();
-
-  const html = `
+    const html = `
     <!DOCTYPE html>
     <html>
       <head>
@@ -96,13 +105,13 @@ const renderPage = (req, res) => {
         <div id="app">${appString}</div>
       </body>
       <script>
-        
+
         window.PRELOADED_STATE = ${JSON.stringify(preloadedState)}
       </script>
       <script src=${manifest["main.js"]}></script>
     </html>
   `;
-  res.send(html);
+    res.send(html);
 };
 
 export default renderPage;

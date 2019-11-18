@@ -41,7 +41,7 @@
         "express-sslify": "^1.2.0",
         "firebase": "^5.7.0",
         "graceful-fs": "^4.2.0",
-        "helmet": "^3.12.0",
+        "helmet": "^3.21.2",
         "jss": "^10.0.0-alpha.21",
         "marked": "^0.7.0",
         "minimatch": "^3.0.4",

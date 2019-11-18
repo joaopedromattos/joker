@@ -3,7 +3,9 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
-import "./LandingPage.scss";
+// import "./LandingPage.scss";
+import "./LandingPageOnly.scss";
+
 import classnames from "classnames";
 import slugify from "slugify";
 import Button from "@material-ui/core/Button";
@@ -22,7 +24,7 @@ import Fapesp from "./../../../assets/images/fapespIcon.png";
 const useStyles = makeStyles(theme => ({
     root: {
         margin: "auto",
-        backgroundImage: "url('/images/jokerLandingPage.jpg')"
+        backgroundColor: "#0f0f0f"
     },
     icon: {
         marginRight: theme.spacing(2)
@@ -88,96 +90,106 @@ function LandingPage(props) {
 
             <main className={classes.root}>
                 {/* Hero unit */}
-                <div className={classes.heroContent}>
-                    <Container maxWidth="sm">
-                        <Typography
-                            component="h1"
-                            variant="h2"
-                            align="center"
-                            color="textPrimary"
-                            gutterBottom
-                        >
-                            Joker
-                        </Typography>
-                        <Typography
-                            variant="h5"
-                            align="center"
-                            color="textSecondary"
-                            paragraph
-                        >
-                            An Open Source Card Sorting Application.
-                        </Typography>
-                        <div className={classes.heroButtons}>
-                            <Grid container spacing={2} justify="center">
-                                <Grid item>
-                                    <Button
-                                        variant="contained"
-                                        href="/boardAccess"
-                                        color="primary"
-                                    >
-                                        Área do participante
-                                    </Button>
-                                </Grid>
-                                <Grid item>
-                                    <Button
-                                        variant="outlined"
-                                        // href="/researcherAuth"
-                                        color="primary"
-                                    >
-                                        <Link
-                                            to="/researcherAuth"
-                                            style={{
-                                                color: "inherit",
-                                                textDecoration: "inherit"
-                                            }}
-                                        >
-                                            Área do pesquisador
-                                        </Link>
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </div>
-                        <div className={classes.heroButtons}>
+
+                <div className="landing-page-info-wrapper">
+                    <div className={classes.heroContent}>
+                        <Container maxWidth="sm">
                             <Typography
-                                variant="caption"
-                                display="block"
-                                align="justify"
+                                component="h1"
+                                variant="h2"
+                                align="center"
+                                color="textPrimary"
+                                gutterBottom
                             >
-                                Agradecimentos aos processos nº 2018/19323-8, nº
-                                2017/15239 - 0 e nº 2015/24525 - 0, da Fundação
-                                de Amparo à Pesquisa do Estado de São Paulo
-                                (FAPESP), que financiaram esta pesquisa e o
-                                desenvolvimento deste projeto. Feito por:
-                                <span style={{ textDecoration: "underline" }}>
-                                    Anderson Canale Garcia, André de Lima
-                                    Salgado, Felipe Silva Dias, João Pedro R.
-                                    Mattos e Renata P. M. Fortes.
-                                </span>
+                                Joker
                             </Typography>
-                        </div>
-                        <br />
-                        <div className={classes.heroButtons}>
-                            <Grid container spacing={2} justify="space-evenly">
-                                <Grid item>
-                                    <img
-                                        src={
-                                            "http://blog.institutocidadejardim.com.br/wp-content/uploads/2018/07/Logotipo-Fapesp-atualizado.png"
-                                        }
-                                        className={classes.fapesp}
-                                    ></img>
+                            <Typography
+                                variant="h5"
+                                align="center"
+                                color="textSecondary"
+                                paragraph
+                            >
+                                An Open Source Card Sorting Application.
+                            </Typography>
+                            <div className={classes.heroButtons}>
+                                <Grid container spacing={2} justify="center">
+                                    <Grid item>
+                                        <Button
+                                            variant="contained"
+                                            href="/boardAccess"
+                                            color="primary"
+                                        >
+                                            Área do participante
+                                        </Button>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            variant="outlined"
+                                            // href="/researcherAuth"
+                                            color="primary"
+                                        >
+                                            <Link
+                                                to="/researcherAuth"
+                                                style={{
+                                                    color: "inherit",
+                                                    textDecoration: "inherit"
+                                                }}
+                                            >
+                                                Área do pesquisador
+                                            </Link>
+                                        </Button>
+                                    </Grid>
                                 </Grid>
-                                <Grid item>
-                                    <img
-                                        src={
-                                            "http://www.scs.usp.br/identidadevisual/wp-content/uploads/2013/08/usp-logo-png.png"
-                                        }
-                                        alt="Logotipo Universidade de São Paulo"
-                                        className={classes.usp}
-                                    />
+                            </div>
+                            <div className={classes.heroButtons}>
+                                <Typography
+                                    variant="caption"
+                                    display="block"
+                                    align="justify"
+                                >
+                                    Agradecimentos aos processos nº
+                                    2018/19323-8, nº 2017/15239 - 0 e nº
+                                    2015/24525 - 0, da Fundação de Amparo à
+                                    Pesquisa do Estado de São Paulo (FAPESP),
+                                    que financiaram esta pesquisa e o
+                                    desenvolvimento deste projeto. Feito por:
+                                    <span
+                                        style={{ textDecoration: "underline" }}
+                                    >
+                                        Anderson Canale Garcia, André de Lima
+                                        Salgado, Felipe Silva Dias, João Pedro
+                                        R. Mattos e Renata P. M. Fortes.
+                                    </span>
+                                </Typography>
+                            </div>
+                            <br />
+                            <div className={classes.heroButtons}>
+                                <Grid
+                                    container
+                                    spacing={2}
+                                    justify="space-evenly"
+                                >
+                                    <Grid item>
+                                        <img
+                                            src={
+                                                "http://blog.institutocidadejardim.com.br/wp-content/uploads/2018/07/Logotipo-Fapesp-atualizado.png"
+                                            }
+                                            className={classes.fapesp}
+                                        ></img>
+                                    </Grid>
+                                    <Grid item>
+                                        <img
+                                            src={
+                                                "http://www.scs.usp.br/identidadevisual/wp-content/uploads/2013/08/usp-logo-png.png"
+                                            }
+                                            alt="Logotipo Universidade de São Paulo"
+                                            className={classes.usp}
+                                        />
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                        </div>
-                    </Container>
+                            </div>
+                        </Container>
+                    </div>
                 </div>
             </main>
             {/* <footer position="relative" className={classes.footer}>
