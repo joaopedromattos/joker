@@ -4,7 +4,7 @@ var mongoose = require("mongoose");
 
 var Board = mongoose.model("Board");
 
-// Here is where the CRUD (create, read, update, delete) Researcher is implemented 
+// Here is where the CRUD (create, read, update, delete) Researcher is implemented
 
 // This will consume a large bandwidth, so I won't create a route for it right now...
 exports.listBoard = (req, res) => {
@@ -48,8 +48,8 @@ exports.createBoard = (req, res) => {
 
 exports.getBoard = (req, res) => {
 
-    Board.find({ studyId: { $in: req.params.studyId.split(',') } }, (err, data) => {   
-             
+    Board.find({ studyId: { $in: req.params.studyId.split(',') } }, (err, data) => {
+
         if (err) {
             console.log(">>> There was an error");
             res.send(err);
@@ -75,7 +75,7 @@ exports.deleteBoard = (req, res) => {
 
     console.log(">>> REQ.body: ", req.body);
 
-    Board.remove({
+    Board.deleteMany({
         _id: req.params._id
     }, (err, data) => {
         if (err) {
