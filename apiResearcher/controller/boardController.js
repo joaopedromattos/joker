@@ -19,8 +19,8 @@ exports.listBoard = (req, res) => {
 
 
 exports.countBoards = (req, res) => {
-    Board.find({ studyId: { $in: req.params.studyId.split(',') }}, (err, data) => {
-        if (err){
+    Board.find({ studyId: { $in: req.params.studyId.split(',') } }, (err, data) => {
+        if (err) {
             res.send(err);
         }
         var count = data.length
@@ -60,8 +60,9 @@ exports.getBoard = (req, res) => {
 }
 
 exports.updateBoard = (req, res) => {
+    console.log("Updating board:", req.body);
 
-    Board.findOneAndUpdate({ _id: req.params._id },  { valid: eval(req.body.valid), lists: eval(req.body.lists) }, { new: true }, (err, data) => {
+    Board.findOneAndUpdate({ _id: req.params._id }, { valid: eval(req.body.valid), lists: eval(req.body.lists) }, { new: true }, (err, data) => {
         if (err) {
             console.log(">>> Err", err);
             res.send(err);
@@ -73,10 +74,10 @@ exports.updateBoard = (req, res) => {
 
 exports.deleteBoard = (req, res) => {
 
-    console.log(">>> REQ.body: ", req.body);
+    console.log(">>> REQ.body: ", req.params_id);
 
     Board.deleteMany({
-        _id: req.params._id
+        _id: req.params._id.split(',')
     }, (err, data) => {
         if (err) {
             console.log(">>> Err", err);

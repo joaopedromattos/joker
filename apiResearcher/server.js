@@ -21,7 +21,8 @@ mongoose.set("useCreateIndex", true);
 const dbUrl = process.env.NODE_ENV === "development" ? "localhost" : "mongo";
 
 mongoose.connect("mongodb://" + dbUrl + ":27017/admins", {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 });
 
 app.use(express.static("./statisticalModule/results"));

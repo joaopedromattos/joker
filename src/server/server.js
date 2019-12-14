@@ -32,7 +32,7 @@ const databaseUrl =
         : process.env.REACT_APP_MONGODB_HOST_ADDRESS;
 
 mongoose
-    .connect(databaseUrl, { useNewUrlParser: true })
+    .connect(databaseUrl, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(client => {
         mongoose.Promise = global.Promise;
         const db = mongoose.connection.db;
