@@ -43,7 +43,7 @@ const styles = theme => ({
 
 class BoardComponent extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
 
@@ -57,7 +57,7 @@ class BoardComponent extends Component {
     }
 
     componentDidMount = () => {
-        if (this.props.match.params.boardId){
+        if (this.props.match.params.boardId) {
             this.setState({ paramRequest: true });
             this.boardSearch();
         }
@@ -78,18 +78,18 @@ class BoardComponent extends Component {
         let studyId = '';
 
         // If we've had no match with the input string...
-        if (parseResult === null){
+        if (parseResult === null) {
             // ... we consider our user has already typed our raw id.
             studyId = this.state.studyLink;
-        }else{
+        } else {
             // When we have a match, we just remove the '/b/' part of the string and get the id.
             studyId = parseResult[0].split("/b/")[1]
         }
 
         // Second parse to decide if we have in our hands is a real id or just rubbish
-        if (/(\`|\~|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\+|\=|\[|\{|\]|\}|\||\\|\'|\<|\,|\.|\>|\?|\/|\""|\;|\:|\s)/.exec(studyId) === null){
+        if (/(\`|\~|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\+|\=|\[|\{|\]|\}|\||\\|\'|\<|\,|\.|\>|\?|\/|\""|\;|\:|\s)/.exec(studyId) === null) {
             return studyId; // If there are no special characters in our string...
-        }else{
+        } else {
             return null;
         }
     }
@@ -112,7 +112,7 @@ class BoardComponent extends Component {
         );
         const { entities } = normalize(boards, [board]);
         console.log("entities: ", entities);
-        return {entities, boardId: boards[0]._id};
+        return { entities, boardId: boards[0]._id };
     };
 
     boardSearch = () => {
@@ -120,24 +120,24 @@ class BoardComponent extends Component {
         let id = (!this.props.match.params.boardId) ? (this.fieldParse()) : (this.props.match.params.boardId);
         console.log("The id we're getting...", id);
 
-        if (id === null ){
+        if (id === null) {
             this.setState({ boardRetrieveError: true, paramRequest: false })
-        }else{
-            axios.get(process.env.REACT_APP_ADMIN_API + "/fetchBoard/_id=" + id).then( (res, err ) => {
+        } else {
+            axios.get(process.env.REACT_APP_ADMIN_API + "/fetchBoard/_id=" + id).then((res, err) => {
 
-                if (err){
+                if (err) {
                     this.setState({ boardRetrieveError: true, paramRequest: false })
-                }else{
+                } else {
 
 
                     const normBoards = this.normalizeBoards([res.data]);
                     console.log("NORM BOARDS: ", normBoards);
 
-                    if (normBoards.entities.boardsById){this.props.boardInit(normBoards.entities.boardsById);}
-                    if (normBoards.entities.listsById){this.props.listInit(normBoards.entities.listsById)};
-                    if (normBoards.entities.cardsById){this.props.cardsInit(normBoards.entities.cardsById)};
-                    if (normBoards.entities.boardId){this.props.currentBoardInit(normBoards.boardId)};
-                    this.setState({loading: true});
+                    if (normBoards.entities.boardsById) { this.props.boardInit(normBoards.entities.boardsById); }
+                    if (normBoards.entities.listsById) { this.props.listInit(normBoards.entities.listsById) };
+                    if (normBoards.entities.cardsById) { this.props.cardsInit(normBoards.entities.cardsById) };
+                    if (normBoards.entities.boardId) { this.props.currentBoardInit(normBoards.boardId) };
+                    this.setState({ loading: true });
 
                     this.props.history.push({
                         pathname: `/b/${normBoards.boardId}`,
@@ -158,11 +158,13 @@ class BoardComponent extends Component {
 
 
         return (
-            <div className="landing-page">
+            <div>
+
                 <Helmet>
                     <title>Acesso ao estudo</title>
                 </Helmet>
-                <div className="landing-page-info-wrapper">
+
+                <div className="landing-page-info-wrapper-access-study">
 
                     <Snackbar
                         anchorOrigin={{
@@ -196,7 +198,7 @@ class BoardComponent extends Component {
 
                     <Paper className={classes.root} elevation={1}>
 
-                        { (!this.state.paramRequest) ?
+                        {(!this.state.paramRequest) ?
 
                             (
                                 <div>
@@ -204,7 +206,7 @@ class BoardComponent extends Component {
                                         Insira o link ou o id do estudo
                                     </Typography>
 
-                                    <br/>
+                                    <br />
 
                                     <TextField
                                         id="outlined-full-width"
@@ -220,16 +222,16 @@ class BoardComponent extends Component {
 
                                     />
 
-                                    <br/>
-                                    <br/>
+                                    <br />
+                                    <br />
 
-                                    <Button style={{ backgroundColor: this.state.loading ? '#7e8cba' : '#3f51b5'}} disabled={this.state.loading} variant="contained" color="primary" fullWidth onClick={() => this.boardSearch()}>
+                                    <Button style={{ backgroundColor: this.state.loading ? '#7e8cba' : '#3f51b5' }} disabled={this.state.loading} variant="contained" color="primary" fullWidth onClick={() => this.boardSearch()}>
                                         {(!this.state.loading) ? ("Iniciar pesquisa") : ("")}
-                                        {this.state.loading && <CircularProgress size={20} className={classes.progress}  /> }
+                                        {this.state.loading && <CircularProgress size={20} className={classes.progress} />}
                                     </Button>
 
-                                    <br/>
-                                    <br/>
+                                    <br />
+                                    <br />
 
                                     <Button variant="outlined" href='/' fullWidth >Retornar à página inicial</Button>
                                 </div>
@@ -239,7 +241,7 @@ class BoardComponent extends Component {
                                 <div>
                                     <Typography variant="h5" align="center" component="h3">
                                         Carregando estudo...
-                                        <br/>
+                                        <br />
                                         <CircularProgress className={classes.progressParamRequest} />
                                     </Typography>
 
@@ -270,7 +272,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch => ({
 
-    boardInit: (fetchedBoard) => dispatch({ type: "BOARD_ACCESS", payload: {board: fetchedBoard}}),
+    boardInit: (fetchedBoard) => dispatch({ type: "BOARD_ACCESS", payload: { board: fetchedBoard } }),
     listInit: (fetchedList) => dispatch({ type: "LIST_ACCESS", payload: { list: fetchedList } }),
     cardsInit: (fetchedCards) => dispatch({ type: "CARD_ACCESS", payload: { cards: fetchedCards } }),
     currentBoardInit: (currentBoard) => dispatch({ type: "PUT_BOARD_ID_IN_REDUX", payload: { boardId: currentBoard } })

@@ -26,6 +26,15 @@ COPY ./statisticalModule /usr/src/api/statisticalModule
 COPY package.json /usr/src/api/
 COPY server.js /usr/src/api/
 COPY .env /usr/src/api/
+
+# Folder in which we'll store our plots.
+RUN mkdir -p /usr/src/api/statisticalModule/results
+
+# Folder in which we'll store our json result.
+RUN mkdir -p /usr/src/api/statisticalModule/json
+
+# Uncomment these lines to use HTTPS 
+# and be sure to put your .cert and .key files in the root directory.
 # COPY server.cert /usr/src/api
 # COPY server.key /usr/src/api
 

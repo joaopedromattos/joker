@@ -11,12 +11,12 @@ const api = db => {
     // effectively prevents the db and client from ever getting out of sync
     router.put("/board", (req, res) => {
         console.log("Body that went out : req.body ", req.body);
-        if (req.body.studyId) {
+        if (req.body.valid) {
             axios
                 .put(
                     process.env.REACT_APP_ADMIN_API +
-                        "/boards/_id=" +
-                        req.body._id,
+                    "/boards/_id=" +
+                    req.body._id,
                     req.body
                 )
                 .then(result => {
@@ -38,8 +38,8 @@ const api = db => {
             axios
                 .delete(
                     process.env.REACT_APP_ADMIN_API +
-                        "/boards/_id=" +
-                        req.body._id
+                    "/boards/_id=" +
+                    req.body._id
                 )
                 .then(result => {
                     res.send(result.data);

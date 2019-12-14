@@ -5,23 +5,29 @@
   width: 100%;
   color: white;
   background-color: #300; // is shown before image loads
-  background-image: url("../../../assets/images/cards.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+  // background-image: url("../../../assets/images/cards.jpg");
+  // background-repeat: no-repeat;
+  // background-size: cover;
+  // background-position: center;
 
   // Smaller image for smaller screens
   @media (max-device-width: 1367px) {
-    background-image: url("../../../assets/images/cards.jpg");
+    // background-image: url("../../../assets/images/cards.jpg");
   }
 }
 
 // wrapper added as a hack to make background
-.landing-page-info-wrapper {
+.landing-page-info-wrapper-access-study {
   display: flex;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  // background: rgba(0, 0, 0, 0.7);
+  // background-image: url("../../../assets/images/cards.jpg");
+  // background-repeat: no-repeat;
+  // background-size: cover;
+  // background-position: center;
+  
+  position: absolute;
 }
 
 .landing-page-info {
