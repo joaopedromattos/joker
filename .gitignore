@@ -3,3 +3,4 @@ dist/
 *.env
 .vscode
 apiResearcher/docker-compose.yml
+apiResearcher/node_modules/
