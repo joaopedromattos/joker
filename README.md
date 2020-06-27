@@ -21,6 +21,7 @@ A React app based on [React Kanban](https://github.com/markusenglund/react-kanba
 | Optional Requirements - In case you prefer to run Joker's Docker Version: 	|
 |                      [Docker](https://www.docker.com/)                      	|
 |              [Docker Compose](https://docs.docker.com/compose/)             	|
+|              Make                                                             |
 
 ## Running the app via Docker (Recommended):
 1. Create `.env` files in the `root` and  `/apiResearcher` folders and fill them as shown in the `root .env` and `apiResearcher .env` sections, down below.
