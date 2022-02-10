@@ -107,7 +107,7 @@
         "file-loader": "^1.1.11",
         "ignore-loader": "^0.1.2",
         "image-webpack-loader": "^4.6.0",
-        "node-sass": "^4.13.0",
+        "node-sass": "^7.0.0",
         "nodemon": "^1.19.1",
         "postcss-loader": "^2.1.1",
         "prettier": "^1.18.2",
